@@ -1,9 +1,11 @@
 package com.trafikkingx.hospital.controller;
 
+import com.trafikkingx.common.pagination.PageResponse;
 import com.trafikkingx.common.response.ApiResponse;
 import com.trafikkingx.hospital.dto.request.CreateHospitalRequest;
 import com.trafikkingx.hospital.dto.request.UpdateHospitalRequest;
 import com.trafikkingx.hospital.dto.response.HospitalResponse;
+import com.trafikkingx.hospital.enums.HospitalType;
 import com.trafikkingx.hospital.service.HospitalService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,13 +34,30 @@ public class HospitalController {
                 .build();
     }
 
-    @GetMapping
-    public ApiResponse<List<HospitalResponse>> getAllHospitals() {
+   @GetMapping
+public ApiResponse<PageResponse<HospitalResponse>> getAllHospitals(
 
-        List<HospitalResponse> response =
-                hospitalService.getAllHospitals();
+        @RequestParam(defaultValue = "0")
+        int page,
 
-        return ApiResponse.<List<HospitalResponse>>builder()
+        @RequestParam(defaultValue = "10")
+        int size,
+
+        @RequestParam(required = false)
+        String city,
+
+        @RequestParam(required = false)
+        HospitalType type
+) {
+
+PageResponse<HospitalResponse> response =
+        hospitalService.getAllHospitals(
+                page,
+                size,
+                city,
+                type
+        );
+        return ApiResponse.<PageResponse<HospitalResponse>>builder()
                 .success(true)
                 .message("Hospitals fetched successfully")
                 .data(response)

@@ -5,14 +5,22 @@ import com.trafikkingx.hospital.dto.request.CreateHospitalRequest;
 import com.trafikkingx.hospital.dto.request.UpdateHospitalRequest;
 import com.trafikkingx.hospital.dto.response.HospitalResponse;
 import com.trafikkingx.hospital.entity.Hospital;
+import com.trafikkingx.hospital.enums.HospitalType;
 import com.trafikkingx.hospital.mapper.HospitalMapper;
 import com.trafikkingx.hospital.repository.HospitalRepository;
 import com.trafikkingx.hospital.service.HospitalService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.domain.Specification;
+
+import com.trafikkingx.hospital.specification.HospitalSpecification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import com.trafikkingx.common.pagination.PageResponse;
+import com.trafikkingx.common.pagination.PaginationUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 @Slf4j
@@ -84,18 +92,45 @@ public HospitalResponse createHospital(
 }
 
 @Override
-public List<HospitalResponse> getAllHospitals() {
+public PageResponse<HospitalResponse> getAllHospitals(
 
-    log.info("Fetching all active hospitals");
+        int page,
 
-    List<Hospital> hospitals =
-            hospitalRepository.findByActiveTrue();
+        int size,
 
-    log.info("Fetched {} hospital(s)", hospitals.size());
+        String city,
 
-    return hospitals.stream()
-            .map(hospitalMapper::toResponse)
-            .toList();
+        HospitalType type
+) {
+
+    log.info(
+            "Fetching hospitals. page={}, size={}, city={}, type={}",
+            page,
+            size,
+            city,
+            type
+    );
+
+    Pageable pageable = PageRequest.of(page, size);
+
+    Specification<Hospital> specification =
+            Specification
+                    .where(HospitalSpecification.isActive())
+                    .and(HospitalSpecification.hasCity(city))
+                    .and(HospitalSpecification.hasType(type));
+
+    Page<Hospital> hospitalPage =
+            hospitalRepository.findAll(
+                    specification,
+                    pageable
+            );
+
+    Page<HospitalResponse> response =
+            hospitalPage.map(
+                    hospitalMapper::toResponse
+            );
+
+    return PaginationUtils.toPageResponse(response);
 }
 
 @Override
