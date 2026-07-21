@@ -6,6 +6,9 @@ import com.trafikkingx.citizen.enums.Gender;
 import com.trafikkingx.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import com.trafikkingx.emergency.entity.EmergencyContact;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "citizen_profiles")
@@ -56,12 +59,6 @@ public class CitizenProfile extends BaseEntity {
 
     private Double longitude;
 
-    private String emergencyContactName;
-
-    private String emergencyContactPhone;
-
-    private String emergencyContactRelation;
-
     @Column(columnDefinition = "TEXT")
     private String medicalConditions;
 
@@ -72,5 +69,13 @@ public class CitizenProfile extends BaseEntity {
     private String currentMedications;
 
     private Boolean organDonor;
+
+    @OneToMany(
+        mappedBy = "citizenProfile",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true)
+    @Builder.Default
+    private List<EmergencyContact> emergencyContacts =
+        new ArrayList<>();
 
 }

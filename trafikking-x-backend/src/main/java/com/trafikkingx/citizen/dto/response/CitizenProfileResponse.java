@@ -45,12 +45,6 @@ public class CitizenProfileResponse {
 
     private Double longitude;
 
-    private String emergencyContactName;
-
-    private String emergencyContactPhone;
-
-    private String emergencyContactRelation;
-
     private String medicalConditions;
 
     private String allergies;
