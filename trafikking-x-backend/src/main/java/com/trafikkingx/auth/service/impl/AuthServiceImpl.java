@@ -6,6 +6,7 @@ import com.trafikkingx.auth.dto.response.CurrentUserResponse;
 import com.trafikkingx.auth.dto.response.LoginResponse;
 import com.trafikkingx.auth.dto.response.RegisterResponse;
 import com.trafikkingx.auth.entity.User;
+import org.springframework.transaction.annotation.Transactional;
 import com.trafikkingx.auth.mapper.UserMapper;
 import com.trafikkingx.auth.repository.UserRepository;
 import com.trafikkingx.auth.service.AuthService;
@@ -30,8 +31,9 @@ public class AuthServiceImpl implements AuthService {
     private final UserMapper userMapper;
     private final JwtService jwtService;
 
-    @Override
-    public RegisterResponse register(RegisterRequest request) {
+@Transactional
+@Override
+public RegisterResponse register(RegisterRequest request) {
 
         log.info("Register request received for email: {}", request.getEmail());
 

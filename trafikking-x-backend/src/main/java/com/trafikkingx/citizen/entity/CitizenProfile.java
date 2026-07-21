@@ -11,17 +11,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "citizen_profiles")
+@Table(
+    name = "citizen_profiles",
+    indexes = {
+        @Index(name = "idx_profile_user", columnList = "user_id")
+    }
+)
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CitizenProfile extends BaseEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(

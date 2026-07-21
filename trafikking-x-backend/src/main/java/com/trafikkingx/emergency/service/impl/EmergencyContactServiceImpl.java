@@ -15,6 +15,7 @@ import com.trafikkingx.emergency.entity.EmergencyContact;
 import com.trafikkingx.emergency.mapper.EmergencyContactMapper;
 import com.trafikkingx.emergency.repository.EmergencyContactRepository;
 import com.trafikkingx.emergency.service.EmergencyContactService;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -66,7 +67,8 @@ private EmergencyContact getEmergencyContact(
             .orElseThrow(EmergencyContactNotFoundException::new);
 }
 
-   @Override
+@Transactional
+@Override
 public EmergencyContactResponse createContact(
         CreateEmergencyContactRequest request) {
 
@@ -150,7 +152,8 @@ public EmergencyContactResponse getContactById(Long id) {
     return emergencyContactMapper.toResponse(emergencyContact);
 }
 
-    @Override
+@Transactional
+@Override
 public EmergencyContactResponse updateContact(
         Long id,
         UpdateEmergencyContactRequest request) {
@@ -198,7 +201,8 @@ public EmergencyContactResponse updateContact(
     return emergencyContactMapper.toResponse(updatedContact);
 }
 
-   @Override
+@Transactional
+@Override
 public void deleteContact(Long id) {
 
     log.info("Deleting emergency contact with id: {}", id);

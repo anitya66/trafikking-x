@@ -7,17 +7,20 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "emergency_contacts")
+@Table(
+    name = "emergency_contacts",
+    indexes = {
+        @Index(name = "idx_contact_profile", columnList = "citizen_profile_id"),
+        @Index(name = "idx_contact_priority", columnList = "priority"),
+        @Index(name = "idx_contact_primary", columnList = "primary_contact")
+    }
+)
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmergencyContact extends BaseEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(

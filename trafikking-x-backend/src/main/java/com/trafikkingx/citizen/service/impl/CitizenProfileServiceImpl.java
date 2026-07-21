@@ -1,6 +1,7 @@
 package com.trafikkingx.citizen.service.impl;
 
 import com.trafikkingx.auth.entity.User;
+import org.springframework.transaction.annotation.Transactional;
 import com.trafikkingx.auth.repository.UserRepository;
 import com.trafikkingx.citizen.dto.request.CreateCitizenProfileRequest;
 import com.trafikkingx.citizen.dto.request.UpdateCitizenProfileRequest;
@@ -40,6 +41,7 @@ public class CitizenProfileServiceImpl implements CitizenProfileService {
                     new UsernameNotFoundException("User not found"));
 }
 
+@Transactional
 @Override
 public CitizenProfileResponse createProfile(
         CreateCitizenProfileRequest request) {
@@ -93,6 +95,7 @@ public CitizenProfileResponse getMyProfile() {
     return citizenProfileMapper.toResponse(citizenProfile);
 }
 
+@Transactional
 @Override
 public CitizenProfileResponse updateProfile(
         UpdateCitizenProfileRequest request) {
