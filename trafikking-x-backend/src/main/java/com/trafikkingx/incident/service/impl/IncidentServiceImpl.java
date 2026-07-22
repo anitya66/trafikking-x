@@ -15,6 +15,8 @@ import com.trafikkingx.incident.repository.IncidentRepository;
 import com.trafikkingx.incident.service.IncidentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import com.trafikkingx.common.event.IncidentCreatedEvent;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,8 @@ public class IncidentServiceImpl implements IncidentService {
     private final UserRepository userRepository;
 
     private final IncidentMapper incidentMapper;
+
+    private final ApplicationEventPublisher eventPublisher;
 
     private User getCurrentUser() {
 
@@ -93,12 +97,24 @@ public IncidentResponse createIncident(
 
     Incident savedIncident = incidentRepository.save(incident);
 
-    log.info(
-            "Incident {} created successfully",
-            savedIncident.getIncidentNumber()
-    );
+eventPublisher.publishEvent(
 
-    return incidentMapper.toResponse(savedIncident);
+        new IncidentCreatedEvent(
+
+                savedIncident.getId(),
+
+                savedIncident.getIncidentNumber()
+
+        )
+
+);
+
+log.info(
+        "Incident {} created successfully",
+        savedIncident.getIncidentNumber()
+);
+
+return incidentMapper.toResponse(savedIncident);
 }
 
 @Override
