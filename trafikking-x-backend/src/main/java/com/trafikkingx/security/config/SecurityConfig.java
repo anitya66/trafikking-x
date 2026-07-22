@@ -23,6 +23,8 @@ public class SecurityConfig {
             throws Exception {
 
         return http
+                .cors(cors -> {})
+                
                 .csrf(AbstractHttpConfigurer::disable)
 
                 .sessionManagement(session ->
@@ -34,6 +36,8 @@ public class SecurityConfig {
         "/api/v1/test/**",
         "/api/v1/auth/register",
         "/api/v1/auth/login",
+        "/ws/**", 
+        "/ws", 
         "/v3/api-docs/**",
         "/swagger-ui/**",
         "/swagger-ui.html"
