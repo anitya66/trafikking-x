@@ -52,7 +52,9 @@ public class DispatchServiceImpl
 
     private final PoliceStationRepository policeStationRepository;
 
-    private final ApplicationEventPublisher eventPublisher;   
+    private final ApplicationEventPublisher eventPublisher;  
+    
+    
 
     private Dispatch getDispatchEntity(Long id) {
 

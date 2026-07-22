@@ -6,6 +6,7 @@ public enum Role {
     POLICE,
     AMBULANCE,
     HOSPITAL,
-    ADMIN
+    ADMIN,
+    DISPATCHER
 
 }
