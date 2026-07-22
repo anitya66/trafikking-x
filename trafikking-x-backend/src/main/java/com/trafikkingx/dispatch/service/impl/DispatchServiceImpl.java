@@ -10,6 +10,7 @@ import com.trafikkingx.dispatch.service.DispatchService;
 import com.trafikkingx.dispatch.validation.DispatchValidator;
 import com.trafikkingx.incident.repository.IncidentRepository;
 import com.trafikkingx.common.event.DispatchCreatedEvent;
+import com.trafikkingx.common.event.ResourcesAssignedEvent;
 import com.trafikkingx.common.exception.custom.*;
 import com.trafikkingx.dispatch.workflow.DispatchStateMachine;
 import lombok.RequiredArgsConstructor;
@@ -209,17 +210,35 @@ public DispatchResponse autoAssignResources(
     );
 
     DispatchResponse response =
-            assignResources(
-                    dispatch.getId(),
-                    request
-            );
+        assignResources(
+                dispatch.getId(),
+                request
+        );
 
-    log.info(
-            "Automatic resource assignment completed for incident {}",
-            incidentId
-    );
+eventPublisher.publishEvent(
 
-    return response;
+        new ResourcesAssignedEvent(
+
+                response.getId(),
+
+                incidentId,
+
+                response.getHospitalId(),
+
+                response.getAmbulanceId(),
+
+                response.getPoliceStationId()
+
+        )
+
+);
+
+log.info(
+        "Automatic resource assignment completed for incident {}",
+        incidentId
+);
+
+return response;
 }
 
 
