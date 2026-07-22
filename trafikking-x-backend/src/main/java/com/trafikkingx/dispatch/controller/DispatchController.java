@@ -144,4 +144,19 @@ public class DispatchController {
                 .data(response)
                 .build();
     }
+
+    @PostMapping("/auto-assign/{incidentId}")
+public ApiResponse<DispatchResponse> autoAssignResources(
+        @PathVariable Long incidentId) {
+
+    return ApiResponse.<DispatchResponse>builder()
+            .success(true)
+            .message("Resources assigned successfully.")
+            .data(
+                    dispatchService.autoAssignResources(
+                            incidentId
+                    )
+            )
+            .build();
+}
 }

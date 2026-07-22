@@ -36,4 +36,8 @@ public interface DispatchService {
     );
 
     List<DispatchResponse> getAllDispatches();
+
+    DispatchResponse autoAssignResources(
+        Long incidentId
+);
 }

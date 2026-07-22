@@ -13,6 +13,8 @@ import com.trafikkingx.common.event.DispatchCreatedEvent;
 import com.trafikkingx.common.exception.custom.*;
 import com.trafikkingx.dispatch.workflow.DispatchStateMachine;
 import lombok.RequiredArgsConstructor;
+import com.trafikkingx.assignment.dto.response.AssignmentResponse;
+import com.trafikkingx.assignment.service.AssignmentEngineService;
 import org.springframework.context.ApplicationEventPublisher;
 import com.trafikkingx.ambulance.entity.Ambulance;
 import com.trafikkingx.ambulance.repository.AmbulanceRepository;
@@ -51,6 +53,8 @@ public class DispatchServiceImpl
     private final AmbulanceRepository ambulanceRepository;
 
     private final PoliceStationRepository policeStationRepository;
+
+    private final AssignmentEngineService assignmentEngineService;
 
     private final ApplicationEventPublisher eventPublisher;  
     
@@ -169,6 +173,53 @@ public DispatchResponse assignResources(
     );
 
     return dispatchMapper.toResponse(updatedDispatch);
+}
+
+@Override
+@Transactional
+public DispatchResponse autoAssignResources(
+        Long incidentId) {
+
+    log.info(
+            "Automatically assigning resources for incident {}",
+            incidentId
+    );
+
+    DispatchResponse dispatch =
+            getDispatchByIncident(incidentId);
+
+    AssignmentResponse assignment =
+            assignmentEngineService.autoAssign(
+                    incidentId
+            );
+
+    AssignResourcesRequest request =
+            new AssignResourcesRequest();
+
+    request.setHospitalId(
+            assignment.getHospitalId()
+    );
+
+    request.setAmbulanceId(
+            assignment.getAmbulanceId()
+    );
+
+    request.setPoliceStationId(
+            assignment.getPoliceStationId()
+    );
+
+    DispatchResponse response =
+            assignResources(
+                    dispatch.getId(),
+                    request
+            );
+
+    log.info(
+            "Automatic resource assignment completed for incident {}",
+            incidentId
+    );
+
+    return response;
 }
 
 
