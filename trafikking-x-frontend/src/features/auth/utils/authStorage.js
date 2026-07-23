@@ -28,6 +28,14 @@ export function getUser() {
   return user ? JSON.parse(user) : null;
 }
 
+export function isAuthenticated() {
+  return !!getToken();
+}
+
+export function getCurrentUser() {
+  return getUser();
+}
+
 export function clearAuth() {
   localStorage.removeItem(TOKEN_KEY);
   localStorage.removeItem(USER_KEY);

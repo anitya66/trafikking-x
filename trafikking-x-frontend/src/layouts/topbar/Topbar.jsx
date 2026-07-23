@@ -8,8 +8,23 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { getCurrentUser } from "@/shared/utils/auth";
+import { logout } from "@/shared/utils/auth";
+import { useNavigate } from "react-router-dom";
 
 export default function Topbar() {
+
+    const user = getCurrentUser();
+    const navigate = useNavigate();
+
+function handleLogout() {
+  logout();
+
+  navigate("/login", {
+    replace: true,
+  });
+}
+
   return (
     <header className="sticky top-0 z-30 border-b border-border bg-background/80 backdrop-blur-xl">
       <div className="flex h-20 items-center justify-between px-8">
@@ -59,13 +74,14 @@ export default function Topbar() {
 
           {/* Profile */}
 
-          <Button
-            variant="ghost"
-            className="gap-2"
-          >
+         <Button
+  variant="ghost"
+  className="gap-2"
+  onClick={handleLogout}
+>
             <UserCircle2 className="h-6 w-6" />
 
-            <span>Operator</span>
+            <span>{user?.fullName ?? "Operator"}</span>
           </Button>
 
         </div>
