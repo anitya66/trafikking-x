@@ -5,6 +5,7 @@ import {
   Shield,
 } from "lucide-react";
 
+import EmergencyMap from "@/features/map/components/EmergencyMap";
 
 import DispatchQueue from "../components/DispatchQueue";
 import MetricCard from "@/shared/components/MetricCard";
@@ -82,15 +83,23 @@ export default function DashboardPage() {
 
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-3">
+      <>
+  {/* Incident Feed + Dispatch */}
 
-  <div className="xl:col-span-2">
-    <LiveIncidentFeed />
+  <div className="grid gap-6 xl:grid-cols-3">
+
+    <div className="xl:col-span-2">
+      <LiveIncidentFeed />
+    </div>
+
+    <DispatchQueue />
+
   </div>
 
-  <DispatchQueue />
+  {/* Full Width Map */}
 
-</div>
+  <EmergencyMap />
+</>
 
       <div className="flex gap-3">
          <SeverityBadge severity="LOW" />
