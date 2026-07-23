@@ -1,10 +1,18 @@
-import DashboardLayout from "@/layouts/DashboardLayout";
-import DashboardPage from "@/features/dashboard/pages/DashboardPage";
+import { Toaster } from "sonner";
+
+import AppRoutes from "@/routes/AppRoutes";
 
 export default function App() {
   return (
-    <DashboardLayout>
-      <DashboardPage />
-    </DashboardLayout>
+    <>
+      <AppRoutes />
+
+      <Toaster
+        position="top-right"
+        richColors
+        closeButton
+        duration={3000}
+      />
+    </>
   );
 }

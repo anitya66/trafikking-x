@@ -10,6 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.trafikkingx.auth.mapper.UserMapper;
 import com.trafikkingx.auth.repository.UserRepository;
 import com.trafikkingx.auth.service.AuthService;
+import com.trafikkingx.auth.enums.Role;
+import com.trafikkingx.citizen.entity.CitizenProfile;
+import com.trafikkingx.citizen.repository.CitizenProfileRepository;
 import com.trafikkingx.common.exception.custom.EmailAlreadyExistsException;
 import com.trafikkingx.common.exception.custom.InvalidCredentialsException;
 import com.trafikkingx.common.exception.custom.PhoneAlreadyExistsException;
@@ -30,6 +33,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
     private final JwtService jwtService;
+    private final CitizenProfileRepository citizenProfileRepository;
 
 @Transactional
 @Override
@@ -57,9 +61,27 @@ public RegisterResponse register(RegisterRequest request) {
 
         User savedUser = userRepository.save(user);
 
-        log.info("User registered successfully: {}", savedUser.getEmail());
+if (savedUser.getRole() == Role.CITIZEN) {
 
-        return userMapper.toRegisterResponse(savedUser);
+    CitizenProfile citizenProfile = CitizenProfile.builder()
+            .user(savedUser)
+            .organDonor(false)
+            .build();
+
+    citizenProfileRepository.save(citizenProfile);
+
+    log.info(
+            "Citizen profile created for user: {}",
+            savedUser.getEmail()
+    );
+}
+
+log.info(
+        "User registered successfully: {}",
+        savedUser.getEmail()
+);
+
+return userMapper.toRegisterResponse(savedUser);
     }
 
     @Override

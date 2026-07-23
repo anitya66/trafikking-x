@@ -5,7 +5,14 @@ import {
   Shield,
 } from "lucide-react";
 
+
+import DispatchQueue from "../components/DispatchQueue";
 import MetricCard from "@/shared/components/MetricCard";
+import LiveIncidentFeed from "../components/LiveIncidentFeed";
+import SeverityBadge from "@/shared/components/SeverityBadge";
+import StatusBadge from "@/shared/components/StatusBadge";
+
+
 
 export default function DashboardPage() {
   return (
@@ -61,6 +68,31 @@ export default function DashboardPage() {
 
       </div>
 
+      <div className="grid gap-6 xl:grid-cols-3">
+
+  <div className="xl:col-span-2">
+    <LiveIncidentFeed />
+  </div>
+
+  <DispatchQueue />
+
+</div>
+
+      <div className="flex gap-3">
+         <SeverityBadge severity="LOW" />
+         <SeverityBadge severity="MEDIUM" />
+         <SeverityBadge severity="HIGH" />
+         <SeverityBadge severity="CRITICAL" />
+      </div>
+
+      <div className="flex flex-wrap gap-3">
+         <StatusBadge status="REPORTED" />
+         <StatusBadge status="ASSIGNED" />
+         <StatusBadge status="IN_PROGRESS" />
+         <StatusBadge status="RESOLVED" />
+         <StatusBadge status="CANCELLED" /> 
+     </div>
+   
     </div>
   );
 }
