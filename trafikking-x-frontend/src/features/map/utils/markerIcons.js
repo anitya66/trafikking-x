@@ -2,7 +2,7 @@ import L from "leaflet";
 
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
-function createIcon(color) {
+function createColorIcon(color) {
   return new L.Icon({
     iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-${color}.png`,
     shadowUrl: markerShadow,
@@ -15,13 +15,19 @@ function createIcon(color) {
 }
 
 export const markerIcons = {
-  LOW: createIcon("green"),
+  LOW: createColorIcon("green"),
+  MEDIUM: createColorIcon("gold"),
+  HIGH: createColorIcon("orange"),
+  CRITICAL: createColorIcon("red"),
 
-  MEDIUM: createIcon("gold"),
+  HOSPITAL: createColorIcon("violet"),
 
-  HIGH: createIcon("orange"),
+  AMBULANCE_AVAILABLE: createColorIcon("blue"),
+  AMBULANCE_ON_DUTY: createColorIcon("yellow"),
+  AMBULANCE_OUT_OF_SERVICE: createColorIcon("grey"),
+  AMBULANCE_MAINTENANCE: createColorIcon("black"),
 
-  CRITICAL: createIcon("red"),
+  POLICE: createColorIcon("black"),
 
-  DEFAULT: createIcon("blue"),
+  DEFAULT: createColorIcon("blue"),
 };
