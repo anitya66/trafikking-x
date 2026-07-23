@@ -1,11 +1,10 @@
-function App() {
+import DashboardLayout from "@/layouts/DashboardLayout";
+import DashboardPage from "@/features/dashboard/pages/DashboardPage";
+
+export default function App() {
   return (
-    <div className="min-h-screen bg-black text-white flex items-center justify-center">
-      <h1 className="text-5xl font-bold">
-        TRAFIKKING X
-      </h1>
-    </div>
+    <DashboardLayout>
+      <DashboardPage />
+    </DashboardLayout>
   );
 }
-
-export default App;
