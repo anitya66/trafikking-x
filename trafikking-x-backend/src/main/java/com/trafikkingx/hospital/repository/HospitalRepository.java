@@ -23,4 +23,6 @@ public interface HospitalRepository
     List<Hospital> findByEmergencyAvailableTrue();
 
     List<Hospital> findByCityIgnoreCase(String city);
+
+    long countByEmergencyAvailableTrue();
 }

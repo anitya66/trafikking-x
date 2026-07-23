@@ -16,4 +16,6 @@ public interface PoliceStationRepository
 
     Page<PoliceStation> findByActiveTrue(Pageable pageable);
 
+    long countByActiveTrue();
+
 }

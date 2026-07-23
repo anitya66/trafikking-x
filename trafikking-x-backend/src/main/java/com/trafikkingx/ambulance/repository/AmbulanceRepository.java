@@ -20,4 +20,8 @@ public interface AmbulanceRepository
     List<Ambulance> findByStatusAndActiveTrue(
             AmbulanceStatus status
     );
+
+    long countByStatusAndActiveTrue(
+        AmbulanceStatus status
+);
 }

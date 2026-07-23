@@ -5,14 +5,15 @@ import IncidentCardSkeleton from "./IncidentCardSkeleton";
 import EmptyIncidentFeed from "./EmptyIncidentFeed";
 import IncidentFeedError from "./IncidentFeedError";
 
-import { useIncidents } from "../hooks/useIncidents";
+import { useRecentIncidents } from "../hooks/useRecentIncidents";
 
 export default function LiveIncidentFeed() {
-  const {
+  
+    const {
     data: incidents = [],
     isLoading,
     isError,
-  } = useIncidents();
+} = useRecentIncidents();
 
   let content;
 
