@@ -16,4 +16,6 @@ public interface DispatchRepository
 
     boolean existsByIncidentId(Long incidentId);
 
+    List<Dispatch> findTop5ByOrderByCreatedAtDesc();
+
 }

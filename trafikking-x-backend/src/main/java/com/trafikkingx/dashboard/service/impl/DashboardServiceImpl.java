@@ -14,6 +14,10 @@ import com.trafikkingx.incident.dto.response.IncidentResponse;
 import com.trafikkingx.incident.entity.Incident;
 import com.trafikkingx.incident.mapper.IncidentMapper;
 import org.springframework.stereotype.Service;
+import com.trafikkingx.dispatch.dto.response.DispatchResponse;
+import com.trafikkingx.dispatch.entity.Dispatch;
+import com.trafikkingx.dispatch.mapper.DispatchMapper;
+import com.trafikkingx.dispatch.repository.DispatchRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,6 +32,9 @@ public class DashboardServiceImpl implements DashboardService {
     private final HospitalRepository hospitalRepository;
     private final PoliceStationRepository policeStationRepository;
     private final IncidentMapper incidentMapper;
+    private final DispatchRepository dispatchRepository;
+
+private final DispatchMapper dispatchMapper;
 
     @Override
     public DashboardSummaryResponse getDashboardSummary() {
@@ -86,6 +93,18 @@ public List<IncidentResponse> getRecentIncidents() {
 
     return incidents.stream()
             .map(incidentMapper::toResponse)
+            .toList();
+}
+
+@Override
+public List<DispatchResponse> getRecentDispatches() {
+
+    log.info("Fetching dashboard dispatch queue");
+
+    return dispatchRepository
+            .findTop5ByOrderByCreatedAtDesc()
+            .stream()
+            .map(dispatchMapper::toResponse)
             .toList();
 }
 }
