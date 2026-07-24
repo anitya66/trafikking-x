@@ -37,29 +37,21 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public ProfileResponse uploadAvatar(
-            MultipartFile file
-    ) {
+    public ProfileResponse uploadAvatar(MultipartFile file) {
 
-        User currentUser =
-                currentUserService.getCurrentUser();
+        User currentUser = currentUserService.getCurrentUser();
 
         fileValidator.validateProfileImage(file);
 
-        if (currentUser.getProfileImage() != null &&
-                !currentUser.getProfileImage().isBlank()) {
+        if (currentUser.getProfileImage() != null
+                && !currentUser.getProfileImage().isBlank()) {
 
-            storageService.delete(
-                    currentUser.getProfileImage()
-            );
+            storageService.delete(currentUser.getProfileImage());
 
         }
 
         UploadResponse uploadResponse =
-                storageService.upload(
-                        file,
-                        "profiles"
-                );
+                storageService.upload(file, "profiles");
 
         currentUser.setProfileImage(
                 uploadResponse.getImageUrl()
@@ -67,9 +59,26 @@ public class AccountServiceImpl implements AccountService {
 
         userRepository.save(currentUser);
 
-        return accountMapper.toProfileResponse(
-                currentUser
-        );
+        return accountMapper.toProfileResponse(currentUser);
+
+    }
+
+    @Override
+    public ProfileResponse deleteAvatar() {
+
+        User currentUser = currentUserService.getCurrentUser();
+
+        if (currentUser.getProfileImage() != null
+                && !currentUser.getProfileImage().isBlank()) {
+
+            storageService.delete(currentUser.getProfileImage());
+
+            currentUser.setProfileImage(null);
+
+            userRepository.save(currentUser);
+        }
+
+        return accountMapper.toProfileResponse(currentUser);
 
     }
 

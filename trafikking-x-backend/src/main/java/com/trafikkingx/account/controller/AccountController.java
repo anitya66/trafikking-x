@@ -45,4 +45,15 @@ public class AccountController {
 
     }
 
+    @DeleteMapping("/avatar")
+    @Operation(summary = "Delete Profile Avatar")
+    public ApiResponse<ProfileResponse> deleteAvatar() {
+
+        return ApiResponse.success(
+                "Avatar deleted successfully.",
+                accountService.deleteAvatar()
+        );
+
+    }
+
 }

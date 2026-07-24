@@ -9,4 +9,6 @@ public interface AccountService {
 
     ProfileResponse uploadAvatar(MultipartFile file);
 
+    ProfileResponse deleteAvatar();
+
 }
