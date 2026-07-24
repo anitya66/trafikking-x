@@ -1,9 +1,16 @@
 import { NavLink } from "react-router-dom";
 
-import { SIDEBAR_NAVIGATION } from "@/shared/constants/navigation";
+import getSidebarConfig from "@/navigation/getSidebarConfig";
+import { getCurrentRole } from "@/shared/utils/role";
 import { cn } from "@/lib/utils";
 
 export default function Sidebar() {
+
+  const role = getCurrentRole();
+  const navigationItems = getSidebarConfig(role);
+
+  console.log("ROLE =", role);
+console.log("ITEMS =", navigationItems);
   return (
     <aside className="hidden h-screen w-72 shrink-0 border-r border-border bg-card/70 backdrop-blur-xl lg:flex lg:flex-col">
       {/* Logo */}
@@ -20,7 +27,7 @@ export default function Sidebar() {
       {/* Navigation */}
       <nav className="flex-1 px-3 py-6">
         <ul className="space-y-2">
-          {SIDEBAR_NAVIGATION.map((item) => {
+          {navigationItems.map((item) => {
             const Icon = item.icon;
 
             return (
