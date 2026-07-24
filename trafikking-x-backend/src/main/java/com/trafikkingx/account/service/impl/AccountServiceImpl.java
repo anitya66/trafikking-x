@@ -12,6 +12,9 @@ import com.trafikkingx.storage.validator.FileValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import com.trafikkingx.account.dto.request.ChangePasswordRequest;
+import com.trafikkingx.account.exception.InvalidPasswordException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +29,8 @@ public class AccountServiceImpl implements AccountService {
     private final FileValidator fileValidator;
 
     private final UserRepository userRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public ProfileResponse getMyProfile() {
@@ -81,5 +86,39 @@ public class AccountServiceImpl implements AccountService {
         return accountMapper.toProfileResponse(currentUser);
 
     }
+
+    @Override
+public void changePassword(ChangePasswordRequest request) {
+
+    User currentUser = currentUserService.getCurrentUser();
+
+    if (!passwordEncoder.matches(
+            request.getCurrentPassword(),
+            currentUser.getPassword()
+    )) {
+
+        throw new InvalidPasswordException(
+                "Current password is incorrect."
+        );
+    }
+
+    if (!request.getNewPassword().equals(
+            request.getConfirmPassword()
+    )) {
+
+        throw new InvalidPasswordException(
+                "New password and confirm password do not match."
+        );
+    }
+
+    currentUser.setPassword(
+            passwordEncoder.encode(
+                    request.getNewPassword()
+            )
+    );
+
+    userRepository.save(currentUser);
+
+}
 
 }

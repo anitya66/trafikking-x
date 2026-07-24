@@ -1,5 +1,6 @@
 package com.trafikkingx.account.service;
 
+import com.trafikkingx.account.dto.request.ChangePasswordRequest;
 import com.trafikkingx.account.dto.response.ProfileResponse;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -10,5 +11,7 @@ public interface AccountService {
     ProfileResponse uploadAvatar(MultipartFile file);
 
     ProfileResponse deleteAvatar();
+
+    void changePassword(ChangePasswordRequest request);
 
 }

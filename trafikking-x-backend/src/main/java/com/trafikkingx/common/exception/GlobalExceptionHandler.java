@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import com.trafikkingx.account.exception.InvalidPasswordException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -78,5 +79,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ApiResponse.failure(ex.getMessage()));
     }
+
+    @ExceptionHandler(InvalidPasswordException.class)
+public ResponseEntity<ApiResponse<Object>> handleInvalidPasswordException(
+        InvalidPasswordException ex) {
+
+    return ResponseEntity.badRequest()
+            .body(ApiResponse.failure(ex.getMessage()));
+}
 
 }

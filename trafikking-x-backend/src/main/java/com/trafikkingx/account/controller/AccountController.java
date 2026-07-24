@@ -1,10 +1,12 @@
 package com.trafikkingx.account.controller;
 
+import com.trafikkingx.account.dto.request.ChangePasswordRequest;
 import com.trafikkingx.account.dto.response.ProfileResponse;
 import com.trafikkingx.account.service.AccountService;
 import com.trafikkingx.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +28,6 @@ public class AccountController {
                 "Profile fetched successfully.",
                 accountService.getMyProfile()
         );
-
     }
 
     @PostMapping(
@@ -42,7 +43,6 @@ public class AccountController {
                 "Avatar uploaded successfully.",
                 accountService.uploadAvatar(file)
         );
-
     }
 
     @DeleteMapping("/avatar")
@@ -53,7 +53,20 @@ public class AccountController {
                 "Avatar deleted successfully.",
                 accountService.deleteAvatar()
         );
+    }
 
+    @PutMapping("/password")
+    @Operation(summary = "Change Password")
+    public ApiResponse<Void> changePassword(
+            @Valid @RequestBody ChangePasswordRequest request
+    ) {
+
+        accountService.changePassword(request);
+
+        return ApiResponse.success(
+                "Password changed successfully.",
+                null
+        );
     }
 
 }
