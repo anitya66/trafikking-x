@@ -23,28 +23,38 @@ public class SecurityConfig {
             throws Exception {
 
         return http
-                .cors(cors -> {})
-                
+                .cors(cors -> {
+                })
+
                 .csrf(AbstractHttpConfigurer::disable)
 
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(
-                                SessionCreationPolicy.STATELESS))
+                                SessionCreationPolicy.STATELESS
+                        )
+                )
 
                 .authorizeHttpRequests(auth -> auth
+
                         .requestMatchers(
-        "/api/v1/test/**",
-        "/api/v1/auth/register",
-        "/api/v1/auth/login",
-        "/ws/**", 
-        "/ws", 
-        "/v3/api-docs/**",
-        "/swagger-ui/**",
-        "/uploads/**",
-        "/swagger-ui.html"
-).permitAll()
+
+                                "/api/v1/auth/**",
+
+                                "/api/v1/test/**",
+
+                                "/uploads/**",
+
+                                "/ws/**",
+                                "/ws",
+
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
+
+                        ).permitAll()
 
                         .anyRequest().authenticated()
+
                 )
 
                 .addFilterBefore(
@@ -54,4 +64,5 @@ public class SecurityConfig {
 
                 .build();
     }
+
 }
