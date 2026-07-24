@@ -56,6 +56,10 @@ export default function DashboardPage() {
     });
 
     queryClient.invalidateQueries({
+  queryKey: ["dashboard-recent-incidents"],
+});
+
+    queryClient.invalidateQueries({
       queryKey: ["incidents"],
     });
 

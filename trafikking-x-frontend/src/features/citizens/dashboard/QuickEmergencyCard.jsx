@@ -1,6 +1,9 @@
+import { useState } from "react";
+
 import { AlertTriangle, ArrowRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+
 import {
   Card,
   CardContent,
@@ -8,7 +11,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+import ReportEmergencyDialog from "@/features/incidents/components/ReportEmergencyDialog";
+
 export default function QuickEmergencyCard() {
+
+    const [open, setOpen] = useState(false);
+
   return (
     <Card className="group relative overflow-hidden">
 
@@ -34,15 +42,21 @@ export default function QuickEmergencyCard() {
         </p>
 
         <Button
-          className="w-full"
-          size="lg"
-        >
+  className="w-full"
+  size="lg"
+  onClick={() => setOpen(true)}
+>
           Report Emergency
 
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
 
       </CardContent>
+
+      <ReportEmergencyDialog
+  open={open}
+  onOpenChange={setOpen}
+/>
 
     </Card>
   );
