@@ -1,10 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { getDispatchQueue } from "@/services/dashboardApi";
+import { getDispatchQueue } from "../services/dispatchApi";
 
 export function useDispatchQueue() {
+
   return useQuery({
-    queryKey: ["dashboard-dispatch-queue"],
+
+    queryKey: ["dispatch-queue"],
+
     queryFn: getDispatchQueue,
+
   });
+
 }

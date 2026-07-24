@@ -10,21 +10,25 @@ import org.springframework.stereotype.Service;
 public class ResourceScoringServiceImpl
         implements ResourceScoringService {
 
-    @Override
-    public double calculateScore(
-            ResourceCandidate candidate) {
+@Override
+public double calculateScore(
+        ResourceCandidate candidate) {
 
-        log.debug(
-                "Calculating score for resource {}",
-                candidate.getName()
-        );
+    log.debug(
+            "Calculating score for resource {}",
+            candidate.getName()
+    );
 
-        /*
-         * Version 1
-         *
-         * Score = Distance
-         */
+    double distance = candidate.getDistance();
 
-        return candidate.getDistance();
-    }
+    /*
+     * Version 2
+     *
+     * Higher score = Better recommendation
+     */
+
+    double score = 100 - (distance * 10);
+
+    return Math.max(score, 10);
+}
 }

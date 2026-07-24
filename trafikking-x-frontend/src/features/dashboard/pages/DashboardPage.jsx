@@ -4,10 +4,15 @@ import {
   Building2,
   Shield,
 } from "lucide-react";
+import { useState } from "react";
 
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+
+import AIRecommendationCard from "@/features/ai/components/AIRecommendationCard";
+import TrackingPanel from "@/features/tracking/components/TrackingPanel";
 import EmergencyMap from "@/features/map/components/EmergencyMap";
+
 import { useDashboardSocket } from "@/hooks/realtime/useDashboardSocket";
 
 import DispatchQueue from "../components/DispatchQueue";
@@ -29,14 +34,22 @@ export default function DashboardPage() {
 
   const queryClient = useQueryClient();
 
+  const [
+    selectedIncident,
+    setSelectedIncident,
+  ] = useState(null);
+
   useDashboardSocket((event) => {
 
     console.log("Dashboard Event", event);
 
-    toast.warning("🚨 New Emergency Incident Reported", {
-      description: `Incident No: ${event.incidentNumber}`,
-      duration: 5000,
-    });
+    toast.warning(
+      "🚨 New Emergency Incident Reported",
+      {
+        description: `Incident No: ${event.incidentNumber}`,
+        duration: 5000,
+      }
+    );
 
     queryClient.invalidateQueries({
       queryKey: ["dashboard-summary"],
@@ -50,22 +63,30 @@ export default function DashboardPage() {
       queryKey: ["map-overview"],
     });
 
+    queryClient.invalidateQueries({
+      queryKey: ["dispatch-queue"],
+    });
+
   });
 
   if (isError) {
+
     return (
       <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-6 text-red-400">
         Failed to load dashboard summary.
       </div>
     );
+
   }
 
   return (
+
     <div className="space-y-8">
 
       {/* Header */}
 
       <div>
+
         <h1 className="text-4xl font-bold tracking-tight">
           Dashboard
         </h1>
@@ -73,6 +94,7 @@ export default function DashboardPage() {
         <p className="mt-2 text-muted-foreground">
           Emergency Command Center
         </p>
+
       </div>
 
       {/* Metrics */}
@@ -117,12 +139,24 @@ export default function DashboardPage() {
 
       </div>
 
-      {/* Incident Feed + Dispatch */}
+      {/* Incident Feed + AI + Tracking + Dispatch */}
 
       <div className="grid gap-6 xl:grid-cols-3">
 
-        <div className="xl:col-span-2">
-          <LiveIncidentFeed />
+        <div className="space-y-6 xl:col-span-2">
+
+          <LiveIncidentFeed
+            onIncidentSelect={setSelectedIncident}
+          />
+
+          <AIRecommendationCard
+            incident={selectedIncident}
+          />
+
+          <TrackingPanel
+            dispatchId={1}
+          />
+
         </div>
 
         <DispatchQueue />
@@ -157,5 +191,7 @@ export default function DashboardPage() {
       </div>
 
     </div>
+
   );
+
 }

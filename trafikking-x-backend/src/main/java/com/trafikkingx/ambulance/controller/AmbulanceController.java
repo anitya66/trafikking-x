@@ -2,6 +2,8 @@ package com.trafikkingx.ambulance.controller;
 
 import com.trafikkingx.ambulance.dto.request.CreateAmbulanceRequest;
 import com.trafikkingx.ambulance.dto.request.UpdateAmbulanceRequest;
+import com.trafikkingx.ambulance.dto.request.UpdateLocationRequest;
+import com.trafikkingx.ambulance.dto.response.AmbulanceLocationResponse;
 import com.trafikkingx.ambulance.dto.response.AmbulanceResponse;
 import com.trafikkingx.ambulance.service.AmbulanceService;
 import com.trafikkingx.common.response.ApiResponse;
@@ -85,4 +87,25 @@ public class AmbulanceController {
                 .message("Ambulance deleted successfully")
                 .build();
     }
+    @PatchMapping("/{ambulanceId}/location")
+public ApiResponse<AmbulanceLocationResponse> updateLocation(
+
+        @PathVariable Long ambulanceId,
+
+        @Valid
+        @RequestBody
+        UpdateLocationRequest request) {
+
+    return ApiResponse
+            .<AmbulanceLocationResponse>builder()
+            .success(true)
+            .message("Ambulance location updated successfully.")
+            .data(
+                    ambulanceService.updateLocation(
+                            ambulanceId,
+                            request
+                    )
+            )
+            .build();
+}
 }

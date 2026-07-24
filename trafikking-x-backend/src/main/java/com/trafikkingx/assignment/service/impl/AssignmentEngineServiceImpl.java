@@ -103,38 +103,96 @@ public class AssignmentEngineServiceImpl
         );
 
         return AssignmentResponse.builder()
-                .incidentId(incidentId)
 
-                .hospitalId(
-                        hospital != null ? hospital.getId() : null
-                )
-                .hospitalName(
-                        hospital != null ? hospital.getName() : null
-                )
-                .hospitalDistance(
-                        hospital != null ? hospital.getDistance() : null
-                )
+        .incidentId(incidentId)
 
-                .ambulanceId(
-                        ambulance != null ? ambulance.getId() : null
-                )
-                .vehicleNumber(
-                        ambulance != null ? ambulance.getName() : null
-                )
-                .ambulanceDistance(
-                        ambulance != null ? ambulance.getDistance() : null
-                )
+        // -------------------------
+        // Hospital
+        // -------------------------
 
-                .policeStationId(
-                        police != null ? police.getId() : null
-                )
-                .policeStationName(
-                        police != null ? police.getName() : null
-                )
-                .policeDistance(
-                        police != null ? police.getDistance() : null
-                )
+        .hospitalId(
+                hospital != null ? hospital.getId() : null
+        )
+        .hospitalName(
+                hospital != null ? hospital.getName() : null
+        )
+        .hospitalDistance(
+                hospital != null ? hospital.getDistance() : null
+        )
+        .hospitalEtaMinutes(
+                hospital != null
+                        ? Math.max(2, (int) Math.ceil(hospital.getDistance() * 2))
+                        : null
+        )
+        .hospitalConfidence(
+                hospital != null
+                        ? Math.min(99, hospital.getScore().intValue())
+                        : null
+        )
+        .hospitalReason(
+                hospital != null
+                        ? "Nearest available hospital selected based on AI resource scoring."
+                        : null
+        )
 
-                .build();
+        // -------------------------
+        // Ambulance
+        // -------------------------
+
+        .ambulanceId(
+                ambulance != null ? ambulance.getId() : null
+        )
+        .vehicleNumber(
+                ambulance != null ? ambulance.getName() : null
+        )
+        .ambulanceDistance(
+                ambulance != null ? ambulance.getDistance() : null
+        )
+        .ambulanceEtaMinutes(
+                ambulance != null
+                        ? Math.max(1, (int) Math.ceil(ambulance.getDistance() * 2))
+                        : null
+        )
+        .ambulanceConfidence(
+                ambulance != null
+                        ? Math.min(99, hospital.getScore().intValue())
+                        : null
+        )
+        .ambulanceReason(
+                ambulance != null
+                        ? "Closest available ambulance with the highest assignment score."
+                        : null
+        )
+
+        // -------------------------
+        // Police
+        // -------------------------
+
+        .policeStationId(
+                police != null ? police.getId() : null
+        )
+        .policeStationName(
+                police != null ? police.getName() : null
+        )
+        .policeDistance(
+                police != null ? police.getDistance() : null
+        )
+        .policeEtaMinutes(
+                police != null
+                        ? Math.max(2, (int) Math.ceil(police.getDistance() * 2))
+                        : null
+        )
+        .policeConfidence(
+                police != null
+                        ? Math.min(99, hospital.getScore().intValue())
+                        : null
+        )
+        .policeReason(
+                police != null
+                        ? "Nearest active police station selected using AI scoring."
+                        : null
+        )
+
+        .build();
     }
 }

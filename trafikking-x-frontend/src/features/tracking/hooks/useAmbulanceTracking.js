@@ -5,12 +5,12 @@ import {
   unsubscribe,
 } from "@/services/websocket/socketManager";
 
-export function useDashboardSocket(callback) {
+export function useAmbulanceTracking(callback) {
 
   useEffect(() => {
 
     subscribe(
-      "/topic/dashboard",
+      "/topic/ambulance/location",
       (message) => {
 
         callback(
@@ -22,7 +22,9 @@ export function useDashboardSocket(callback) {
 
     return () => {
 
-      unsubscribe("/topic/dashboard");
+      unsubscribe(
+        "/topic/ambulance/location"
+      );
 
     };
 

@@ -6,7 +6,7 @@ import com.trafikkingx.incident.entity.Incident;
 import com.trafikkingx.notification.enums.NotificationStatus;
 import com.trafikkingx.notification.enums.NotificationType;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import com.trafikkingx.common.exception.custom.NotificationAccessDeniedException;
 import com.trafikkingx.common.exception.custom.NotificationNotFoundException;
 import com.trafikkingx.notification.dto.NotificationResponse;
@@ -35,7 +35,9 @@ public class NotificationServiceImpl implements NotificationService {
 
     private final UserRepository userRepository;
 
-        private Notification getNotification(Long id) {
+    private final SimpMessagingTemplate messagingTemplate;
+
+    private Notification getNotification(Long id) {
 
         return notificationRepository.findById(id)
                 .orElseThrow(
@@ -96,12 +98,22 @@ public void createNotification(
     notification.setIncident(incident);
 }
 
-    notificationRepository.save(notification);
+    Notification savedNotification =
+        notificationRepository.save(notification);
 
-    log.info(
-            "Notification created successfully for user: {}",
-            recipient.getEmail()
-    );
+NotificationResponse response =
+        notificationMapper.toResponse(savedNotification);
+
+messagingTemplate.convertAndSendToUser(
+        recipient.getEmail(),
+        "/queue/notifications",
+        response
+);
+
+log.info(
+        "Notification created and pushed to user: {}",
+        recipient.getEmail()
+);
 }
 
 @Override

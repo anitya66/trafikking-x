@@ -8,9 +8,15 @@ import com.trafikkingx.ambulance.mapper.AmbulanceMapper;
 import com.trafikkingx.ambulance.repository.AmbulanceRepository;
 import com.trafikkingx.ambulance.service.AmbulanceService;
 import com.trafikkingx.ambulance.validation.AmbulanceValidator;
+import com.trafikkingx.common.event.AmbulanceLocationUpdatedEvent;
 import com.trafikkingx.common.exception.custom.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import com.trafikkingx.ambulance.dto.request.UpdateLocationRequest;
+import com.trafikkingx.ambulance.dto.response.AmbulanceLocationResponse;
+import java.time.LocalDateTime;
+
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,11 +33,14 @@ public class AmbulanceServiceImpl implements AmbulanceService {
 
     private final AmbulanceValidator ambulanceValidator;
 
+    private final ApplicationEventPublisher eventPublisher;
+
     private Ambulance getAmbulance(Long id) {
 
         return ambulanceRepository.findById(id)
                 .orElseThrow(AmbulanceNotFoundException::new);
     }
+
 
 @Override
 @Transactional
@@ -145,5 +154,61 @@ public void deleteAmbulance(Long id) {
             "Ambulance deleted successfully: {}",
             ambulance.getVehicleNumber()
     );
+}
+
+@Override
+@Transactional
+public AmbulanceLocationResponse updateLocation(
+        Long ambulanceId,
+        UpdateLocationRequest request) {
+
+    log.info(
+            "Updating location for ambulance {}",
+            ambulanceId
+    );
+
+    Ambulance ambulance =
+            getAmbulance(ambulanceId);
+
+    ambulance.setCurrentLatitude(
+            request.getLatitude()
+    );
+
+    ambulance.setCurrentLongitude(
+            request.getLongitude()
+    );
+
+    ambulance.setLastLocationUpdatedAt(
+            LocalDateTime.now()
+    );
+
+    Ambulance updated =
+            ambulanceRepository.save(ambulance);
+
+    eventPublisher.publishEvent(
+
+        new AmbulanceLocationUpdatedEvent(
+
+                updated.getId(),
+
+                updated.getCurrentLatitude(),
+
+                updated.getCurrentLongitude()
+
+        )
+
+);        
+
+    log.info(
+            "Location updated successfully for ambulance {}",
+            ambulanceId
+    );
+
+    return AmbulanceLocationResponse.builder()
+            .ambulanceId(updated.getId())
+            .latitude(updated.getCurrentLatitude())
+            .longitude(updated.getCurrentLongitude())
+            .updatedAt(updated.getLastLocationUpdatedAt())
+            .build();
 }
 }

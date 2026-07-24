@@ -25,6 +25,12 @@ public class AssignmentResponse {
 
     private Double hospitalDistance;
 
+    private Integer hospitalEtaMinutes;
+
+private Integer hospitalConfidence;
+
+private String hospitalReason;
+
     // Ambulance
 
     private Long ambulanceId;
@@ -33,6 +39,12 @@ public class AssignmentResponse {
 
     private Double ambulanceDistance;
 
+    private Integer ambulanceEtaMinutes;
+
+private Integer ambulanceConfidence;
+
+private String ambulanceReason;
+
     // Police
 
     private Long policeStationId;
@@ -40,4 +52,10 @@ public class AssignmentResponse {
     private String policeStationName;
 
     private Double policeDistance;
+
+    private Integer policeEtaMinutes;
+
+private Integer policeConfidence;
+
+private String policeReason;
 }

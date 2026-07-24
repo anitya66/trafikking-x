@@ -13,9 +13,21 @@ import {
   formatIncidentType,
 } from "../utils/incidentFormatter";
 
-export default function IncidentCard({ incident }) {
+export default function IncidentCard({
+  incident,
+  selected,
+  onClick,
+}) {
+
   return (
-    <Card className="group cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:border-primary/20">
+    <Card
+  onClick={onClick}
+  className={`group cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 ${
+    selected
+      ? "border-primary ring-2 ring-primary/20"
+      : ""
+  }`}
+>
 
       <CardContent className="space-y-5 p-6">
 
