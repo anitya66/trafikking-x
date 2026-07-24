@@ -3,8 +3,9 @@ import {
   BrainCircuit,
   Circle,
   Search,
-  UserCircle2,
 } from "lucide-react";
+
+import UserMenu from "@/shared/components/user-menu/UserMenu";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -135,19 +136,9 @@ export default function Topbar() {
 
           {/* Profile */}
 
-          <Button
-            variant="ghost"
-            className="gap-2"
-            onClick={handleLogout}
-          >
-
-            <UserCircle2 className="h-6 w-6" />
-
-            <span>
-              {user?.fullName ?? "Operator"}
-            </span>
-
-          </Button>
+          <UserMenu
+  onLogout={handleLogout}
+/>
 
         </div>
 

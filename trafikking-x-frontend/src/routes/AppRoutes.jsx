@@ -1,14 +1,13 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
-import DashboardLayout from "@/layouts/DashboardLayout";
-
-import DashboardPage from "@/features/dashboard/pages/DashboardPage";
 import RoleRoutes from "./RoleRoutes";
 import LoginPage from "@/features/auth/pages/LoginPage";
 import RegisterPage from "@/features/auth/pages/RegisterPage";
 import RoleRedirect from "./RoleRedirect";
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
+import { LandingPage } from "@/features/landing";
+import { isAuthenticated } from "@/shared/utils/auth";
 
 export default function AppRoutes() {
   return (
@@ -17,9 +16,9 @@ export default function AppRoutes() {
       <Route
   path="/"
   element={
-    <ProtectedRoute>
-      <RoleRedirect />
-    </ProtectedRoute>
+    isAuthenticated()
+      ? <RoleRedirect />
+      : <LandingPage />
   }
 />
 
@@ -42,63 +41,63 @@ export default function AppRoutes() {
       />
 
       <Route
-  path="/dashboard"
-  element={
-    <ProtectedRoute>
-      <RoleRoutes />
-    </ProtectedRoute>
-  }
-/>
-
-<Route
-  path="/citizen"
-  element={
-    <ProtectedRoute>
-      <RoleRoutes />
-    </ProtectedRoute>
-  }
-/>
-
-<Route
-  path="/ambulance"
-  element={
-    <ProtectedRoute>
-      <RoleRoutes />
-    </ProtectedRoute>
-  }
-/>
-
-<Route
-  path="/hospital"
-  element={
-    <ProtectedRoute>
-      <RoleRoutes />
-    </ProtectedRoute>
-  }
-/>
-
-<Route
-  path="/police"
-  element={
-    <ProtectedRoute>
-      <RoleRoutes />
-    </ProtectedRoute>
-  }
-/>
-
-<Route
-  path="/admin"
-  element={
-    <ProtectedRoute>
-      <RoleRoutes />
-    </ProtectedRoute>
-  }
-/>
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <RoleRoutes />
+          </ProtectedRoute>
+        }
+      />
 
       <Route
-  path="*"
-  element={<RoleRedirect />}
- />
+        path="/citizen/*"
+        element={
+          <ProtectedRoute>
+            <RoleRoutes />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/ambulance"
+        element={
+          <ProtectedRoute>
+            <RoleRoutes />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/hospital"
+        element={
+          <ProtectedRoute>
+            <RoleRoutes />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/police"
+        element={
+          <ProtectedRoute>
+            <RoleRoutes />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute>
+            <RoleRoutes />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="*"
+        element={<RoleRedirect />}
+      />
 
     </Routes>
   );
