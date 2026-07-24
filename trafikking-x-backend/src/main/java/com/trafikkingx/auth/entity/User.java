@@ -45,4 +45,16 @@ public class User extends BaseEntity {
     @Builder.Default
     @Column(nullable = false)
     private boolean profileCompleted = false;
+
+    @Column(length = 500)
+private String profileImage;
+
+@Column(length = 500)
+private String bio;
+
+@Column(length = 255)
+private String address;
+
+@Column(length = 255)
+private String organization;
 }

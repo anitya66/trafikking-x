@@ -5,12 +5,15 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 
 import { NAVIGATION } from "../constants/navigation";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
 
   const [scrolled, setScrolled] = useState(false);
 
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
 
@@ -104,16 +107,17 @@ export default function Navbar() {
         <div className="hidden items-center gap-3 lg:flex">
 
           <Button
-            variant="ghost"
-          >
-            Login
-          </Button>
+  variant="ghost"
+  onClick={() => navigate("/login")}
+>
+  Login
+</Button>
 
-          <Button>
-
-            Launch Platform
-
-          </Button>
+<Button
+  onClick={() => navigate("/register")}
+>
+  Launch Platform
+</Button>
 
         </div>
 
