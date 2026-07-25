@@ -26,6 +26,6 @@ export default function RoleRedirect() {
       return <Navigate to="/admin" replace />;
 
     default:
-      return <Navigate to="/login" replace />;
+    return <Navigate to="/" replace />;
   }
 }

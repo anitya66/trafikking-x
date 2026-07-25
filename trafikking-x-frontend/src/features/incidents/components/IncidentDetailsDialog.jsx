@@ -46,7 +46,7 @@ if (isLoading) {
   );
 }
 
-if (!incident) return null;
+
 
 if (isError) {
   return (

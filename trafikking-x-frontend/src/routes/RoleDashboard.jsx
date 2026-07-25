@@ -1,5 +1,3 @@
-import DashboardLayout from "@/layouts/DashboardLayout";
-
 import DashboardPage from "@/features/dashboard/pages/DashboardPage";
 
 import CitizenDashboard from "@/dashboards/citizen/CitizenDashboard";
@@ -11,43 +9,32 @@ import AdminDashboard from "@/dashboards/admin/AdminDashboard";
 import { getCurrentRole } from "@/shared/utils/role";
 import { ROLES } from "@/shared/constants/roles";
 
-export default function RoleRoutes() {
+export default function RoleDashboard() {
+
   const role = getCurrentRole();
 
-  let dashboard = null;
-
   switch (role) {
+
     case ROLES.DISPATCHER:
-      dashboard = <DashboardPage />;
-      break;
+      return <DashboardPage />;
 
     case ROLES.CITIZEN:
-      dashboard = <CitizenDashboard />;
-      break;
+      return <CitizenDashboard />;
 
     case ROLES.AMBULANCE:
-      dashboard = <AmbulanceDashboard />;
-      break;
+      return <AmbulanceDashboard />;
 
     case ROLES.HOSPITAL:
-      dashboard = <HospitalDashboard />;
-      break;
+      return <HospitalDashboard />;
 
     case ROLES.POLICE:
-      dashboard = <PoliceDashboard />;
-      break;
+      return <PoliceDashboard />;
 
     case ROLES.ADMIN:
-      dashboard = <AdminDashboard />;
-      break;
+      return <AdminDashboard />;
 
     default:
       return null;
   }
 
-  return (
-    <DashboardLayout>
-      {dashboard}
-    </DashboardLayout>
-  );
 }

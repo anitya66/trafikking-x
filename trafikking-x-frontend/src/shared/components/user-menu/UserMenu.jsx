@@ -88,7 +88,7 @@ export default function UserMenu({
 
         <MenuItem
           onClick={() =>
-            navigate("/profile")
+            navigate("/account/profile")
           }
         >
 

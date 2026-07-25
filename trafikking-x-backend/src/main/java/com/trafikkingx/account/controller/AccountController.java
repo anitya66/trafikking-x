@@ -1,6 +1,7 @@
 package com.trafikkingx.account.controller;
 
 import com.trafikkingx.account.dto.request.ChangePasswordRequest;
+import com.trafikkingx.account.dto.request.UpdateProfileRequest;
 import com.trafikkingx.account.dto.response.ProfileResponse;
 import com.trafikkingx.account.service.AccountService;
 import com.trafikkingx.common.response.ApiResponse;
@@ -68,5 +69,18 @@ public class AccountController {
                 null
         );
     }
+
+    @PutMapping
+@Operation(summary = "Update Profile")
+public ApiResponse<ProfileResponse> updateProfile(
+        @Valid @RequestBody UpdateProfileRequest request
+) {
+
+    return ApiResponse.success(
+            "Profile updated successfully.",
+            accountService.updateProfile(request)
+    );
+
+}
 
 }

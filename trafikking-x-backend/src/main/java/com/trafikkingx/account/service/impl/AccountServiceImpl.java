@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.trafikkingx.account.dto.request.ChangePasswordRequest;
 import com.trafikkingx.account.exception.InvalidPasswordException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import com.trafikkingx.account.dto.request.UpdateProfileRequest;
 
 @Service
 @RequiredArgsConstructor
@@ -119,6 +120,30 @@ public void changePassword(ChangePasswordRequest request) {
 
     userRepository.save(currentUser);
 
+}
+
+@Override
+public ProfileResponse updateProfile(UpdateProfileRequest request) {
+
+    User currentUser = currentUserService.getCurrentUser();
+
+    if (!currentUser.getPhoneNumber().equals(request.getPhoneNumber())
+            && userRepository.existsByPhoneNumber(request.getPhoneNumber())) {
+
+        throw new IllegalArgumentException("Phone number already exists.");
+    }
+
+    currentUser.setFullName(request.getFullName());
+    currentUser.setPhoneNumber(request.getPhoneNumber());
+    currentUser.setBio(request.getBio());
+    currentUser.setAddress(request.getAddress());
+    currentUser.setOrganization(request.getOrganization());
+
+    currentUser.setProfileCompleted(true);
+
+    userRepository.save(currentUser);
+
+    return accountMapper.toProfileResponse(currentUser);
 }
 
 }

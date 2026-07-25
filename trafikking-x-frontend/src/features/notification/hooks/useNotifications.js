@@ -4,7 +4,7 @@ import {
   getNotifications,
   getUnreadNotifications,
   getUnreadCount,
-} from "../services/notificationApi";
+} from "../api/notificationApi";
 
 export function useNotifications() {
 

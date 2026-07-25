@@ -5,6 +5,7 @@ import {
   Search,
 } from "lucide-react";
 
+import NotificationBell from "@/features/notification/components/NotificationBell";
 import UserMenu from "@/shared/components/user-menu/UserMenu";
 
 import { Input } from "@/components/ui/input";
@@ -58,15 +59,15 @@ export default function Topbar() {
 
   });
 
-  function handleLogout() {
+function handleLogout() {
 
-    logout();
+  logout();
 
-    navigate("/login", {
-      replace: true,
-    });
+  navigate("/", {
+    replace: true,
+  });
 
-  }
+}
 
   return (
     <header className="sticky top-0 z-30 border-b border-border bg-background/80 backdrop-blur-xl">
@@ -113,26 +114,7 @@ export default function Topbar() {
 
           {/* Notification Bell */}
 
-          <div className="relative">
-
-            <Button
-              variant="outline"
-              size="icon"
-            >
-              <Bell className="h-5 w-5" />
-            </Button>
-
-            {unreadCount > 0 && (
-
-              <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-xs font-bold text-white">
-
-                {unreadCount > 99 ? "99+" : unreadCount}
-
-              </span>
-
-            )}
-
-          </div>
+          <NotificationBell />
 
           {/* Profile */}
 
