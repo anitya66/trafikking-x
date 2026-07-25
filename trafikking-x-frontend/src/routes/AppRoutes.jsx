@@ -12,6 +12,10 @@ import RoleDashboard from "./RoleDashboard";
 import MyIncidentsPage from "@/features/incidents/pages/MyIncidentsPage";
 
 import DashboardLayout from "@/layouts/DashboardLayout";
+import EmergencyContactsPage from "@/features/emergency-contacts/pages/EmergencyContactsPage";
+import HospitalsPage from "@/features/hospitals/pages/HospitalsPage";
+import ReportEmergencyPage from "@/features/incidents/pages/ReportEmergencyPage";
+import SettingsPage from "@/features/settings/pages/SettingsPage";
 
 import { ProfilePage } from "@/features/account";
 
@@ -101,9 +105,40 @@ export default function AppRoutes() {
           element={<ProfilePage />}
         />
 
+        
+        <Route
+          path="/account/settings"
+          element={<ProfilePage />}
+        />
+
         <Route
   path="/citizen/incidents"
   element={<MyIncidentsPage />}
+/>
+
+<Route
+  path="/citizen/contacts"
+  element={<EmergencyContactsPage />}
+/>
+
+<Route
+    path="/citizen/profile"
+    element={<ProfilePage />}
+        />
+
+<Route
+  path="/citizen/hospitals"
+  element={<HospitalsPage />}
+/>
+
+<Route
+  path="/citizen/report"
+  element={<ReportEmergencyPage />}
+/>
+
+<Route
+  path="/citizen/settings"
+  element={<SettingsPage />}
 />
 
       </Route>

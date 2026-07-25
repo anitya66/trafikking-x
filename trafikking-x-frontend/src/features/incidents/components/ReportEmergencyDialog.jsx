@@ -77,9 +77,9 @@ const locationDetected = useMemo(() => {
 
     await createIncidentMutation.mutateAsync(values);
 
-    toast.success("Emergency reported successfully.");
+toast.success("Emergency reported successfully.");
 
-    onOpenChange(false);
+onOpenChange(false);
 
   } catch (error) {
 
@@ -155,9 +155,21 @@ function detectLocation() {
 
   return (
     <Dialog
-      open={open}
-      onOpenChange={onOpenChange}
-    >
+  open={open}
+  onOpenChange={(value) => {
+
+    if (!value) {
+
+      onOpenChange(false);
+
+      return;
+
+    }
+
+    onOpenChange(value);
+
+  }}
+>
       <DialogContent className="sm:max-w-2xl">
 
         <DialogHeader>
@@ -308,13 +320,13 @@ function detectLocation() {
 
           <DialogFooter>
 
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => onOpenChange(false)}
-            >
-              Cancel
-            </Button>
+         <Button
+  type="button"
+  variant="outline"
+  onClick={() => onOpenChange(false)}
+>
+  Cancel
+</Button>
 
             <Button
   type="submit"

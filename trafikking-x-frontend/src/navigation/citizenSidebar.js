@@ -35,11 +35,11 @@ const citizenSidebar = [
     path: "/citizen/hospitals",
     icon: Building2,
   },
-  {
-    title: "AI Assistant",
-    path: "/citizen/assistant",
-    icon: Bot,
-  },
+  // {
+  //   title: "AI Assistant",
+  //   path: "/citizen/assistant",
+  //   icon: Bot,
+  // },
   {
     title: "Profile",
     path: "/citizen/profile",

@@ -1,18 +1,10 @@
 import { useState } from "react";
 
-import { Navigate } from "react-router-dom";
-
 import ReportEmergencyDialog from "../components/ReportEmergencyDialog";
 
 export default function ReportEmergencyPage() {
 
   const [open, setOpen] = useState(true);
-
-  if (!open) {
-
-    return <Navigate to="/citizen" replace />;
-
-  }
 
   return (
 
