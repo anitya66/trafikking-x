@@ -18,4 +18,17 @@ public interface DispatchRepository
 
     List<Dispatch> findTop5ByOrderByCreatedAtDesc();
 
+    long countByStatusIn(List<DispatchStatus> statuses);
+
+List<Dispatch> findByStatusIn(List<DispatchStatus> statuses);
+
+List<Dispatch> findByStatusInOrderByCreatedAtDesc(
+        List<DispatchStatus> statuses
+);
+
+List<Dispatch> findByHospitalIdAndStatusInOrderByCreatedAtDesc(
+        Long hospitalId,
+        List<DispatchStatus> statuses
+);
+
 }

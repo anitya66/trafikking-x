@@ -1,9 +1,6 @@
 import {
   Home,
-  Radio,
   MapPinned,
-  Clock3,
-  History,
   User,
   Settings,
 } from "lucide-react";
@@ -15,24 +12,9 @@ const ambulanceSidebar = [
     icon: Home,
   },
   {
-    title: "Assignments",
-    path: "/ambulance/assignments",
-    icon: Radio,
-  },
-  {
-    title: "Navigation",
-    path: "/ambulance/navigation",
-    icon: MapPinned,
-  },
-  {
     title: "Live Tracking",
     path: "/ambulance/tracking",
-    icon: Clock3,
-  },
-  {
-    title: "History",
-    path: "/ambulance/history",
-    icon: History,
+    icon: MapPinned,
   },
   {
     title: "Profile",

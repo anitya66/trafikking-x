@@ -1,167 +1,168 @@
-import { useMemo, useState } from "react";
-
 import {
+  Activity,
+  Ambulance,
+  BedDouble,
+  HeartPulse,
+  Stethoscope,
   Building2,
-  Search,
+  ClipboardPlus,
+  ShieldCheck,
 } from "lucide-react";
 
-import PageHeader from "@/shared/components/PageHeader";
+import MetricCard from "@/shared/components/MetricCard";
 
-import LoadingState from "@/shared/components/LoadingState";
-import EmptyState from "@/shared/components/EmptyState";
+import IncomingPatientsCard from "../components/dashboard/IncomingPatientsCard";
+import IncomingAmbulancesCard from "../components/dashboard/IncomingAmbulancesCard";
+import AIRecommendationCard from "../components/dashboard/AIRecommendationCard";
+import BedOccupancyCard from "../components/dashboard/BedOccupancyCard";
+import ICUOccupancyCard from "../components/dashboard/ICUOccupancyCard";
 
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-
-import { useHospitals } from "..";
-
-import HospitalCard from "../components/HospitalCard";
-import HospitalDetailsDialog from "../components/HospitalDetailsDialog";
+import { useHospitalDashboard } from "../hooks/useHospitalDashboard";
 
 export default function HospitalsPage() {
 
   const {
-
     data,
-
     isLoading,
-
     isError,
-
-  } = useHospitals({
-
-    page: 0,
-
-    size: 20,
-
-  });
-
-  const hospitals = data?.content ?? [];
-
-  const [search, setSearch] = useState("");
-
-  const [selectedHospital, setSelectedHospital] =
-    useState(null);
-
-  const filteredHospitals = useMemo(() => {
-
-    return hospitals.filter((hospital) =>
-
-      hospital.hospitalName
-        .toLowerCase()
-        .includes(search.toLowerCase()) ||
-
-      hospital.city
-        .toLowerCase()
-        .includes(search.toLowerCase())
-
-    );
-
-  }, [
-
-    hospitals,
-
-    search,
-
-  ]);
-
-  if (isLoading) {
-
-    return <LoadingState cards={6} />;
-
-  }
+  } = useHospitalDashboard();
 
   if (isError) {
-
     return (
-
-      <div className="py-20 text-center text-red-500">
-
-        Failed to load hospitals.
-
+      <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-6 text-red-400">
+        Failed to load hospital dashboard.
       </div>
-
     );
-
   }
+
+  const metrics = data?.metrics;
 
   return (
 
     <div className="space-y-8">
 
-      <PageHeader
+      {/* Header */}
 
-        title="Hospitals"
+      <div>
 
-        description="Browse hospitals and emergency medical facilities."
+        <h1 className="text-4xl font-bold tracking-tight">
+          Hospital Dashboard
+        </h1>
 
-      />
+        <p className="mt-2 text-muted-foreground">
+          Emergency Response & Patient Management Center
+        </p>
 
-      <div className="relative max-w-md">
+      </div>
 
-        <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+      {/* Metrics */}
 
-        <Input
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
 
-          value={search}
+        <MetricCard
+          title="Emergency Queue"
+          value={isLoading ? "--" : metrics?.emergencyQueue}
+          subtitle="Waiting Patients"
+          trend="+3"
+          icon={Activity}
+        />
 
-          onChange={(e) =>
-            setSearch(e.target.value)
+        <MetricCard
+          title="Available Beds"
+          value={isLoading ? "--" : metrics?.availableBeds}
+          subtitle="Ready"
+          trend="+5"
+          icon={BedDouble}
+        />
+
+        <MetricCard
+          title="ICU Beds"
+          value={isLoading ? "--" : metrics?.availableIcuBeds}
+          subtitle="Available"
+          trend="+1"
+          icon={HeartPulse}
+        />
+
+        <MetricCard
+          title="Doctors On Duty"
+          value={isLoading ? "--" : metrics?.doctorsOnDuty}
+          subtitle="Current Shift"
+          trend="+2"
+          icon={Stethoscope}
+        />
+
+        <MetricCard
+          title="Incoming Ambulances"
+          value={isLoading ? "--" : metrics?.incomingAmbulances}
+          subtitle="En Route"
+          trend="+1"
+          icon={Ambulance}
+        />
+
+        <MetricCard
+          title="Hospital Capacity"
+          value={
+            isLoading
+              ? "--"
+              : `${metrics?.hospitalCapacity}%`
           }
+          subtitle="Occupancy"
+          trend="+4%"
+          icon={Building2}
+        />
 
-          placeholder="Search hospital or city..."
+        <MetricCard
+          title="Today's Admissions"
+          value={isLoading ? "--" : metrics?.todayAdmissions}
+          subtitle="Patients"
+          trend="+8"
+          icon={ClipboardPlus}
+        />
 
-          className="pl-10"
-
+        <MetricCard
+          title="Emergency Status"
+          value={isLoading ? "--" : metrics?.emergencyStatus}
+          subtitle="Operational"
+          icon={ShieldCheck}
         />
 
       </div>
 
-            {filteredHospitals.length === 0 ? (
+      {/* Dashboard */}
 
-        <EmptyState
-          icon={
-            <Building2 className="h-14 w-14 text-muted-foreground" />
-          }
-          title="No Hospitals Found"
-          description="Try changing your search keywords."
-        />
+      <div className="grid gap-6 xl:grid-cols-3">
 
-      ) : (
+        <div className="space-y-6 xl:col-span-2">
 
-        <div className="grid gap-6 lg:grid-cols-2">
+          <IncomingPatientsCard
+            patients={data?.incomingPatients ?? []}
+          />
 
-          {filteredHospitals.map((hospital) => (
-
-            <HospitalCard
-              key={hospital.id}
-              hospital={hospital}
-              onView={setSelectedHospital}
-            />
-
-          ))}
+          <IncomingAmbulancesCard
+            ambulances={data?.incomingAmbulances ?? []}
+          />
 
         </div>
 
-      )}
+        <div className="space-y-6">
 
-      <HospitalDetailsDialog
+          <AIRecommendationCard
+            recommendation={data?.aiRecommendation}
+          />
 
-        open={!!selectedHospital}
+          <BedOccupancyCard
+            occupancy={data?.bedOccupancy}
+          />
 
-        hospital={selectedHospital}
+          <ICUOccupancyCard
+            occupancy={data?.icuOccupancy}
+          />
 
-        onOpenChange={(open) => {
+        </div>
 
-          if (!open) {
+      </div>
 
-            setSelectedHospital(null);
-
-          }
-
-        }}
-
-      />    </div>
+    </div>
 
   );
 

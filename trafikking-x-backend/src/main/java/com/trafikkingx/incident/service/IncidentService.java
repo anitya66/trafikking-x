@@ -22,4 +22,8 @@ public interface IncidentService {
     );
 
     void deleteIncident(Long id);
+
+    List<IncidentResponse> getAllIncidents();
+
+    List<IncidentResponse> getActiveIncidents();
 }

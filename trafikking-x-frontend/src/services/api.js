@@ -1,4 +1,6 @@
 import axios from "axios";
+import { clearAuth } from "@/features/auth/utils/authStorage";
+import { getAccessToken } from "@/shared/utils/auth";
 
 const api = axios.create({
   baseURL: "http://localhost:8080/api/v1",
@@ -12,7 +14,7 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("accessToken");
+    const token = getAccessToken();
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -24,15 +26,28 @@ api.interceptors.request.use(
 );
 
 api.interceptors.response.use(
+
   (response) => response,
 
   (error) => {
-    if (error.response?.status === 401) {
-      console.warn("Unauthorized request");
+
+    const status = error.response?.status;
+
+    if (status === 401 || status === 403) {
+
+      console.warn("Session expired.");
+
+      clearAuth();
+
+if (window.location.pathname !== "/login") {
+  window.location.replace("/login");
+}
+
     }
 
     return Promise.reject(error);
-  }
-);
 
+  }
+
+);
 export default api;

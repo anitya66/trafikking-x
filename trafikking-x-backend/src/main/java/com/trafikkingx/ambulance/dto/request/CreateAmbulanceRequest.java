@@ -11,6 +11,9 @@ import lombok.*;
 @AllArgsConstructor
 public class CreateAmbulanceRequest {
 
+    @NotNull
+    private Long userId;
+
     @NotBlank
     private String vehicleNumber;
 

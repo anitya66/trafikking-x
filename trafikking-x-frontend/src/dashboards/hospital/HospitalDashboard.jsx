@@ -1,9 +1,5 @@
-const HospitalDashboard = () => {
-    return (
-        <div className="p-6 text-2xl font-semibold">
-            Hospital Dashboard (Coming Soon)
-        </div>
-    );
-};
+import HospitalsPage from "@/features/hospitals/pages/HospitalsPage";
 
-export default HospitalDashboard;
+export default function HospitalDashboard() {
+  return <HospitalsPage />;
+}

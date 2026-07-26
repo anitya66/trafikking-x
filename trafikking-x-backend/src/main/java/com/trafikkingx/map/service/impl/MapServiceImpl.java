@@ -13,6 +13,10 @@ import com.trafikkingx.police.entity.PoliceStation;
 import com.trafikkingx.police.repository.PoliceStationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.trafikkingx.assignment.entity.Assignment;
+import com.trafikkingx.assignment.enums.AssignmentStatus;
+import com.trafikkingx.assignment.repository.AssignmentRepository;
+import com.trafikkingx.map.dto.response.MapAssignmentResponse;
 
 import java.util.List;
 
@@ -27,6 +31,8 @@ public class MapServiceImpl implements MapService {
     private final AmbulanceRepository ambulanceRepository;
 
     private final PoliceStationRepository policeStationRepository;
+
+    private final AssignmentRepository assignmentRepository;
 
     @Override
     public MapOverviewResponse getMapOverview() {
@@ -74,11 +80,38 @@ public class MapServiceImpl implements MapService {
                         .map(this::toPoliceMarker)
                         .toList();
 
+        List<MapAssignmentResponse> assignments =
+
+        assignmentRepository
+
+                .findByStatusIn(
+
+                        List.of(
+
+                                AssignmentStatus.PENDING,
+
+                                AssignmentStatus.ACCEPTED,
+
+                                AssignmentStatus.EN_ROUTE,
+
+                                AssignmentStatus.ARRIVED
+
+                        )
+
+                )
+
+                .stream()
+
+                .map(this::toAssignmentResponse)
+
+                .toList();
+
         return MapOverviewResponse.builder()
                 .incidents(incidents)
                 .hospitals(hospitals)
                 .ambulances(ambulances)
                 .policeStations(policeStations)
+                .assignments(assignments)
                 .build();
     }
 
@@ -134,4 +167,34 @@ public class MapServiceImpl implements MapService {
                 .status("ACTIVE")
                 .build();
     }
+
+    private MapAssignmentResponse toAssignmentResponse(
+        Assignment assignment
+) {
+
+    return MapAssignmentResponse.builder()
+
+            .assignmentId(
+                    assignment.getId()
+            )
+
+            .incidentId(
+                    assignment.getIncident().getId()
+            )
+
+            .ambulanceId(
+                    assignment.getAmbulance().getId()
+            )
+
+            .hospitalId(
+                    null
+            )
+
+            .policeStationId(
+                    null
+            )
+
+            .build();
+
+}
 }

@@ -28,10 +28,18 @@ public interface IncidentRepository
 
     long countByStatusIn(List<IncidentStatus> statuses);
 
-long countByReportedAtBetween(
-        LocalDateTime start,
-        LocalDateTime end
-);
+    long countByReportedAtBetween(
+            LocalDateTime start,
+            LocalDateTime end
+    );
 
-List<Incident> findTop5ByOrderByReportedAtDesc();
+    List<Incident> findTop5ByOrderByReportedAtDesc();
+
+    // NEW
+    List<Incident> findAllByOrderByReportedAtDesc();
+
+    // NEW
+    List<Incident> findByStatusInOrderByReportedAtDesc(
+            List<IncidentStatus> statuses
+    );
 }

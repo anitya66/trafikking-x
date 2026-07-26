@@ -8,6 +8,8 @@ import com.trafikkingx.ambulance.mapper.AmbulanceMapper;
 import com.trafikkingx.ambulance.repository.AmbulanceRepository;
 import com.trafikkingx.ambulance.service.AmbulanceService;
 import com.trafikkingx.ambulance.validation.AmbulanceValidator;
+import com.trafikkingx.auth.entity.User;
+import com.trafikkingx.auth.repository.UserRepository;
 import com.trafikkingx.common.event.AmbulanceLocationUpdatedEvent;
 import com.trafikkingx.common.exception.custom.*;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,8 @@ import com.trafikkingx.ambulance.dto.response.AmbulanceLocationResponse;
 import java.time.LocalDateTime;
 
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,11 +39,36 @@ public class AmbulanceServiceImpl implements AmbulanceService {
 
     private final ApplicationEventPublisher eventPublisher;
 
+    private final UserRepository userRepository;
+
     private Ambulance getAmbulance(Long id) {
 
         return ambulanceRepository.findById(id)
                 .orElseThrow(AmbulanceNotFoundException::new);
-    }
+        }
+
+    private User getCurrentUser() {
+
+    String email = SecurityContextHolder
+            .getContext()
+            .getAuthentication()
+            .getName();
+
+    return userRepository
+            .findByEmail(email)
+            .orElseThrow(
+                    () -> new UsernameNotFoundException("User not found")
+            );
+}
+
+private Ambulance getCurrentAmbulance() {
+
+    return ambulanceRepository
+            .findByUser(getCurrentUser())
+            .orElseThrow(
+                    AmbulanceNotFoundException::new
+            );
+}
 
 
 @Override
@@ -69,6 +98,12 @@ public AmbulanceResponse createAmbulance(
 
     Ambulance ambulance =
             ambulanceMapper.toEntity(request);
+
+    User user = userRepository.findById(request.getUserId())
+        .orElseThrow(() ->
+                new UsernameNotFoundException("User not found"));
+
+ambulance.setUser(user);        
 
     Ambulance savedAmbulance =
             ambulanceRepository.save(ambulance);
@@ -210,5 +245,74 @@ public AmbulanceLocationResponse updateLocation(
             .longitude(updated.getCurrentLongitude())
             .updatedAt(updated.getLastLocationUpdatedAt())
             .build();
+
+        }
+
+@Override
+public AmbulanceResponse getMyAmbulance() {
+
+    return ambulanceMapper.toResponse(
+            getCurrentAmbulance()
+    );
+
+}
+
+@Override
+@Transactional
+public AmbulanceLocationResponse updateMyLocation(
+        UpdateLocationRequest request
+) {
+
+    Ambulance ambulance =
+            getCurrentAmbulance();
+
+    ambulance.setCurrentLatitude(
+            request.getLatitude()
+    );
+
+    ambulance.setCurrentLongitude(
+            request.getLongitude()
+    );
+
+    ambulance.setLastLocationUpdatedAt(
+            LocalDateTime.now()
+    );
+
+    Ambulance updated =
+            ambulanceRepository.save(
+                    ambulance
+            );
+
+    eventPublisher.publishEvent(
+
+            new AmbulanceLocationUpdatedEvent(
+
+                    updated.getId(),
+
+                    updated.getCurrentLatitude(),
+
+                    updated.getCurrentLongitude()
+
+            )
+
+    );
+
+    log.info(
+            "Live location updated for ambulance {}",
+            updated.getId()
+    );
+
+    return AmbulanceLocationResponse.builder()
+
+            .ambulanceId(updated.getId())
+
+            .latitude(updated.getCurrentLatitude())
+
+            .longitude(updated.getCurrentLongitude())
+
+            .updatedAt(updated.getLastLocationUpdatedAt())
+
+            .build();
+
 }
 }

@@ -2,6 +2,7 @@ package com.trafikkingx.police.entity;
 
 import com.trafikkingx.common.entity.BaseEntity;
 import com.trafikkingx.police.enums.PoliceStationType;
+import com.trafikkingx.auth.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -62,4 +63,12 @@ public class PoliceStation extends BaseEntity {
     @Builder.Default
     @Column(nullable = false)
     private Boolean active = true;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+        name = "user_id",
+        nullable = false,
+        unique = true)
+    private User user;
+
 }

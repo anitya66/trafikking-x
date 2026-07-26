@@ -61,11 +61,9 @@ export default function Topbar() {
 
 function handleLogout() {
 
-  logout();
+  queryClient.clear();
 
-  navigate("/", {
-    replace: true,
-  });
+  logout();
 
 }
 

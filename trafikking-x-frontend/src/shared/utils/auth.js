@@ -18,4 +18,6 @@ export function isAuthenticated() {
 
 export function logout() {
   clearAuth();
+
+  window.location.replace("/login");
 }

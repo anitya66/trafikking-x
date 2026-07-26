@@ -108,4 +108,39 @@ public ApiResponse<AmbulanceLocationResponse> updateLocation(
             )
             .build();
 }
+
+@GetMapping("/me")
+public ApiResponse<AmbulanceResponse> getMyAmbulance() {
+
+    return ApiResponse.<AmbulanceResponse>builder()
+            .success(true)
+            .message("Ambulance fetched successfully")
+            .data(
+                    ambulanceService.getMyAmbulance()
+            )
+            .build();
+
+}
+
+@PutMapping("/me/location")
+public ApiResponse<AmbulanceLocationResponse> updateMyLocation(
+
+        @Valid
+        @RequestBody
+        UpdateLocationRequest request
+
+) {
+
+    return ApiResponse
+            .<AmbulanceLocationResponse>builder()
+            .success(true)
+            .message("Location updated successfully.")
+            .data(
+                    ambulanceService.updateMyLocation(
+                            request
+                    )
+            )
+            .build();
+
+}
 }

@@ -22,3 +22,13 @@ export async function getHospital(id) {
   return data.data;
 
 }
+
+export async function getHospitalDashboard() {
+
+  const { data } = await api.get(
+    "/hospitals/dashboard"
+  );
+
+  return data.data;
+
+}

@@ -5,6 +5,7 @@ import com.trafikkingx.ambulance.enums.VehicleType;
 import com.trafikkingx.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import com.trafikkingx.auth.entity.User;
 
 import java.time.LocalDateTime;
 
@@ -56,4 +57,11 @@ public class Ambulance extends BaseEntity {
     @Builder.Default
     @Column(nullable = false)
     private LocalDateTime lastLocationUpdatedAt = LocalDateTime.now();
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+        name = "user_id",
+        unique = true)
+    private User user;
+
 }

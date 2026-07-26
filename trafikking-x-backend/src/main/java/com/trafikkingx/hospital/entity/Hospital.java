@@ -2,6 +2,7 @@ package com.trafikkingx.hospital.entity;
 
 import com.trafikkingx.common.entity.BaseEntity;
 import com.trafikkingx.hospital.enums.HospitalType;
+import com.trafikkingx.auth.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -82,4 +83,13 @@ public class Hospital extends BaseEntity {
     @Builder.Default
     @Column(nullable = false)
     private Boolean active = true;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+        name = "user_id",
+        nullable = false,
+        unique = true)
+    private User user;
+    
+
 }

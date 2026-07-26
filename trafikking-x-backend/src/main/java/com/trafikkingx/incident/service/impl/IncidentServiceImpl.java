@@ -10,12 +10,15 @@ import com.trafikkingx.incident.dto.request.CreateIncidentRequest;
 import com.trafikkingx.incident.dto.request.UpdateIncidentRequest;
 import com.trafikkingx.incident.dto.response.IncidentResponse;
 import com.trafikkingx.incident.entity.Incident;
+import com.trafikkingx.incident.enums.IncidentStatus;
 import com.trafikkingx.incident.mapper.IncidentMapper;
 import com.trafikkingx.incident.repository.IncidentRepository;
 import com.trafikkingx.incident.service.IncidentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import com.trafikkingx.common.event.IncidentCreatedEvent;
+
+import org.springframework.data.domain.Sort;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -193,6 +196,37 @@ public void deleteIncident(Long id) {
             "Incident {} deleted successfully",
             incident.getIncidentNumber()
     );
+}
+
+@Override
+public List<IncidentResponse> getAllIncidents() {
+
+    return incidentRepository
+            .findAllByOrderByReportedAtDesc()
+            .stream()
+            .map(incidentMapper::toResponse)
+            .toList();
+
+
+
+}
+
+@Override
+public List<IncidentResponse> getActiveIncidents() {
+
+    return incidentRepository
+            .findByStatusInOrderByReportedAtDesc(
+                    List.of(
+                            IncidentStatus.REPORTED,
+                            IncidentStatus.UNDER_REVIEW,
+                            IncidentStatus.DISPATCHED,
+                            IncidentStatus.RESPONDING
+                    )
+            )
+            .stream()
+            .map(incidentMapper::toResponse)
+            .toList();
+
 }
 
 }

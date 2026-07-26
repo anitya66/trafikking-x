@@ -11,6 +11,9 @@ import lombok.*;
 @AllArgsConstructor
 public class CreatePoliceStationRequest {
 
+    @NotNull
+    private Long userId;
+
     @NotBlank
     private String stationName;
 

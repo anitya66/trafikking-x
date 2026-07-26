@@ -1,5 +1,7 @@
 package com.trafikkingx.police.service.impl;
 
+import com.trafikkingx.auth.entity.User;
+import com.trafikkingx.auth.repository.UserRepository;
 import com.trafikkingx.common.exception.custom.*;
 import com.trafikkingx.common.pagination.PageResponse;
 import com.trafikkingx.police.dto.request.CreatePoliceStationRequest;
@@ -34,6 +36,8 @@ public class PoliceStationServiceImpl
 
     private final PoliceStationValidator policeStationValidator;
 
+    private final UserRepository userRepository;
+
     private PoliceStation getPoliceStation(Long id) {
 
     return policeStationRepository.findById(id)
@@ -65,8 +69,14 @@ public PoliceStationResponse createPoliceStation(
         );
     }
 
+    User user = userRepository.findById(request.getUserId())
+        .orElseThrow(() ->
+                new IllegalArgumentException("User not found."));
+
     PoliceStation policeStation =
             policeStationMapper.toEntity(request);
+
+    policeStation.setUser(user);        
 
     PoliceStation savedPoliceStation =
             policeStationRepository.save(policeStation);

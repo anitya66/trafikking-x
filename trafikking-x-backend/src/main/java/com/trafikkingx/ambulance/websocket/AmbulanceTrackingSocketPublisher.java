@@ -26,11 +26,19 @@ public class AmbulanceTrackingSocketPublisher {
 
         messagingTemplate.convertAndSend(
 
-                "/topic/ambulance/location",
+        "/topic/ambulances",
 
-                event
+        event
 
-        );
+);
+
+messagingTemplate.convertAndSend(
+
+        "/topic/ambulance/" + event.getAmbulanceId(),
+
+        event
+
+);
 
     }
 

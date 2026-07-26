@@ -45,6 +45,20 @@ public class IncidentController {
                 .build();
     }
 
+    @GetMapping("/all")
+public ApiResponse<List<IncidentResponse>> getAllIncidents() {
+
+    List<IncidentResponse> response =
+            incidentService.getAllIncidents();
+
+    return ApiResponse.<List<IncidentResponse>>builder()
+            .success(true)
+            .message("All incidents fetched successfully")
+            .data(response)
+            .build();
+
+}
+
     @GetMapping("/{id}")
     public ApiResponse<IncidentResponse> getIncidentById(
             @PathVariable Long id) {
@@ -85,4 +99,18 @@ public class IncidentController {
                 .message("Incident deleted successfully")
                 .build();
     }
+
+    @GetMapping("/active")
+public ApiResponse<List<IncidentResponse>> getActiveIncidents() {
+
+    List<IncidentResponse> response =
+            incidentService.getActiveIncidents();
+
+    return ApiResponse.<List<IncidentResponse>>builder()
+            .success(true)
+            .message("Active incidents fetched successfully")
+            .data(response)
+            .build();
+
+}
 }

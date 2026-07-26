@@ -9,6 +9,7 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface AmbulanceMapper {
 
+    @Mapping(target = "user", ignore = true)
     Ambulance toEntity(CreateAmbulanceRequest request);
 
     AmbulanceResponse toResponse(Ambulance ambulance);

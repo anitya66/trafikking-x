@@ -29,4 +29,12 @@ public interface AmbulanceService {
         Long ambulanceId,
         UpdateLocationRequest request
 );
+
+AmbulanceResponse getMyAmbulance();
+
+AmbulanceLocationResponse updateMyLocation(
+        UpdateLocationRequest request
+);
+
+
 }

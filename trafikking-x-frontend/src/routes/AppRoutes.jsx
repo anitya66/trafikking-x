@@ -4,22 +4,26 @@ import { LandingPage } from "@/features/landing";
 
 import LoginPage from "@/features/auth/pages/LoginPage";
 import RegisterPage from "@/features/auth/pages/RegisterPage";
-
+import HospitalCaseDetailsPage from "@/features/hospitals/pages/HospitalCaseDetailsPage";
 import PublicRoute from "./PublicRoute";
 import ProtectedRoute from "./ProtectedRoute";
 import RoleRedirect from "./RoleRedirect";
 import RoleDashboard from "./RoleDashboard";
-import MyIncidentsPage from "@/features/incidents/pages/MyIncidentsPage";
 
 import DashboardLayout from "@/layouts/DashboardLayout";
-import EmergencyContactsPage from "@/features/emergency-contacts/pages/EmergencyContactsPage";
-import HospitalsPage from "@/features/hospitals/pages/HospitalsPage";
-import ReportEmergencyPage from "@/features/incidents/pages/ReportEmergencyPage";
-import SettingsPage from "@/features/settings/pages/SettingsPage";
 
 import { ProfilePage } from "@/features/account";
 
 import { isAuthenticated } from "@/shared/utils/auth";
+import BedCapacityPage from "@/features/hospitals/pages/BedCapacityPage";
+import CaseHistoryPage from "@/features/hospitals/pages/CaseHistoryPage";
+
+import MyIncidentsPage from "@/features/incidents/pages/MyIncidentsPage";
+import ReportEmergencyPage from "@/features/incidents/pages/ReportEmergencyPage";
+import EmergencyContactsPage from "@/features/emergency-contacts/pages/EmergencyContactsPage";
+import HospitalsPage from "@/features/hospitals/pages/HospitalsPage";
+import IncomingCasesPage from "@/features/hospitals/pages/IncomingCasesPage";
+import SettingsPage from "@/features/settings/pages/SettingsPage";
 
 export default function AppRoutes() {
 
@@ -70,6 +74,8 @@ export default function AppRoutes() {
         }
       >
 
+        {/* Role Dashboards */}
+
         <Route
           path="/dashboard"
           element={<RoleDashboard />}
@@ -100,46 +106,90 @@ export default function AppRoutes() {
           element={<RoleDashboard />}
         />
 
+        {/* Account */}
+
         <Route
           path="/account/profile"
           element={<ProfilePage />}
         />
 
-        
         <Route
           path="/account/settings"
           element={<ProfilePage />}
         />
 
+        {/* Citizen */}
+
         <Route
-  path="/citizen/incidents"
-  element={<MyIncidentsPage />}
-/>
-
-<Route
-  path="/citizen/contacts"
-  element={<EmergencyContactsPage />}
-/>
-
-<Route
-    path="/citizen/profile"
-    element={<ProfilePage />}
+          path="/citizen/incidents"
+          element={<MyIncidentsPage />}
         />
 
-<Route
-  path="/citizen/hospitals"
-  element={<HospitalsPage />}
+        <Route
+          path="/citizen/contacts"
+          element={<EmergencyContactsPage />}
+        />
+
+        <Route
+          path="/citizen/profile"
+          element={<ProfilePage />}
+        />
+
+        <Route
+          path="/citizen/hospitals"
+          element={<HospitalsPage />}
+        />
+
+        <Route
+          path="/citizen/report"
+          element={<ReportEmergencyPage />}
+        />
+
+        <Route
+          path="/citizen/settings"
+          element={<SettingsPage />}
+        />
+
+        {/* Hospital */}
+
+        <Route
+          path="/hospital/cases"
+          element={<IncomingCasesPage />}
+        />
+
+        <Route
+  path="/hospital/beds"
+  element={<BedCapacityPage />}
+/>
+
+        <Route
+          path="/hospital/staff"
+          element={
+            <div className="text-2xl font-bold">
+              Medical Staff
+            </div>
+          }
+        />
+
+        <Route
+  path="/hospital/history"
+  element={<CaseHistoryPage />}
 />
 
 <Route
-  path="/citizen/report"
-  element={<ReportEmergencyPage />}
+  path="/hospital/cases/:id"
+  element={<HospitalCaseDetailsPage />}
 />
 
-<Route
-  path="/citizen/settings"
-  element={<SettingsPage />}
-/>
+        <Route
+          path="/hospital/profile"
+          element={<ProfilePage />}
+        />
+
+        <Route
+          path="/hospital/settings"
+          element={<SettingsPage />}
+        />
 
       </Route>
 

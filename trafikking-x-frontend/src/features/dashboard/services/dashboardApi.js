@@ -1,10 +1,12 @@
 import api from "@/services/api";
 
 /**
- * Fetch all incidents for the currently logged-in user.
+ * Dispatcher Active Queue
  */
-export async function getMyIncidents() {
-  const response = await api.get("/incidents");
+export async function getActiveIncidents() {
+
+  const response = await api.get("/incidents/active");
 
   return response.data.data;
+
 }

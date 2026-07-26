@@ -10,7 +10,9 @@ export function useAmbulanceTracking(callback) {
   useEffect(() => {
 
     subscribe(
-      "/topic/ambulance/location",
+
+      "/topic/ambulances",
+
       (message) => {
 
         callback(
@@ -18,12 +20,13 @@ export function useAmbulanceTracking(callback) {
         );
 
       }
+
     );
 
     return () => {
 
       unsubscribe(
-        "/topic/ambulance/location"
+        "/topic/ambulances"
       );
 
     };

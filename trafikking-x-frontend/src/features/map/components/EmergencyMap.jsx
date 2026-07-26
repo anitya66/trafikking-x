@@ -2,6 +2,7 @@ import "leaflet/dist/leaflet.css";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { useMapOverview } from "../hooks/useMapOverview";
+import RouteLayer from "../layers/RouteLayer";
 
 import {
   MapContainer,
@@ -79,9 +80,65 @@ export default function EmergencyMap() {
             incidents={data?.incidents}
           />
 
+{data?.assignments?.map((assignment) => {
+
+  const ambulance =
+    data.ambulances.find(
+
+      (a) =>
+
+        a.id === assignment.ambulanceId
+
+    );
+
+  const incident =
+    data.incidents.find(
+
+      (i) =>
+
+        i.id === assignment.incidentId
+
+    );
+
+  if (!ambulance || !incident) {
+
+    return null;
+
+  }
+
+  return (
+
+    <RouteLayer
+
+      key={assignment.assignmentId}
+
+      start={{
+
+        lat: ambulance.latitude,
+
+        lng: ambulance.longitude,
+
+      }}
+
+      end={{
+
+        lat: incident.latitude,
+
+        lng: incident.longitude,
+
+      }}
+
+    />
+
+  );
+
+})}
+
           <HospitalLayer
             hospitals={data?.hospitals}
           />
+
+          
 
           <AmbulanceLayer
             ambulances={data?.ambulances}

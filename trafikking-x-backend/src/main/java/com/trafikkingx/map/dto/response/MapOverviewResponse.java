@@ -22,4 +22,6 @@ public class MapOverviewResponse {
     private List<MapMarkerResponse> ambulances;
 
     private List<MapMarkerResponse> policeStations;
+
+    private List<MapAssignmentResponse> assignments;
 }

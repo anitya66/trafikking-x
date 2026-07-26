@@ -9,6 +9,7 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface PoliceStationMapper {
 
+    @Mapping(target = "user", ignore = true)
     PoliceStation toEntity(CreatePoliceStationRequest request);
 
     PoliceStationResponse toResponse(PoliceStation policeStation);
