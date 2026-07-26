@@ -31,4 +31,9 @@ List<Dispatch> findByHospitalIdAndStatusInOrderByCreatedAtDesc(
         List<DispatchStatus> statuses
 );
 
+List<Dispatch> findByPoliceStationIdAndStatusInOrderByCreatedAtDesc(
+        Long policeStationId,
+        List<DispatchStatus> statuses
+);
+
 }

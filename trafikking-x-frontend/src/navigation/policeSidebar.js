@@ -19,15 +19,15 @@ const policeSidebar = [
     icon: Shield,
   },
   {
-    title: "Assignments",
-    path: "/police/assignments",
+    title: "Case History",
+    path: "/police/case-history",
     icon: ClipboardList,
   },
-  {
-    title: "Reports",
-    path: "/police/reports",
-    icon: FileText,
-  },
+  // {
+  //   title: "Reports",
+  //   path: "/police/reports",
+  //   icon: FileText,
+  // },
   {
     title: "Profile",
     path: "/police/profile",

@@ -1,9 +1,5 @@
-const PoliceDashboard = () => {
-    return (
-        <div className="p-6 text-2xl font-semibold">
-            Police Dashboard (Coming Soon)
-        </div>
-    );
-};
+import PoliceDashboardPage from "@/features/police/pages/PoliceDashboardPage";
 
-export default PoliceDashboard;
+export default function PoliceDashboard() {
+  return <PoliceDashboardPage />;
+}

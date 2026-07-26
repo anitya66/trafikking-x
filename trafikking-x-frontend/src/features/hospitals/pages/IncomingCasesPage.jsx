@@ -1,38 +1,21 @@
-import { Search } from "lucide-react";
+import { Activity } from "lucide-react";
 
-import { Input } from "@/components/ui/input";
+import { useIncomingPatients } from "../hooks/useIncomingPatients";
 
 import HospitalCaseList
   from "../components/cases/HospitalCaseList";
-
-import { useIncomingPatients }
-  from "../hooks/useIncomingPatients";
 
 export default function IncomingCasesPage() {
 
   const {
 
-    data,
+    data: patients = [],
 
     isLoading,
 
     isError,
 
   } = useIncomingPatients();
-
-  if (isLoading) {
-
-    return (
-
-      <div className="flex h-60 items-center justify-center">
-
-        Loading...
-
-      </div>
-
-    );
-
-  }
 
   if (isError) {
 
@@ -52,44 +35,49 @@ export default function IncomingCasesPage() {
 
     <div className="space-y-8">
 
-      {/* Header */}
+      <div className="flex items-center gap-3">
 
-      <div>
+        <div className="rounded-xl bg-primary/10 p-3">
 
-        <h1 className="text-4xl font-bold">
+          <Activity className="h-6 w-6 text-primary" />
 
-          Incoming Cases
+        </div>
 
-        </h1>
+        <div>
 
-        <p className="mt-2 text-muted-foreground">
+          <h1 className="text-4xl font-bold tracking-tight">
 
-          Manage all incoming emergency patients.
+            Incoming Cases
 
-        </p>
+          </h1>
+
+          <p className="text-muted-foreground">
+
+            Review emergency cases assigned to your hospital.
+
+          </p>
+
+        </div>
 
       </div>
 
-      {/* Search */}
+      {isLoading ? (
 
-      <div className="relative max-w-md">
+        <div className="rounded-xl border p-12 text-center">
 
-        <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+          Loading incoming patients...
 
-        <Input
-          placeholder="Search patient..."
-          className="pl-10"
+        </div>
+
+      ) : (
+
+        <HospitalCaseList
+
+          patients={patients}
+
         />
 
-      </div>
-
-      {/* Cases */}
-
-      <HospitalCaseList
-
-        patients={data ?? []}
-
-      />
+      )}
 
     </div>
 

@@ -24,6 +24,9 @@ import EmergencyContactsPage from "@/features/emergency-contacts/pages/Emergency
 import HospitalsPage from "@/features/hospitals/pages/HospitalsPage";
 import IncomingCasesPage from "@/features/hospitals/pages/IncomingCasesPage";
 import SettingsPage from "@/features/settings/pages/SettingsPage";
+import ActiveCasesPage from "@/features/police/pages/ActiveCasesPage";
+import PoliceCaseDetailsPage from "@/features/police/pages/PoliceCaseDetailsPage";
+import PoliceHistoryPage from "@/features/police/pages/PoliceHistoryPage";
 
 export default function AppRoutes() {
 
@@ -158,9 +161,9 @@ export default function AppRoutes() {
         />
 
         <Route
-  path="/hospital/beds"
-  element={<BedCapacityPage />}
-/>
+          path="/hospital/beds"
+          element={<BedCapacityPage />}
+        />
 
         <Route
           path="/hospital/staff"
@@ -191,7 +194,35 @@ export default function AppRoutes() {
           element={<SettingsPage />}
         />
 
+        <Route
+  path="/police/cases"
+  element={<ActiveCasesPage />}
+/>
+
+<Route
+  path="/police/cases/:id"
+  element={<PoliceCaseDetailsPage />}
+/>
+
+<Route
+  path="/police/case-history"
+  element={<PoliceHistoryPage />}
+/>
+
+<Route
+  path="/police/profile"
+  element={<ProfilePage />}
+/>
+
+<Route
+  path="/police/settings"
+  element={<SettingsPage />}
+/>
+
+        
+
       </Route>
+      
 
       <Route
         path="*"

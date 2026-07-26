@@ -24,11 +24,11 @@ const hospitalSidebar = [
     path: "/hospital/beds",
     icon: Bed,
   },
-  {
-    title: "Medical Staff",
-    path: "/hospital/staff",
-    icon: Stethoscope,
-  },
+  // {
+  //   title: "Medical Staff",
+  //   path: "/hospital/staff",
+  //   icon: Stethoscope,
+  // },
   {
     title: "Case History",
     path: "/hospital/history",
