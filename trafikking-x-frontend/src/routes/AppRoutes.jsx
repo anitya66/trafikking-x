@@ -35,6 +35,9 @@ import PolicePage from "@/features/dashboard/pages/PolicePage";
 import CitizensPage from "@/features/dashboard/pages/CitizensPage";
 import AICommandPage from "@/features/ai/pages/AICommandPage";
 import NotificationsPage from "@/features/dashboard/pages/NotificationsPage";
+import MissionHistoryPage from "@/features/ambulance/history/pages/MissionHistoryPage";
+import AmbulanceTrackingPage from "@/features/ambulance/tracking/pages/AmbulanceTrackingPage";
+import CurrentMissionPage from "@/features/ambulance/current-mission/pages/CurrentMissionPage";
 
 
 export default function AppRoutes() {
@@ -149,6 +152,43 @@ export default function AppRoutes() {
           path="/ambulance"
           element={<RoleDashboard />}
         />
+
+        <Route
+
+  path="/ambulance/history"
+
+  element={<MissionHistoryPage />}
+
+/>
+
+<Route
+
+  path="/ambulance/tracking"
+
+  element={<AmbulanceTrackingPage />}
+
+/>
+
+<Route
+
+  path="/ambulance/profile"
+
+  element={<ProfilePage />}
+
+/>
+
+<Route
+
+  path="/ambulance/settings"
+
+  element={<SettingsPage />}
+
+/>
+
+<Route
+  path="/ambulance/current-mission"
+  element={<CurrentMissionPage />}
+/>
 
         <Route
           path="/hospital"

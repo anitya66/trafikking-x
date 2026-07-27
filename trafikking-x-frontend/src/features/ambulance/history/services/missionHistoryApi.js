@@ -1,9 +1,9 @@
 import api from "@/config/axios";
 
-export async function getMyAmbulance() {
+export async function getMissionHistory() {
 
   const response = await api.get(
-    "/ambulances/me"
+    "/ambulance/assignments"
   );
 
   return response.data.data;

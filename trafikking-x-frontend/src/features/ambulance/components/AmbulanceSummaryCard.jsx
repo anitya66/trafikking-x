@@ -2,7 +2,7 @@ import {
   Activity,
   Truck,
   User,
-  MapPinned,
+  Satellite,
 } from "lucide-react";
 
 import MetricCard from "@/shared/components/MetricCard";
@@ -18,18 +18,22 @@ export default function AmbulanceSummaryCard({
     status === "AVAILABLE"
       ? "Ready For Dispatch"
       : status === "BUSY"
-      ? "On Emergency Mission"
+      ? "Responding To Emergency"
       : status === "OFFLINE"
-      ? "Currently Offline"
+      ? "Vehicle Offline"
       : "Current Status";
 
-  const locationValue =
-    ambulance ? "LIVE" : "--";
+  const gpsValue =
+    ambulance?.active
+      ? "CONNECTED"
+      : "OFFLINE";
 
-  const locationSubtitle =
-    ambulance
-      ? "GPS Connected"
-      : "Waiting For Signal";
+  const gpsSubtitle =
+    ambulance?.lastLocationUpdatedAt
+      ? `Updated ${new Date(
+          ambulance.lastLocationUpdatedAt
+        ).toLocaleTimeString()}`
+      : "Waiting For GPS";
 
   return (
 
@@ -44,23 +48,33 @@ export default function AmbulanceSummaryCard({
 
       <MetricCard
         title="Vehicle"
-        value={ambulance?.vehicleNumber ?? "--"}
-        subtitle="Emergency Vehicle"
+        value={
+          ambulance?.vehicleNumber ?? "--"
+        }
+        subtitle={
+          ambulance?.vehicleType ??
+          "Emergency Vehicle"
+        }
         icon={Truck}
       />
 
       <MetricCard
         title="Driver"
-        value={ambulance?.driverName ?? "--"}
-        subtitle="Assigned Paramedic"
+        value={
+          ambulance?.driverName ?? "--"
+        }
+        subtitle={
+          ambulance?.driverPhone ??
+          "No Contact"
+        }
         icon={User}
       />
 
       <MetricCard
-        title="Location"
-        value={locationValue}
-        subtitle={locationSubtitle}
-        icon={MapPinned}
+        title="GPS"
+        value={gpsValue}
+        subtitle={gpsSubtitle}
+        icon={Satellite}
       />
 
     </div>

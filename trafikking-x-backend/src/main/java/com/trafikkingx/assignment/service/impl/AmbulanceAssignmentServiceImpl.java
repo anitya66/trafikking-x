@@ -101,24 +101,20 @@ public AssignmentDetailsResponse getCurrentAssignment() {
     Ambulance ambulance =
             getCurrentAmbulance();
 
-    Assignment assignment =
-            assignmentRepository
-                    .findFirstByAmbulanceAndStatusInOrderByAssignedAtDesc(
-                            ambulance,
-                            List.of(
-                                    AssignmentStatus.PENDING,
-                                    AssignmentStatus.ACCEPTED,
-                                    AssignmentStatus.EN_ROUTE,
-                                    AssignmentStatus.ARRIVED
-                            )
+    return assignmentRepository
+            .findFirstByAmbulanceAndStatusInOrderByAssignedAtDesc(
+                    ambulance,
+                    List.of(
+                            AssignmentStatus.PENDING,
+                            AssignmentStatus.ACCEPTED,
+                            AssignmentStatus.EN_ROUTE,
+                            AssignmentStatus.ARRIVED
                     )
-                    .orElseThrow(
-                            AssignmentNotFoundException::new
-                    );
-
-    return assignmentMapper.toResponse(
-            assignment
-    );
+            )
+            .map(
+                    assignmentMapper::toResponse
+            )
+            .orElse(null);
 
 }
 

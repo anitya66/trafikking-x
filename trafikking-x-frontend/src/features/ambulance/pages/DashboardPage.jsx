@@ -7,6 +7,12 @@ import { useAmbulance } from "../hooks/useAmbulance";
 import { useCurrentAssignment } from "@/features/assignment/hooks/useCurrentAssignment";
 import { useLiveLocation } from "../hooks/useLiveLocation";
 
+import AmbulanceDashboardSkeleton
+from "../components/AmbulanceDashboardSkeleton";
+
+import MissionPreviewCard
+from "../components/MissionPreviewCard";
+
 export default function DashboardPage() {
 
     useLiveLocation();
@@ -22,15 +28,13 @@ export default function DashboardPage() {
     isLoading: assignmentLoading,
   } = useCurrentAssignment();
 
-  const ambulance = data?.[0];
+  const ambulance = data;
 
-  if (isLoading || assignmentLoading) {
-    return (
-      <div>
-        Loading...
-      </div>
-    );
-  }
+ if (isLoading || assignmentLoading) {
+
+  return <AmbulanceDashboardSkeleton />;
+
+}
 
   if (isError) {
     return (
@@ -60,9 +64,9 @@ export default function DashboardPage() {
 
       </div>
 
-      <CurrentAssignmentCard
-        assignment={assignment}
-      />
+      <MissionPreviewCard
+    assignment={assignment}
+/>
 
       <AmbulanceSummaryCard
         ambulance={ambulance}

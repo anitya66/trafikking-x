@@ -1,14 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { getAmbulances } from "../services/ambulanceApi";
+import {
+  getMyAmbulance,
+} from "../services/ambulanceApi";
 
 export function useAmbulance() {
 
   return useQuery({
 
-    queryKey: ["ambulances"],
+    queryKey: ["my-ambulance"],
 
-    queryFn: getAmbulances,
+    queryFn: getMyAmbulance,
 
     staleTime: 1000 * 60,
 
