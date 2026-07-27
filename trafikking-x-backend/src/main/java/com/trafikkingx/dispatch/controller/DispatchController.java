@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import com.trafikkingx.assignment.dto.response.AssignmentResponse;
+import com.trafikkingx.dispatch.dto.request.DispatchApprovalRequest;
 
 import java.util.List;
 
@@ -157,6 +159,30 @@ public ApiResponse<DispatchResponse> autoAssignResources(
                             incidentId
                     )
             )
+            .build();
+}
+
+@Operation(summary = "Approve AI Recommendation")
+@PostMapping("/{dispatchId}/approve")
+public ApiResponse<AssignmentResponse> approveDispatch(
+
+        @PathVariable Long dispatchId,
+
+        @Valid
+        @RequestBody
+        DispatchApprovalRequest request
+) {
+
+    AssignmentResponse response =
+            dispatchService.approveDispatch(
+                    dispatchId,
+                    request
+            );
+
+    return ApiResponse.<AssignmentResponse>builder()
+            .success(true)
+            .message("Dispatch approved successfully.")
+            .data(response)
             .build();
 }
 }

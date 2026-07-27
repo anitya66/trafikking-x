@@ -1,4 +1,4 @@
-import api from "@/services/api";
+import api from "@/config/axios";
 
 export async function getMapOverview() {
   const response = await api.get("/map/overview");

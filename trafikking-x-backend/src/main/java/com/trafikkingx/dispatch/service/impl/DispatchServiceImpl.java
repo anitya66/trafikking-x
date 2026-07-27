@@ -13,13 +13,19 @@ import com.trafikkingx.common.event.DispatchCreatedEvent;
 import com.trafikkingx.common.event.ResourcesAssignedEvent;
 import com.trafikkingx.common.exception.custom.*;
 import com.trafikkingx.dispatch.workflow.DispatchStateMachine;
+import com.trafikkingx.common.event.AssignmentCreatedEvent;
 import lombok.RequiredArgsConstructor;
-import com.trafikkingx.assignment.dto.response.AssignmentResponse;
-import com.trafikkingx.assignment.service.AssignmentEngineService;
+import com.trafikkingx.assignment.dto.internal.AssignmentCreationResult;
+
+import com.trafikkingx.recommendation.engine.RecommendationEngineService;
+import com.trafikkingx.recommendation.model.RecommendationResult;
+import com.trafikkingx.recommendation.model.RecommendedResource;
 import org.springframework.context.ApplicationEventPublisher;
 import com.trafikkingx.ambulance.entity.Ambulance;
 import com.trafikkingx.ambulance.repository.AmbulanceRepository;
-
+import com.trafikkingx.assignment.dto.request.CreateAssignmentRequest;
+import com.trafikkingx.assignment.dto.response.AssignmentResponse;
+import com.trafikkingx.assignment.service.AssignmentEngineService;
 import com.trafikkingx.hospital.entity.Hospital;
 import com.trafikkingx.hospital.repository.HospitalRepository;
 
@@ -55,9 +61,13 @@ public class DispatchServiceImpl
 
     private final PoliceStationRepository policeStationRepository;
 
-    private final AssignmentEngineService assignmentEngineService;
+    private final RecommendationEngineService recommendationEngineService;
 
     private final ApplicationEventPublisher eventPublisher;  
+
+    private final AssignmentEngineService assignmentEngineService;
+
+    
     
     
 
@@ -189,25 +199,40 @@ public DispatchResponse autoAssignResources(
     DispatchResponse dispatch =
             getDispatchByIncident(incidentId);
 
-    AssignmentResponse assignment =
-            assignmentEngineService.autoAssign(
-                    incidentId
-            );
+    RecommendationResult recommendation =
+        recommendationEngineService.generateRecommendation(
+                incidentId
+        );
 
-    AssignResourcesRequest request =
-            new AssignResourcesRequest();
+AssignResourcesRequest request =
+        new AssignResourcesRequest();
 
+RecommendedResource hospital =
+        recommendation.getHospital();
+
+RecommendedResource ambulance =
+        recommendation.getAmbulance();
+
+RecommendedResource police =
+        recommendation.getPolice();
+
+if (hospital != null) {
     request.setHospitalId(
-            assignment.getHospitalId()
+            hospital.getId()
     );
+}
 
+if (ambulance != null) {
     request.setAmbulanceId(
-            assignment.getAmbulanceId()
+            ambulance.getId()
     );
+}
 
+if (police != null) {
     request.setPoliceStationId(
-            assignment.getPoliceStationId()
+            police.getId()
     );
+}
 
     DispatchResponse response =
         assignResources(
@@ -357,4 +382,101 @@ public List<DispatchResponse> getAllDispatches() {
             .map(dispatchMapper::toResponse)
             .toList();
 }
+
+@Override
+@Transactional
+public AssignmentResponse approveDispatch(
+        Long dispatchId,
+        DispatchApprovalRequest request
+) {
+
+    log.info(
+            "Approving dispatch {}",
+            dispatchId
+    );
+
+    Dispatch dispatch =
+            getDispatchEntity(dispatchId);
+
+    CreateAssignmentRequest assignmentRequest =
+            CreateAssignmentRequest.builder()
+                    .incidentId(request.getIncidentId())
+                    .ambulanceId(request.getAmbulanceId())
+                    .remarks(request.getRemarks())
+                    .build();
+
+    
+
+Hospital hospital =
+        hospitalRepository
+                .findById(request.getHospitalId())
+                .orElseThrow(
+                        HospitalNotFoundException::new
+                );
+
+Ambulance ambulance =
+        ambulanceRepository
+                .findById(request.getAmbulanceId())
+                .orElseThrow(
+                        AmbulanceNotFoundException::new
+                );
+
+PoliceStation policeStation =
+        policeStationRepository
+                .findById(request.getPoliceId())
+                .orElseThrow(
+                        PoliceStationNotFoundException::new
+                );
+
+dispatch.setHospital(hospital);
+
+dispatch.setAmbulance(ambulance);
+
+dispatch.setPoliceStation(policeStation);
+
+dispatch.setDispatcherNotes(
+        request.getRemarks()
+);
+
+dispatch.setStatus(
+        DispatchStatus.RESOURCES_ASSIGNED
+);
+
+dispatch.setDispatchedAt(
+        LocalDateTime.now()
+);
+
+dispatchRepository.save(dispatch);
+
+AssignmentCreationResult result =
+        assignmentEngineService.createAssignment(
+                assignmentRequest
+        );
+
+eventPublisher.publishEvent(
+
+        new AssignmentCreatedEvent(
+
+                result.getAssignmentId(),
+
+                result.getIncidentId(),
+
+                result.getAmbulanceId(),
+
+                result.getDispatcherId(),
+
+                 result.getRecipientUserId()
+
+        )
+
+);
+
+log.info(
+        "Dispatch {} approved successfully.",
+        dispatchId
+);
+
+return result.getResponse();
+}
+
 }

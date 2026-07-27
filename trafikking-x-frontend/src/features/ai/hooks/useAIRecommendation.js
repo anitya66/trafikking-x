@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-
 import { getAIRecommendation } from "../services/aiApi";
 
 export function useAIRecommendation(incidentId) {
@@ -15,6 +14,8 @@ export function useAIRecommendation(incidentId) {
       getAIRecommendation(incidentId),
 
     enabled: !!incidentId,
+
+    retry: false,
 
     staleTime: 1000 * 60,
 

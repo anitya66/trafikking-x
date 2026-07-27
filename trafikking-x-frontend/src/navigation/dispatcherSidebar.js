@@ -19,47 +19,47 @@ const dispatcherSidebar = [
   },
   {
     title: "Incidents",
-    path: "/incidents",
+    path: "/dispatcher/incidents",
     icon: Siren,
   },
   {
     title: "Dispatch",
-    path: "/dispatch",
+    path: "/dispatcher/dispatch",
     icon: Radio,
   },
   {
     title: "Ambulances",
-    path: "/ambulances",
+    path: "/dispatcher/ambulances",
     icon: Ambulance,
   },
   {
     title: "Hospitals",
-    path: "/hospitals",
+    path: "/dispatcher/hospitals",
     icon: Building2,
   },
   {
     title: "Police",
-    path: "/police",
+    path: "/dispatcher/police",
     icon: Shield,
   },
   {
     title: "Citizens",
-    path: "/citizens",
+    path: "/dispatcher/citizens",
     icon: Users,
   },
   {
     title: "AI Command",
-    path: "/ai-command",
+    path: "/dispatcher/ai-command",
     icon: BrainCircuit,
   },
   {
     title: "Notifications",
-    path: "/notifications",
+    path: "/dispatcher/notifications",
     icon: Bell,
   },
   {
     title: "Settings",
-    path: "/settings",
+    path: "/dispatcher/settings",
     icon: Settings,
   },
 ];

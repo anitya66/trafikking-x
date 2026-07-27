@@ -27,6 +27,15 @@ import SettingsPage from "@/features/settings/pages/SettingsPage";
 import ActiveCasesPage from "@/features/police/pages/ActiveCasesPage";
 import PoliceCaseDetailsPage from "@/features/police/pages/PoliceCaseDetailsPage";
 import PoliceHistoryPage from "@/features/police/pages/PoliceHistoryPage";
+import IncidentsPage from "@/features/dashboard/pages/IncidentsPage";
+import DispatchPage from "@/features/dashboard/pages/DispatchPage";
+import AmbulancesPage from "@/features/dashboard/pages/AmbulancesPage";
+import HospitalPage from "@/features/dashboard/pages/HospitalPages";
+import PolicePage from "@/features/dashboard/pages/PolicePage";
+import CitizensPage from "@/features/dashboard/pages/CitizensPage";
+import AICommandPage from "@/features/ai/pages/AICommandPage";
+import NotificationsPage from "@/features/dashboard/pages/NotificationsPage";
+
 
 export default function AppRoutes() {
 
@@ -89,6 +98,53 @@ export default function AppRoutes() {
           element={<RoleDashboard />}
         />
 
+        {/* Dispatcher */}
+
+<Route
+  path="/dispatcher/incidents"
+  element={<IncidentsPage />}
+/>
+
+<Route
+  path="/dispatcher/dispatch"
+  element={<DispatchPage />}
+/>
+
+<Route
+  path="/dispatcher/ambulances"
+  element={<AmbulancesPage />}
+/>
+
+<Route
+  path="/dispatcher/hospitals"
+  element={<HospitalsPage />}
+/>
+
+<Route
+  path="/dispatcher/police"
+  element={<PolicePage />}
+/>
+
+<Route
+  path="/dispatcher/citizens"
+  element={<CitizensPage />}
+/>
+
+<Route
+  path="/dispatcher/ai-command"
+  element={<AICommandPage />}
+/>
+
+<Route
+  path="/dispatcher/notifications"
+  element={<NotificationsPage />}
+/>
+
+<Route
+  path="/dispatcher/settings"
+  element={<SettingsPage />}
+/>
+
         <Route
           path="/ambulance"
           element={<RoleDashboard />}
@@ -120,6 +176,8 @@ export default function AppRoutes() {
           path="/account/settings"
           element={<ProfilePage />}
         />
+
+        
 
         {/* Citizen */}
 
@@ -218,6 +276,7 @@ export default function AppRoutes() {
   path="/police/settings"
   element={<SettingsPage />}
 />
+
 
         
 

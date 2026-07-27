@@ -76,23 +76,40 @@ export default function AIRecommendationCard({
 
   }
 
-  if (isError) {
+if (isError) {
 
-    return (
+  return (
 
-      <Card>
+    <Card>
 
-        <CardContent className="flex h-[250px] items-center justify-center text-red-500">
+      <CardContent className="flex h-[250px] flex-col items-center justify-center space-y-4 text-center">
 
-          Failed to load AI Recommendation.
+        <BrainCircuit className="h-12 w-12 text-primary" />
 
-        </CardContent>
+        <div>
 
-      </Card>
+          <h3 className="text-lg font-semibold">
 
-    );
+            AI Recommendation Unavailable
 
-  }
+          </h3>
+
+          <p className="mt-2 max-w-md text-sm text-muted-foreground">
+
+            Resources may already have been assigned for this incident,
+            or no additional recommendation is required.
+
+          </p>
+
+        </div>
+
+      </CardContent>
+
+    </Card>
+
+  );
+
+}
 
   return (
 

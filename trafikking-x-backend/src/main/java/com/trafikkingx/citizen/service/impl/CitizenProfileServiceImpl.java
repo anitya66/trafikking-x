@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -123,6 +124,41 @@ public CitizenProfileResponse updateProfile(
             currentUser.getEmail());
 
     return citizenProfileMapper.toResponse(updatedProfile);
+}
+
+@Override
+public List<CitizenProfileResponse> getAllCitizens() {
+
+    log.info("Fetching all citizens.");
+
+    return citizenProfileRepository
+            .findAllByOrderByCreatedAtDesc()
+            .stream()
+            .map(citizenProfileMapper::toResponse)
+            .toList();
+
+}
+
+@Override
+public CitizenProfileResponse getCitizenById(
+        Long id
+) {
+
+    log.info(
+            "Fetching citizen {}",
+            id
+    );
+
+    CitizenProfile profile =
+            citizenProfileRepository
+                    .findById(id)
+                    .orElseThrow(
+                            CitizenProfileNotFoundException::new
+                    );
+
+    return citizenProfileMapper
+            .toResponse(profile);
+
 }
 
 }

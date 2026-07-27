@@ -1,14 +1,13 @@
 package com.trafikkingx.assignment.service.impl;
 
+import com.trafikkingx.assignment.dto.internal.AssignmentCreationResult;
+import com.trafikkingx.assignment.dto.request.CreateAssignmentRequest;
 import com.trafikkingx.assignment.dto.response.AssignmentResponse;
 import com.trafikkingx.assignment.entity.Assignment;
 import com.trafikkingx.assignment.enums.AssignmentStatus;
-import com.trafikkingx.assignment.enums.ResourceType;
-import com.trafikkingx.assignment.model.ResourceCandidate;
+import com.trafikkingx.assignment.mapper.AssignmentResponseMapper;
 import com.trafikkingx.assignment.repository.AssignmentRepository;
-import com.trafikkingx.assignment.scoring.ResourceScoringService;
 import com.trafikkingx.assignment.service.AssignmentEngineService;
-import com.trafikkingx.assignment.strategy.AssignmentStrategy;
 import com.trafikkingx.ambulance.entity.Ambulance;
 import com.trafikkingx.ambulance.repository.AmbulanceRepository;
 import com.trafikkingx.auth.entity.User;
@@ -17,69 +16,42 @@ import com.trafikkingx.common.exception.custom.AmbulanceNotFoundException;
 import com.trafikkingx.common.exception.custom.IncidentNotFoundException;
 import com.trafikkingx.incident.entity.Incident;
 import com.trafikkingx.incident.repository.IncidentRepository;
+import com.trafikkingx.recommendation.engine.RecommendationEngineService;
+import com.trafikkingx.recommendation.model.RecommendationResult;
+import com.trafikkingx.recommendation.model.RecommendedResource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
-
 @Slf4j
 @Service
 public class AssignmentEngineServiceImpl
         implements AssignmentEngineService {
 
-    private final IncidentRepository incidentRepository;
-
-    private final ResourceScoringService scoringService;
-
-    private final Map<ResourceType, AssignmentStrategy> strategyMap;
-
+    private final RecommendationEngineService recommendationEngineService;
     private final AssignmentRepository assignmentRepository;
-
     private final AmbulanceRepository ambulanceRepository;
-
     private final UserRepository userRepository;
+    private final IncidentRepository incidentRepository;
+    private final AssignmentResponseMapper assignmentResponseMapper;
 
     public AssignmentEngineServiceImpl(
-
             IncidentRepository incidentRepository,
-
-            ResourceScoringService scoringService,
-
-            List<AssignmentStrategy> strategies,
-
+            RecommendationEngineService recommendationEngineService,
             AssignmentRepository assignmentRepository,
-
             AmbulanceRepository ambulanceRepository,
-
+            AssignmentResponseMapper assignmentResponseMapper,
             UserRepository userRepository
-
     ) {
 
         this.incidentRepository = incidentRepository;
-
-        this.scoringService = scoringService;
-
+        this.recommendationEngineService = recommendationEngineService;
         this.assignmentRepository = assignmentRepository;
-
         this.ambulanceRepository = ambulanceRepository;
-
         this.userRepository = userRepository;
-
-        this.strategyMap = new EnumMap<>(ResourceType.class);
-
-        for (AssignmentStrategy strategy : strategies) {
-
-            strategyMap.put(
-                    strategy.getResourceType(),
-                    strategy
-            );
-
-        }
+        this.assignmentResponseMapper = assignmentResponseMapper;
 
     }
 
@@ -110,9 +82,7 @@ public class AssignmentEngineServiceImpl
 
     }
 
-    private Ambulance getAmbulance(
-            Long ambulanceId
-    ) {
+    private Ambulance getAmbulance(Long ambulanceId) {
 
         return ambulanceRepository
                 .findById(ambulanceId)
@@ -122,11 +92,14 @@ public class AssignmentEngineServiceImpl
 
     }
 
+    /**
+     * Legacy method.
+     * Will be removed after dispatcher approval workflow
+     * completely replaces automatic assignment.
+     */
     @Override
     @Transactional
-    public AssignmentResponse autoAssign(
-            Long incidentId
-    ) {
+    public AssignmentResponse autoAssign(Long incidentId) {
 
         log.info(
                 "Starting automatic assignment for incident {}",
@@ -136,46 +109,18 @@ public class AssignmentEngineServiceImpl
         Incident incident =
                 getIncident(incidentId);
 
-        if (assignmentRepository.existsByIncident(incident)) {
+        RecommendationResult recommendation =
+                recommendationEngineService.generateRecommendation(
+                        incidentId
+                );
 
-            throw new IllegalStateException(
-                    "Resources already assigned for this incident."
-            );
-
-        }
-
-        ResourceCandidate hospital =
-                strategyMap
-                        .get(ResourceType.HOSPITAL)
-                        .findBestResource(incident);
-
-        ResourceCandidate ambulance =
-                strategyMap
-                        .get(ResourceType.AMBULANCE)
-                        .findBestResource(incident);
-
-        ResourceCandidate police =
-                strategyMap
-                        .get(ResourceType.POLICE)
-                        .findBestResource(incident);
-
-        if (hospital != null) {
-
-            hospital.setScore(
-                    scoringService.calculateScore(
-                            hospital
-                    )
-            );
-
-        }
+        RecommendedResource ambulance =
+                recommendation.getAmbulance();
 
         if (ambulance != null) {
 
-            ambulance.setScore(
-                    scoringService.calculateScore(
-                            ambulance
-                    )
-            );
+            User dispatcher =
+                    getCurrentDispatcher();
 
             Ambulance ambulanceEntity =
                     getAmbulance(
@@ -186,179 +131,100 @@ public class AssignmentEngineServiceImpl
                     Assignment.builder()
                             .incident(incident)
                             .ambulance(ambulanceEntity)
-                            .dispatcher(getCurrentDispatcher())
+                            .dispatcher(dispatcher)
                             .status(AssignmentStatus.PENDING)
                             .build();
 
-            assignmentRepository.save(
-                    assignment
-            );
-
-            log.info(
-                    "Assignment {} created successfully.",
-                    assignment.getId()
-            );
+            assignmentRepository.save(assignment);
 
         }
 
-        if (police != null) {
-
-            police.setScore(
-                    scoringService.calculateScore(
-                            police
-                    )
-            );
-
-        }
-
-        log.info(
-                "Automatic assignment completed successfully."
+        return assignmentResponseMapper.toResponse(
+                recommendation
         );
 
-        return AssignmentResponse.builder()
+    }
 
+    @Override
+    @Transactional
+    public AssignmentCreationResult createAssignment(
+            CreateAssignmentRequest request
+    ) {
+
+        log.info(
+                "Creating assignment for incident {}",
+                request.getIncidentId()
+        );
+
+        Incident incident =
+                getIncident(
+                        request.getIncidentId()
+                );
+
+        if (assignmentRepository.existsByIncident(incident)) {
+
+            throw new IllegalStateException(
+                    "Resources already assigned for this incident."
+            );
+
+        }
+
+        Ambulance ambulance =
+                getAmbulance(
+                        request.getAmbulanceId()
+                );
+
+        User dispatcher =
+                getCurrentDispatcher();
+
+        Assignment assignment =
+                Assignment.builder()
+                        .incident(incident)
+                        .ambulance(ambulance)
+                        .dispatcher(dispatcher)
+                        .status(AssignmentStatus.PENDING)
+                        .remarks(request.getRemarks())
+                        .build();
+
+        assignment =
+                assignmentRepository.save(
+                        assignment
+                );
+
+        log.info(
+                "Assignment {} created successfully.",
+                assignment.getId()
+        );
+
+        RecommendationResult recommendation =
+                recommendationEngineService.generateRecommendation(
+                        request.getIncidentId()
+                );
+
+        AssignmentResponse response =
+                assignmentResponseMapper.toResponse(
+                        recommendation
+                );
+
+        return AssignmentCreationResult.builder()
+                .assignmentId(
+                        assignment.getId()
+                )
                 .incidentId(
-                        incidentId
+                        incident.getId()
                 )
-
-                // Hospital
-
-                .hospitalId(
-                        hospital != null
-                                ? hospital.getId()
-                                : null
-                )
-
-                .hospitalName(
-                        hospital != null
-                                ? hospital.getName()
-                                : null
-                )
-
-                .hospitalDistance(
-                        hospital != null
-                                ? hospital.getDistance()
-                                : null
-                )
-
-                .hospitalEtaMinutes(
-                        hospital != null
-                                ? Math.max(
-                                2,
-                                (int) Math.ceil(
-                                        hospital.getDistance() * 2
-                                )
-                        )
-                                : null
-                )
-
-                .hospitalConfidence(
-                        hospital != null
-                                ? Math.min(
-                                99,
-                                hospital.getScore().intValue()
-                        )
-                                : null
-                )
-
-                .hospitalReason(
-                        hospital != null
-                                ? "Nearest available hospital selected based on AI resource scoring."
-                                : null
-                )
-
-                // Ambulance
-
                 .ambulanceId(
-                        ambulance != null
-                                ? ambulance.getId()
-                                : null
+                        ambulance.getId()
                 )
-
-                .vehicleNumber(
-                        ambulance != null
-                                ? ambulance.getName()
-                                : null
+                .dispatcherId(
+                        dispatcher.getId()
                 )
-
-                .ambulanceDistance(
-                        ambulance != null
-                                ? ambulance.getDistance()
-                                : null
+                .response(
+                        response
                 )
-
-                .ambulanceEtaMinutes(
-                        ambulance != null
-                                ? Math.max(
-                                1,
-                                (int) Math.ceil(
-                                        ambulance.getDistance() * 2
-                                )
-                        )
-                                : null
-                )
-
-                .ambulanceConfidence(
-                        ambulance != null
-                                ? Math.min(
-                                99,
-                                ambulance.getScore().intValue()
-                        )
-                                : null
-                )
-
-                .ambulanceReason(
-                        ambulance != null
-                                ? "Closest available ambulance with the highest assignment score."
-                                : null
-                )
-
-                              // Police
-
-                .policeStationId(
-                        police != null
-                                ? police.getId()
-                                : null
-                )
-
-                .policeStationName(
-                        police != null
-                                ? police.getName()
-                                : null
-                )
-
-                .policeDistance(
-                        police != null
-                                ? police.getDistance()
-                                : null
-                )
-
-                .policeEtaMinutes(
-                        police != null
-                                ? Math.max(
-                                2,
-                                (int) Math.ceil(
-                                        police.getDistance() * 2
-                                )
-                        )
-                                : null
-                )
-
-                .policeConfidence(
-                        police != null
-                                ? Math.min(
-                                99,
-                                police.getScore().intValue()
-                        )
-                                : null
-                )
-
-                .policeReason(
-                        police != null
-                                ? "Nearest active police station selected using AI scoring."
-                                : null
-                )
-
+                .recipientUserId(
+                        ambulance.getUser()
+                                 .getId())
                 .build();
 
     }

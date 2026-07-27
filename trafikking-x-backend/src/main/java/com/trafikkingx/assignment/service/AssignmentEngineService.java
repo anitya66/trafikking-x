@@ -1,15 +1,27 @@
 package com.trafikkingx.assignment.service;
 
+import com.trafikkingx.assignment.dto.internal.AssignmentCreationResult;
+import com.trafikkingx.assignment.dto.request.CreateAssignmentRequest;
 import com.trafikkingx.assignment.dto.response.AssignmentResponse;
 
 public interface AssignmentEngineService {
 
     /**
-     * Automatically assigns the nearest and most suitable
-     * emergency resources for the given incident.
+     * Legacy method.
      *
-     * @param incidentId Incident ID
-     * @return AssignmentResponse
+     * Will be removed after the dispatcher approval
+     * workflow is fully migrated.
      */
-    AssignmentResponse autoAssign(Long incidentId);
+    AssignmentResponse autoAssign(
+            Long incidentId
+    );
+
+    /**
+     * Creates an assignment from dispatcher-approved
+     * resources.
+     */
+    AssignmentCreationResult createAssignment(
+        CreateAssignmentRequest request
+);
+
 }

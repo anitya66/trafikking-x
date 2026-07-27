@@ -1,32 +1,31 @@
 package com.trafikkingx.ai.service.impl;
 
 import com.trafikkingx.ai.service.AIRecommendationService;
-import com.trafikkingx.assignment.dto.response.AssignmentResponse;
-import com.trafikkingx.assignment.service.AssignmentEngineService;
+import com.trafikkingx.recommendation.dto.AIRecommendationResponse;
+import com.trafikkingx.recommendation.engine.RecommendationEngineService;
+import com.trafikkingx.recommendation.mapper.RecommendationMapper;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AIRecommendationServiceImpl
         implements AIRecommendationService {
 
-    private final AssignmentEngineService assignmentEngineService;
+    private final RecommendationEngineService recommendationEngineService;
+
+    private final RecommendationMapper recommendationMapper;
 
     @Override
-    public AssignmentResponse getRecommendation(
+    public AIRecommendationResponse getRecommendation(
             Long incidentId
     ) {
 
-        log.info(
-                "Generating AI recommendation for incident {}",
-                incidentId
-        );
-
-        return assignmentEngineService.autoAssign(
-                incidentId
+        return recommendationMapper.toResponse(
+                recommendationEngineService.generateRecommendation(
+                        incidentId
+                )
         );
     }
+
 }
