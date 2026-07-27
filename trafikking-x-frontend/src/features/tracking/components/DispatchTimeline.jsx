@@ -25,7 +25,7 @@ export default function DispatchTimeline({
       {timeline.map((event, index) => (
 
         <TimelineItem
-          key={index}
+          key={`${event.title}-${event.timestamp ?? index}`}
           title={event.title}
           description={event.description}
           timestamp={event.timestamp}

@@ -1,7 +1,7 @@
 import "leaflet/dist/leaflet.css";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { useMapOverview } from "../hooks/useMapOverview";
+
 import RouteLayer from "../layers/RouteLayer";
 
 import {
@@ -32,32 +32,56 @@ L.Icon.Default.mergeOptions({
 
 const DEFAULT_CENTER = [28.6139, 77.2090];
 
-export default function EmergencyMap() {
+export default function EmergencyMap({
 
-  const { data, isLoading, isError } = useMapOverview();
+  overview,
 
-  if (isLoading) {
+  loading,
+
+  error,
+
+}) {
+
+  if (loading) {
+
     return (
+
       <Card>
+
         <CardContent className="flex h-[520px] items-center justify-center">
+
           Loading map...
+
         </CardContent>
+
       </Card>
+
     );
+
   }
 
-  if (isError) {
+  if (error) {
+
     return (
+
       <Card className="overflow-hidden">
+
         <CardContent className="flex h-[520px] items-center justify-center text-red-500">
+
           Failed to load map.
+
         </CardContent>
+
       </Card>
+
     );
+
   }
 
   return (
+
     <Card className="overflow-hidden">
+
       <CardContent className="p-0">
 
         <MapContainer
@@ -73,84 +97,85 @@ export default function EmergencyMap() {
           />
 
           <AutoFitBounds
-            incidents={data?.incidents}
+            incidents={overview?.incidents}
           />
 
           <IncidentLayer
-            incidents={data?.incidents}
+            incidents={overview?.incidents}
           />
 
-{data?.assignments?.map((assignment) => {
+          {overview?.assignments?.map((assignment) => {
 
-  const ambulance =
-    data.ambulances.find(
+            const ambulance =
+              overview?.ambulances?.find(
 
-      (a) =>
+                (a) =>
 
-        a.id === assignment.ambulanceId
+                  a.id === assignment.ambulanceId
 
-    );
+              );
 
-  const incident =
-    data.incidents.find(
+            const incident =
+              overview?.incidents?.find(
 
-      (i) =>
+                (i) =>
 
-        i.id === assignment.incidentId
+                  i.id === assignment.incidentId
 
-    );
+              );
 
-  if (!ambulance || !incident) {
+            if (!ambulance || !incident) {
 
-    return null;
+              return null;
 
-  }
+            }
 
-  return (
+            return (
 
-    <RouteLayer
+              <RouteLayer
 
-      key={assignment.assignmentId}
+                key={assignment.assignmentId}
 
-      start={{
+                start={{
 
-        lat: ambulance.latitude,
+                  lat: ambulance.latitude,
 
-        lng: ambulance.longitude,
+                  lng: ambulance.longitude,
 
-      }}
+                }}
 
-      end={{
+                end={{
 
-        lat: incident.latitude,
+                  lat: incident.latitude,
 
-        lng: incident.longitude,
+                  lng: incident.longitude,
 
-      }}
+                }}
 
-    />
+              />
 
-  );
+            );
 
-})}
+          })}
 
           <HospitalLayer
-            hospitals={data?.hospitals}
+            hospitals={overview?.hospitals}
           />
 
-          
-
           <AmbulanceLayer
-            ambulances={data?.ambulances}
+            ambulances={overview?.ambulances}
           />
 
           <PoliceLayer
-            policeStations={data?.policeStations}
+            policeStations={overview?.policeStations}
           />
 
         </MapContainer>
 
       </CardContent>
+
     </Card>
+
   );
+
 }

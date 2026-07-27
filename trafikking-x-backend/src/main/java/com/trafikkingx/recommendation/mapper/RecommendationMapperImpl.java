@@ -66,13 +66,16 @@ public class RecommendationMapperImpl
 
         recommendations.add(
                 ResourceRecommendation.builder()
-                        .resourceId(resource.getId())
-                        .resourceType(type)
-                        .resourceName(resource.getName())
-                        .score(resource.getScore())
-                        .etaMinutes(resource.getEtaMinutes())
-                        .reason(resource.getReason())
-                        .build()
+        .resourceId(resource.getId())
+        .resourceType(type)
+        .resourceName(resource.getName())
+        .distanceKm(
+                resource.getDistance()
+        )
+        .score(resource.getScore())
+        .etaMinutes(resource.getEtaMinutes())
+        .reason(resource.getReason())
+        .build()
         );
     }
 

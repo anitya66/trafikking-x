@@ -1,4 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
+import SeverityBadge from "@/shared/components/SeverityBadge";
 
 export default function AIAnalysisSummary({
 

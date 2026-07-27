@@ -11,42 +11,46 @@ import {
 
 import { Card, CardContent } from "@/components/ui/card";
 
-import ETAChip from "./ETAChip";
-import DispatchTimeline from "./DispatchTimeline";
+import ETAChip from "@/features/tracking/components/ETAChip";
+import DispatchTimeline from "@/features/tracking/components/DispatchTimeline";
+import { useLiveEta } from "@/features/tracking/hooks/useLiveEta";
 
-import { useTracking } from "../hooks/useTracking";
-import { useLiveEta } from "../hooks/useLiveEta";
+import { useCitizenTracking } from "../hooks/useCitizenTracking";
 
-export default function TrackingPanel({
-  dispatchId,
-}) {
+export default function CitizenLiveTrackingCard() {
 
   const {
     data,
     isLoading,
     isError,
-  } = useTracking(dispatchId);
+  } = useCitizenTracking();
 
-  const [liveEta, setLiveEta] = useState(null);
+  const [tracking, setTracking] = useState(null);
 
   useEffect(() => {
 
     if (data) {
 
-      setLiveEta(data);
+      setTracking(data);
 
     }
 
   }, [data]);
 
   const handleEtaUpdate =
-    useCallback((event) => {
+  useCallback((event) => {
 
-      if (event.dispatchId !== dispatchId) {
-        return;
+    setTracking((previous) => {
+
+      if (!previous) {
+        return previous;
       }
 
-      setLiveEta((previous) => ({
+      if (event.dispatchId !== previous.dispatchId) {
+        return previous;
+      }
+
+      return {
 
         ...previous,
 
@@ -56,31 +60,13 @@ export default function TrackingPanel({
         remainingDistanceKm:
           event.remainingDistanceKm,
 
-      }));
+      };
 
-    }, [dispatchId]);
+    });
 
-  useLiveEta(
-    handleEtaUpdate
-  );
+  }, []);
 
-  if (!dispatchId) {
-
-    return (
-
-      <Card>
-
-        <CardContent className="flex h-[220px] items-center justify-center">
-
-          Select a dispatch to view tracking.
-
-        </CardContent>
-
-      </Card>
-
-    );
-
-  }
+  useLiveEta(handleEtaUpdate);
 
   if (isLoading) {
 
@@ -88,9 +74,9 @@ export default function TrackingPanel({
 
       <Card>
 
-        <CardContent className="flex h-[220px] items-center justify-center">
+        <CardContent className="flex h-60 items-center justify-center">
 
-          Loading tracking...
+          Loading live tracking...
 
         </CardContent>
 
@@ -100,15 +86,15 @@ export default function TrackingPanel({
 
   }
 
-  if (isError) {
+  if (isError || !tracking) {
 
     return (
 
       <Card>
 
-        <CardContent className="flex h-[220px] items-center justify-center text-red-500">
+        <CardContent className="flex h-60 items-center justify-center">
 
-          Failed to load tracking.
+          No active emergency.
 
         </CardContent>
 
@@ -132,20 +118,20 @@ export default function TrackingPanel({
 
               <Truck className="h-6 w-6 text-primary" />
 
-              Live Dispatch Tracking
+              Live Emergency Tracking
 
             </h2>
 
             <p className="text-sm text-muted-foreground">
 
-              Current dispatch progress
+              Your ambulance is on the way.
 
             </p>
 
           </div>
 
           <ETAChip
-            eta={liveEta?.etaMinutes}
+            eta={tracking.etaMinutes}
           />
 
         </div>
@@ -154,11 +140,11 @@ export default function TrackingPanel({
 
           <MapPinned className="h-4 w-4 text-primary" />
 
-          Remaining Distance:
+          Remaining Distance
 
           <strong>
 
-            {liveEta?.remainingDistanceKm?.toFixed(2)} km
+            {tracking.remainingDistanceKm?.toFixed(2)} km
 
           </strong>
 
@@ -174,7 +160,7 @@ export default function TrackingPanel({
 
           <div className="inline-flex rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
 
-            {data.currentStatus}
+            {tracking.status}
 
           </div>
 
@@ -189,7 +175,7 @@ export default function TrackingPanel({
           </h3>
 
           <DispatchTimeline
-            timeline={data.timeline}
+            timeline={tracking.timeline}
           />
 
         </div>

@@ -1,4 +1,9 @@
-import { useEffect, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+
 import { Marker, Popup } from "react-leaflet";
 
 import { markerIcons } from "../utils/markerIcons";
@@ -18,33 +23,32 @@ export default function AmbulanceLayer({ ambulances }) {
 
   }, [ambulances]);
 
-  useAmbulanceTracking((event) => {
+ const handleTrackingUpdate = useCallback((event) => {
 
     console.log(
-      "🚑 Live Ambulance Update",
-      event
+        "🚑 Live Ambulance Update",
+        event
     );
 
     setLiveAmbulances((previous) =>
-      previous.map((ambulance) =>
+        previous.map((ambulance) =>
 
-        ambulance.id === event.ambulanceId
+            ambulance.id === event.ambulanceId
 
-          ? {
-              ...ambulance,
+                ? {
+                    ...ambulance,
+                    latitude: event.latitude,
+                    longitude: event.longitude,
+                }
 
-              latitude: event.latitude,
+                : ambulance
 
-              longitude: event.longitude,
-            }
-
-          : ambulance
-
-      )
+        )
     );
 
-  });
+}, []);
 
+useAmbulanceTracking(handleTrackingUpdate);
   return (
     <>
       {liveAmbulances.map((ambulance) => (

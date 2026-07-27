@@ -9,28 +9,28 @@ export function useAmbulanceTracking(callback) {
 
   useEffect(() => {
 
-    subscribe(
+  const handleMessage = (message) => {
 
-      "/topic/ambulances",
-
-      (message) => {
-
-        callback(
-          JSON.parse(message.body)
-        );
-
-      }
-
+    callback(
+      JSON.parse(message.body)
     );
 
-    return () => {
+  };
 
-      unsubscribe(
-        "/topic/ambulances"
-      );
+  subscribe(
+    "/topic/tracking/live",
+    handleMessage
+  );
 
-    };
+  return () => {
 
-  }, [callback]);
+    unsubscribe(
+      "/topic/tracking/live",
+      handleMessage
+    );
+
+  };
+
+}, [callback]);
 
 }

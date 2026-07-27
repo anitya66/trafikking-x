@@ -4,6 +4,7 @@ import ActiveIncidentsWidget from "@/features/citizens/dashboard/ActiveIncidents
 import NearbyHospitalsWidget from "@/features/citizens/dashboard/NearbyHospitalsWidget";
 import EmergencyContactsWidget from "@/features/citizens/dashboard/EmergencyContactsWidget";
 import AIEmergencyAssistantCard from "@/features/citizens/components/AIEmergencyAssistantCard";
+import CitizenLiveTrackingCard from "@/features/citizens/tracking/components/CitizenLiveTrackingCard";
 
 export default function CitizenDashboard() {
   return (
@@ -14,6 +15,7 @@ export default function CitizenDashboard() {
         <div className="space-y-6 xl:col-span-2">
           <QuickEmergencyCard />
           <ActiveIncidentsWidget />
+          <CitizenLiveTrackingCard />
           <AIEmergencyAssistantCard />
         </div>
 

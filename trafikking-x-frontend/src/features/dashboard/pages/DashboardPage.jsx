@@ -11,7 +11,7 @@ import { toast } from "sonner";
 
 import AIRecommendationCard from "@/features/ai/components/AIRecommendationCard";
 import TrackingPanel from "@/features/tracking/components/TrackingPanel";
-import EmergencyMap from "@/features/map/components/EmergencyMap";
+import DispatcherEmergencyMap from "@/features/map/components/DispatcherEmergencyMap";
 
 import { useDashboardSocket } from "@/hooks/realtime/useDashboardSocket";
 
@@ -172,7 +172,7 @@ export default function DashboardPage() {
 
       {/* Emergency Map */}
 
-      <EmergencyMap />
+      <DispatcherEmergencyMap />
 
       {/* Severity Samples */}
 

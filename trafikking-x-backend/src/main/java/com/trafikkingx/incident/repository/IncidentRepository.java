@@ -3,6 +3,9 @@ package com.trafikkingx.incident.repository;
 import com.trafikkingx.citizen.entity.CitizenProfile;
 import com.trafikkingx.incident.entity.Incident;
 import com.trafikkingx.incident.enums.IncidentStatus;
+import com.trafikkingx.auth.entity.User;
+
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -42,4 +45,9 @@ public interface IncidentRepository
     List<Incident> findByStatusInOrderByReportedAtDesc(
             List<IncidentStatus> statuses
     );
+
+    Optional<Incident> findTopByCitizenProfileUserOrderByCreatedAtDesc(
+        User user
+);
+
 }

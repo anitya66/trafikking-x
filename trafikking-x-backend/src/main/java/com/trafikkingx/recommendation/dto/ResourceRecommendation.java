@@ -38,6 +38,11 @@ public class ResourceRecommendation {
     private String resourceName;
 
     /**
+     * Distance from incident (KM).
+     */
+    private Double distanceKm;
+
+    /**
      * AI/Scoring confidence.
      */
     private Double score;
@@ -51,4 +56,5 @@ public class ResourceRecommendation {
      * Explanation shown to dispatcher.
      */
     private String reason;
+
 }

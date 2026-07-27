@@ -5,6 +5,26 @@ let client = null;
 
 const subscriptions = new Map();
 
+/*
+Map Structure
+
+destination
+      ↓
+Set<callback>
+
+Example
+
+"/topic/tracking/live"
+
+↓
+
+Set(
+   callback1,
+   callback2,
+   callback3
+)
+*/
+
 export function connectSocket() {
 
   if (client?.active || client?.connected) {
@@ -49,39 +69,64 @@ export function subscribe(destination, callback) {
 
   connectSocket();
 
-  subscriptions.set(destination, callback);
+  if (!subscriptions.has(destination)) {
+
+    subscriptions.set(
+      destination,
+      new Set()
+    );
+
+  }
+
+  subscriptions
+    .get(destination)
+    .add(callback);
 
   if (client.connected) {
 
     return client.subscribe(
+
       destination,
-      callback
+
+      (message) => {
+
+        subscriptions
+          .get(destination)
+          ?.forEach((listener) => {
+
+            listener(message);
+
+          });
+
+      }
+
     );
 
   }
 
   return null;
-}
-
-export function unsubscribe(destination) {
-
-  subscriptions.delete(destination);
 
 }
 
-export function publish(destination, body) {
+export function unsubscribe(
+  destination,
+  callback
+) {
 
-  if (!client?.connected) {
+  const listeners =
+    subscriptions.get(destination);
+
+  if (!listeners) {
     return;
   }
 
-  client.publish({
+  listeners.delete(callback);
 
-    destination,
+  if (listeners.size === 0) {
 
-    body: JSON.stringify(body),
+    subscriptions.delete(destination);
 
-  });
+  }
 
 }
 

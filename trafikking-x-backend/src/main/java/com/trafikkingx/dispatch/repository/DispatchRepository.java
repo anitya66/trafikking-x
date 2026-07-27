@@ -36,4 +36,6 @@ List<Dispatch> findByPoliceStationIdAndStatusInOrderByCreatedAtDesc(
         List<DispatchStatus> statuses
 );
 
+Optional<Dispatch> findByAmbulanceId(Long ambulanceId);
+
 }
