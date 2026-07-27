@@ -8,7 +8,7 @@ import DispatcherSection from "../sections/dispatcher/DispatcherSection";
 import ResourcesSection from "../sections/resources/ResourcesSection";
 import TrackingSection from "../sections/tracking/TrackingSection";
 import MissionSection from "../sections/mission/MissionSection";
-
+import SectionDivider from "@/shared/components/landing/SectionDivider";
 import EcosystemSection from "../sections/ecosystem/EcosystemSection";
 import ShowcaseSection from "../sections/showcase/ShowcaseSection";
 
@@ -36,33 +36,55 @@ export default function LandingPage() {
 
           <EmergencySection />
 
-          <AIAnalysisSection />
+<SectionDivider
+  title="AI Recommendation Engine"
+/>
 
-          <DispatcherSection />
+<AIAnalysisSection />
 
-          <ResourcesSection />
 
-          <TrackingSection />
 
-          <MissionSection />
+<DispatcherSection />
+
+<SectionDivider
+  title="Resource Coordination"
+/>
+
+<ResourcesSection />
+
+
+
+
+<TrackingSection />
+
+
+<MissionSection />
 
         </section>
 
         {/* FEATURES */}
         <section id="features">
 
-          <EcosystemSection />
+<SectionDivider
+  title="Unified Ecosystem"
+/>
 
-          <ShowcaseSection />
+         <EcosystemSection />
 
+
+
+<ShowcaseSection />
         </section>
 
         {/* ABOUT */}
         <section id="about">
+<AISection />
 
-          <AISection />
+<SectionDivider
+  title="Technology Stack"
+/>
 
-          <TechnologySection />
+<TechnologySection />
 
         </section>
 

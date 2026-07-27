@@ -1,14 +1,19 @@
+import { cn } from "@/lib/utils";
+
 export default function SectionContainer({
   id,
-  className = "",
+  className,
   children,
 }) {
   return (
     <section
       id={id}
-      className={`relative overflow-hidden py-28 ${className}`}
+      className={cn(
+        "relative overflow-hidden py-20 sm:py-24 lg:py-28",
+        className
+      )}
     >
-      <div className="mx-auto w-full max-w-7xl px-6">
+      <div className="page-container">
         {children}
       </div>
     </section>

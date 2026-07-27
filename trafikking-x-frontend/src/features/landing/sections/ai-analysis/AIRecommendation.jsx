@@ -2,52 +2,103 @@ import {
   Ambulance,
   Building2,
   Shield,
+  ArrowRight,
 } from "lucide-react";
 
+const recommendations = [
+  {
+    icon: Ambulance,
+    title: "Dispatch Nearest Ambulance",
+    subtitle: "ETA 2 min • Priority High",
+    color: "bg-green-500/15 text-green-400",
+  },
+  {
+    icon: Building2,
+    title: "Reserve Trauma Center",
+    subtitle: "2 Beds Available",
+    color: "bg-blue-500/15 text-blue-400",
+  },
+  {
+    icon: Shield,
+    title: "Notify Local Police Unit",
+    subtitle: "Traffic Control Required",
+    color: "bg-orange-500/15 text-orange-400",
+  },
+];
+
 export default function AIRecommendation() {
-
   return (
+    <div>
 
-    <div className="space-y-4">
+      {/* Header */}
 
-      <div className="flex items-center gap-3">
+      <div className="mb-6 flex items-center justify-between">
 
-        <Ambulance className="h-5 w-5 text-green-400" />
+        <div>
 
-        <span className="text-slate-300">
+          <h4 className="text-xl font-bold text-white">
+            AI Recommendations
+          </h4>
 
-          Dispatch Nearest Ambulance
+          <p className="mt-1 text-sm text-slate-400">
+            Generated based on real-time analysis
+          </p>
 
-        </span>
+        </div>
+
+        <div className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-2">
+
+          <span className="text-xs font-semibold uppercase tracking-wider text-cyan-300">
+            Confidence 98%
+          </span>
+
+        </div>
 
       </div>
 
-      <div className="flex items-center gap-3">
+      {/* Recommendations */}
 
-        <Building2 className="h-5 w-5 text-blue-400" />
+      <div className="space-y-4">
 
-        <span className="text-slate-300">
+        {recommendations.map((item) => {
+          const Icon = item.icon;
 
-          Reserve Trauma Center
+          return (
+            <div
+              key={item.title}
+              className="group flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.03] p-5 transition-all duration-300 hover:border-primary/20 hover:bg-white/[0.05]"
+            >
 
-        </span>
+              <div className="flex items-center gap-4">
 
-      </div>
+                <div className={`rounded-2xl p-3 ${item.color}`}>
 
-      <div className="flex items-center gap-3">
+                  <Icon className="h-5 w-5" />
 
-        <Shield className="h-5 w-5 text-orange-400" />
+                </div>
 
-        <span className="text-slate-300">
+                <div>
 
-          Notify Local Police Unit
+                  <h5 className="font-semibold text-white">
+                    {item.title}
+                  </h5>
 
-        </span>
+                  <p className="mt-1 text-sm text-slate-400">
+                    {item.subtitle}
+                  </p>
+
+                </div>
+
+              </div>
+
+              <ArrowRight className="h-5 w-5 text-slate-500 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-primary" />
+
+            </div>
+          );
+        })}
 
       </div>
 
     </div>
-
   );
-
 }

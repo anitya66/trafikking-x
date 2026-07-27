@@ -1,3 +1,5 @@
+import { BrainCircuit } from "lucide-react";
+
 const flow = [
   "Emergency",
   "AI Analysis",
@@ -9,26 +11,65 @@ const flow = [
 
 export default function AIFlow() {
   return (
-    <div className="my-16 flex flex-wrap items-center justify-center gap-4">
+    <div className="my-16 hidden items-center justify-center xl:flex">
 
-      {flow.map((item, index) => (
+      {flow.map((item, index) => {
 
-        <div
-          key={item}
-          className="flex items-center gap-4"
-        >
+        const active = item === "AI Analysis";
 
-          <div className="rounded-full border border-blue-500/20 bg-blue-500/10 px-5 py-3 text-sm font-semibold text-blue-300">
-            {item}
+        return (
+          <div
+            key={item}
+            className="flex items-center"
+          >
+
+            {/* Node */}
+
+            <div
+              className={`relative flex min-w-[150px] flex-col items-center`}
+
+            >
+              {active && (
+                <div className="absolute -top-10 flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1">
+
+                  <BrainCircuit className="h-4 w-4 text-primary" />
+
+                  <span className="text-xs font-semibold uppercase tracking-wider text-primary">
+                    AI Core
+                  </span>
+
+                </div>
+              )}
+
+              <div
+                className={`flex h-14 w-14 items-center justify-center rounded-full border transition-all duration-300 ${
+                  active
+                    ? "border-primary/30 bg-primary/10 shadow-[0_0_30px_rgba(59,130,246,.35)]"
+                    : "border-white/10 bg-white/[0.04]"
+                }`}
+              >
+
+                <span className="text-sm font-bold text-white">
+                  {index + 1}
+                </span>
+
+              </div>
+
+              <p className="mt-4 whitespace-nowrap text-sm font-medium text-slate-300">
+                {item}
+              </p>
+
+            </div>
+
+            {/* Connector */}
+
+            {index !== flow.length - 1 && (
+              <div className="mx-4 h-px w-20 bg-gradient-to-r from-primary/30 to-white/10" />
+            )}
+
           </div>
-
-          {index !== flow.length - 1 && (
-            <span className="text-slate-600">→</span>
-          )}
-
-        </div>
-
-      ))}
+        );
+      })}
 
     </div>
   );

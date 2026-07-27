@@ -15,31 +15,35 @@ function DashboardCard({
   color,
 }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-xl">
-
+    <motion.div
+      whileHover={{
+        y: -4,
+      }}
+      transition={{
+        duration: 0.2,
+      }}
+      className="group rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur-xl transition-all duration-300 hover:border-primary/20 hover:bg-white/[0.06]"
+    >
       <div className="flex items-center justify-between">
 
         <div>
-
-          <p className="text-xs text-slate-400">
+          <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
             {title}
           </p>
 
           <h4 className="mt-2 text-lg font-bold text-white">
             {value}
           </h4>
-
         </div>
 
         <div
-          className={`rounded-xl p-3 ${color}`}
+          className={`rounded-2xl p-3 transition-transform duration-300 group-hover:scale-105 ${color}`}
         >
           <Icon className="h-5 w-5 text-white" />
         </div>
 
       </div>
-
-    </div>
+    </motion.div>
   );
 }
 
@@ -55,51 +59,48 @@ export default function HeroDashboard() {
         x: 0,
       }}
       transition={{
-        duration: .7,
-        delay: .4,
+        duration: 0.7,
+        delay: 0.35,
       }}
-      className="relative"
+      className="relative mx-auto w-full max-w-xl"
     >
+      {/* Background Glow */}
 
-      {/* Glow */}
+      <div className="absolute -inset-6 rounded-[42px] bg-primary/15 blur-3xl" />
 
-      <div className="absolute -inset-4 rounded-[40px] bg-blue-500/20 blur-3xl" />
+      {/* Main Panel */}
 
-      <div className="relative rounded-[32px] border border-white/10 bg-white/5 p-6 backdrop-blur-2xl">
+      <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.05] p-6 shadow-2xl backdrop-blur-2xl">
 
         {/* Header */}
 
         <div className="mb-6 flex items-center justify-between">
 
           <div>
-
             <h3 className="text-xl font-bold text-white">
-
               AI Command Center
-
             </h3>
 
-            <p className="text-sm text-slate-400">
-
-              Live Emergency Overview
-
+            <p className="mt-1 text-sm text-slate-400">
+              Real-Time Emergency Dashboard
             </p>
-
           </div>
 
-          <div className="flex items-center gap-2 rounded-full bg-green-500/10 px-3 py-2">
+          <div className="flex items-center gap-2 rounded-full border border-green-500/20 bg-green-500/10 px-3 py-2">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
 
-            <div className="h-2 w-2 rounded-full bg-green-500" />
-
-            <span className="text-xs text-green-400">
-
-              Live
-
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
             </span>
 
+            <span className="text-xs font-medium text-green-400">
+              LIVE
+            </span>
           </div>
 
         </div>
+
+        {/* Dashboard Cards */}
 
         <div className="grid gap-4">
 
@@ -133,31 +134,38 @@ export default function HeroDashboard() {
 
         </div>
 
-        {/* Fake Map */}
+        {/* Map */}
 
-        <div className="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-slate-900">
+        <div className="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-slate-950">
 
           <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
 
             <div className="flex items-center gap-2">
-
               <MapPinned className="h-4 w-4 text-primary" />
 
-              <span className="text-sm text-white">
-
-                Live Map
-
+              <span className="text-sm font-medium text-white">
+                Live Emergency Map
               </span>
-
             </div>
 
             <Activity className="h-4 w-4 text-green-500" />
 
           </div>
 
-          <div className="flex h-44 items-center justify-center bg-[radial-gradient(circle_at_center,rgba(59,130,246,.15),transparent_70%)]">
+          <div className="relative flex h-52 items-center justify-center overflow-hidden">
 
-            <MapPinned className="h-16 w-16 text-blue-400/60" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,.18),transparent_70%)]" />
+
+            <div
+              className="absolute inset-0 opacity-[0.05]"
+              style={{
+                backgroundImage:
+                  "linear-gradient(rgba(255,255,255,.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.15) 1px, transparent 1px)",
+                backgroundSize: "32px 32px",
+              }}
+            />
+
+            <MapPinned className="relative h-16 w-16 text-blue-400/70" />
 
           </div>
 

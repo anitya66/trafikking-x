@@ -5,24 +5,25 @@ export default function FooterColumn({
   return (
     <div>
 
-      <h3 className="mb-5 font-bold text-white">
+      <h3 className="mb-6 text-sm font-semibold uppercase tracking-[0.2em] text-slate-300">
 
         {title}
 
       </h3>
 
-      <div className="space-y-3">
+      <div className="space-y-4">
 
         {links.map((link) => (
 
-          <p
+          <button
             key={link}
-            className="cursor-pointer text-slate-400 transition hover:text-white"
+            type="button"
+            className="block text-left text-slate-400 transition-all duration-200 hover:translate-x-1 hover:text-white"
           >
 
             {link}
 
-          </p>
+          </button>
 
         ))}
 
