@@ -2,6 +2,7 @@ import {
   Ambulance,
   Clock3,
   MapPin,
+  Radio,
 } from "lucide-react";
 
 import {
@@ -12,77 +13,114 @@ import {
 } from "@/components/ui/card";
 
 export default function IncomingAmbulancesCard({
-
   ambulances = [],
-
 }) {
-
   return (
+    <Card className="group relative overflow-hidden">
 
-    <Card>
+      {/* Background Glow */}
 
-      <CardHeader className="pb-4">
+      <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
+      <CardHeader className="relative pb-5">
 
         <CardTitle className="flex items-center justify-between">
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
 
-            <Ambulance className="h-5 w-5 text-primary" />
+            <div className="rounded-xl bg-cyan-500/10 p-2">
 
-            <span>Incoming Ambulances</span>
+              <Ambulance className="h-5 w-5 text-cyan-500" />
+
+            </div>
+
+            <div>
+
+              <h2 className="text-lg font-bold">
+
+                Incoming Ambulances
+
+              </h2>
+
+              <p className="text-sm font-normal text-muted-foreground">
+
+                Ambulances currently heading to your hospital
+
+              </p>
+
+            </div>
 
           </div>
 
-          <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+          <div className="rounded-full bg-cyan-500/10 px-4 py-1 text-sm font-bold text-cyan-500">
 
             {ambulances.length}
 
-          </span>
+          </div>
 
         </CardTitle>
 
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="relative">
 
         {ambulances.length === 0 ? (
 
-          <div className="flex h-40 items-center justify-center rounded-xl border border-dashed text-sm text-muted-foreground">
+          <div className="flex h-56 flex-col items-center justify-center rounded-2xl border border-dashed">
 
-            No incoming ambulances.
+            <Radio className="mb-4 h-12 w-12 text-muted-foreground" />
+
+            <h3 className="text-lg font-semibold">
+
+              No Incoming Ambulances
+
+            </h3>
+
+            <p className="mt-2 text-center text-sm text-muted-foreground">
+
+              Ambulances assigned to your hospital
+              will appear here in real time.
+
+            </p>
 
           </div>
 
         ) : (
 
-          <div className="space-y-4">
+          <div className="space-y-5">
 
             {ambulances.map((ambulance, index) => (
 
               <div
                 key={ambulance.ambulanceNumber ?? index}
-                className="rounded-xl border p-4 transition-all hover:border-primary/40 hover:bg-primary/5"
+                className="rounded-2xl border border-border bg-card/40 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-500/30 hover:shadow-lg hover:shadow-cyan-500/10"
               >
 
-                <div className="flex items-start justify-between gap-4">
+                <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
 
                   <div className="min-w-0 flex-1">
 
-                    <h3 className="font-semibold">
+                    <div className="flex items-center gap-2">
 
-                      {ambulance.ambulanceNumber}
+                      <Ambulance className="h-4 w-4 text-cyan-500" />
 
-                    </h3>
+                      <h3 className="truncate text-lg font-semibold">
 
-                    <p className="mt-1 text-sm text-muted-foreground">
+                        {ambulance.ambulanceNumber}
 
-                      {ambulance.driverName}
+                      </h3>
+
+                    </div>
+
+                    <p className="mt-2 text-sm text-muted-foreground">
+
+                      Driver • {ambulance.driverName}
 
                     </p>
 
                   </div>
 
-                  <span className="rounded-full bg-cyan-500/10 px-2 py-1 text-xs font-medium text-cyan-500">
+                  <span className="inline-flex rounded-full bg-cyan-500/10 px-3 py-1 text-xs font-semibold text-cyan-500">
 
                     {ambulance.status}
 
@@ -90,21 +128,45 @@ export default function IncomingAmbulancesCard({
 
                 </div>
 
-                <div className="mt-4 flex items-center justify-between">
+                <div className="mt-6 grid gap-4 sm:grid-cols-2">
 
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <div>
 
-                    <MapPin className="h-4 w-4" />
+                    <p className="text-xs uppercase tracking-wide text-muted-foreground">
 
-                    En Route
+                      Current Route
+
+                    </p>
+
+                    <div className="mt-1 inline-flex items-center gap-2">
+
+                      <MapPin className="h-4 w-4 text-primary" />
+
+                      <span className="font-medium">
+
+                        En Route
+
+                      </span>
+
+                    </div>
 
                   </div>
 
-                  <div className="flex items-center gap-2 text-sm font-semibold">
+                  <div className="sm:text-right">
 
-                    <Clock3 className="h-4 w-4 text-primary" />
+                    <p className="text-xs uppercase tracking-wide text-muted-foreground">
 
-                    {ambulance.etaMinutes} min
+                      Estimated Arrival
+
+                    </p>
+
+                    <div className="mt-1 inline-flex items-center gap-2 font-semibold text-primary">
+
+                      <Clock3 className="h-4 w-4" />
+
+                      {ambulance.etaMinutes} min
+
+                    </div>
 
                   </div>
 
@@ -121,7 +183,5 @@ export default function IncomingAmbulancesCard({
       </CardContent>
 
     </Card>
-
   );
-
 }

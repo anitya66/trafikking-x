@@ -20,7 +20,6 @@ import ICUOccupancyCard from "../components/dashboard/ICUOccupancyCard";
 import { useHospitalDashboard } from "../hooks/useHospitalDashboard";
 
 export default function HospitalsPage() {
-
   const {
     data,
     isLoading,
@@ -29,7 +28,7 @@ export default function HospitalsPage() {
 
   if (isError) {
     return (
-      <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-6 text-red-400">
+      <div className="rounded-2xl border border-red-500/20 bg-red-500/10 p-6 text-red-400">
         Failed to load hospital dashboard.
       </div>
     );
@@ -38,26 +37,31 @@ export default function HospitalsPage() {
   const metrics = data?.metrics;
 
   return (
-
     <div className="space-y-8">
 
       {/* Header */}
 
-      <div>
+      <div className="space-y-2">
 
-        <h1 className="text-4xl font-bold tracking-tight">
+        <h1 className="text-3xl font-black tracking-tight lg:text-5xl">
+
           Hospital Dashboard
+
         </h1>
 
-        <p className="mt-2 text-muted-foreground">
-          Emergency Response & Patient Management Center
+        <p className="max-w-3xl text-base text-muted-foreground lg:text-lg">
+
+          Monitor incoming emergency patients, ambulance arrivals,
+          hospital capacity, ICU availability and AI-assisted
+          recommendations in one intelligent command center.
+
         </p>
 
       </div>
 
       {/* Metrics */}
 
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 2xl:grid-cols-4">
 
         <MetricCard
           title="Emergency Queue"
@@ -128,11 +132,13 @@ export default function HospitalsPage() {
 
       </div>
 
-      {/* Dashboard */}
+      {/* Main Dashboard */}
 
-      <div className="grid gap-6 xl:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 2xl:grid-cols-12">
 
-        <div className="space-y-6 xl:col-span-2">
+        {/* Left Side */}
+
+        <div className="space-y-6 2xl:col-span-8">
 
           <IncomingPatientsCard
             patients={data?.incomingPatients ?? []}
@@ -144,7 +150,9 @@ export default function HospitalsPage() {
 
         </div>
 
-        <div className="space-y-6">
+        {/* Right Sidebar */}
+
+        <div className="space-y-6 2xl:col-span-4">
 
           <AIRecommendationCard
             recommendation={data?.aiRecommendation}
@@ -163,7 +171,5 @@ export default function HospitalsPage() {
       </div>
 
     </div>
-
   );
-
 }

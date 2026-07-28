@@ -8,25 +8,29 @@ export default function DashboardLayout() {
     <div className="min-h-screen bg-background text-foreground">
       <div className="flex">
 
-        <Sidebar />
+  {/* Desktop Sidebar */}
 
-        <div className="flex min-h-screen flex-1 flex-col">
+  <Sidebar />
 
-          <Topbar />
+  {/* Content */}
 
-          <main className="flex-1 overflow-y-auto">
+  <div className="flex min-h-screen min-w-0 flex-1 flex-col">
 
-            <div className="page-container section-spacing">
+    <Topbar />
 
-              <Outlet />
+    <main className="flex-1 overflow-x-hidden overflow-y-auto">
 
-            </div>
+      <div className="page-container section-spacing">
 
-          </main>
-
-        </div>
+        <Outlet />
 
       </div>
+
+    </main>
+
+  </div>
+
+</div>
     </div>
   );
 }

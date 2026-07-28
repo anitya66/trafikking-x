@@ -118,11 +118,23 @@ async function confirmDelete() {
 
     return (
 
-      <div className="py-20 text-center text-red-500">
+      <div className="rounded-3xl border border-red-500/20 bg-red-500/5 p-12 text-center">
 
-        Failed to load emergency contacts.
+  <HeartHandshake className="mx-auto mb-5 h-14 w-14 text-red-500" />
 
-      </div>
+  <h3 className="text-xl font-bold">
+
+    Unable To Load Contacts
+
+  </h3>
+
+  <p className="mt-3 text-muted-foreground">
+
+    Please refresh the page and try again.
+
+  </p>
+
+</div>
 
     );
 
@@ -140,31 +152,31 @@ async function confirmDelete() {
 
         actions={
 
-          <div className="flex items-center gap-3">
+  <div className="flex w-full flex-col gap-4 lg:w-auto lg:flex-row lg:items-center">
 
-            <SearchInput
+    <SearchInput
+      value={search}
+      onChange={(e) =>
+        setSearch(e.target.value)
+      }
+      placeholder="Search by name, phone or relationship..."
+      className="lg:w-80"
+    />
 
-              value={search}
+    <Button
+      size="lg"
+      onClick={handleAdd}
+    >
 
-              onChange={(e) =>
-                setSearch(e.target.value)
-              }
+      <Plus className="mr-2 h-4 w-4" />
 
-              placeholder="Search contact..."
+      Add Emergency Contact
 
-            />
+    </Button>
 
-            <Button onClick={handleAdd}>
+  </div>
 
-              <Plus className="mr-2 h-4 w-4" />
-
-              Add Contact
-
-            </Button>
-
-          </div>
-
-        }
+}
 
       />
             {filteredContacts.length === 0 ? (
@@ -173,14 +185,14 @@ async function confirmDelete() {
           icon={
             <HeartHandshake className="h-14 w-14 text-muted-foreground" />
           }
-          title="No Emergency Contacts"
-          description="Add trusted people so emergency responders can contact them when needed."
+          title="No Trusted Contacts Yet"
+          description="Add family members or trusted friends who should be notified immediately during an emergency."
           action={
             <Button onClick={handleAdd}>
 
               <Plus className="mr-2 h-4 w-4" />
 
-              Add Contact
+              Create First Contact
 
             </Button>
           }
@@ -188,7 +200,7 @@ async function confirmDelete() {
 
       ) : (
 
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
 
           {filteredContacts.map((contact) => (
 

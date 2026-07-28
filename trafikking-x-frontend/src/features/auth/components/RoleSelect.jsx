@@ -1,4 +1,12 @@
 import {
+  Ambulance,
+  Building2,
+  Headphones,
+  Shield,
+  User,
+} from "lucide-react";
+
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -10,27 +18,27 @@ const ROLES = [
   {
     value: "CITIZEN",
     label: "Citizen",
-    icon: "🧑",
+    icon: User,
   },
   {
     value: "POLICE",
     label: "Police",
-    icon: "👮",
+    icon: Shield,
   },
   {
     value: "AMBULANCE",
     label: "Ambulance",
-    icon: "🚑",
+    icon: Ambulance,
   },
   {
     value: "HOSPITAL",
     label: "Hospital",
-    icon: "🏥",
+    icon: Building2,
   },
   {
     value: "DISPATCHER",
     label: "Dispatcher",
-    icon: "🎧",
+    icon: Headphones,
   },
 ];
 
@@ -43,23 +51,34 @@ export default function RoleSelect({
       value={value}
       onValueChange={onChange}
     >
-      <SelectTrigger className="h-11 w-full">
+      <SelectTrigger className="h-12 w-full rounded-xl border-white/10 bg-white/5 backdrop-blur-sm transition-all hover:border-primary/40 focus:ring-primary/30">
         <SelectValue placeholder="Select your role" />
       </SelectTrigger>
 
-      <SelectContent>
-        {ROLES.map((role) => (
-          <SelectItem
-            key={role.value}
-            value={role.value}
-          >
-            <span className="flex items-center gap-2">
-              <span>{role.icon}</span>
+      <SelectContent className="rounded-xl border-white/10 bg-background/95 backdrop-blur-xl">
+        {ROLES.map((role) => {
+          const Icon = role.icon;
 
-              {role.label}
-            </span>
-          </SelectItem>
-        ))}
+          return (
+            <SelectItem
+              key={role.value}
+              value={role.value}
+              className="cursor-pointer rounded-lg py-3"
+            >
+              <div className="flex items-center gap-3">
+
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+
+                  <Icon className="h-4 w-4 text-primary" />
+
+                </div>
+
+                <span>{role.label}</span>
+
+              </div>
+            </SelectItem>
+          );
+        })}
       </SelectContent>
     </Select>
   );

@@ -1,4 +1,9 @@
-import { History } from "lucide-react";
+import {
+  CalendarDays,
+  History,
+  ShieldCheck,
+  UserRound,
+} from "lucide-react";
 
 import { usePoliceHistory } from "../hooks/usePoliceHistory";
 
@@ -14,18 +19,34 @@ import { Badge } from "@/components/ui/badge";
 export default function PoliceHistoryPage() {
 
   const {
+
     data: history = [],
+
     isLoading,
+
     isError,
+
   } = usePoliceHistory();
 
   if (isError) {
 
     return (
 
-      <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-6 text-red-400">
+      <div className="rounded-3xl border border-red-500/20 bg-red-500/5 p-12 text-center">
 
-        Failed to load police history.
+        <History className="mx-auto mb-5 h-12 w-12 text-red-500" />
+
+        <h3 className="text-2xl font-bold">
+
+          Unable To Load Police History
+
+        </h3>
+
+        <p className="mt-3 text-muted-foreground">
+
+          Please try again later.
+
+        </p>
 
       </div>
 
@@ -37,25 +58,47 @@ export default function PoliceHistoryPage() {
 
     <div className="space-y-8">
 
-      <div className="flex items-center gap-3">
+      {/* Header */}
 
-        <div className="rounded-xl bg-primary/10 p-3">
+      <div className="flex flex-col gap-6 rounded-3xl border border-primary/10 bg-card/60 p-6 backdrop-blur lg:flex-row lg:items-center lg:justify-between">
 
-          <History className="h-6 w-6 text-primary" />
+        <div className="flex items-center gap-4">
+
+          <div className="rounded-2xl bg-primary/10 p-4">
+
+            <History className="h-8 w-8 text-primary" />
+
+          </div>
+
+          <div>
+
+            <h1 className="text-3xl font-bold tracking-tight lg:text-4xl">
+
+              Police Case History
+
+            </h1>
+
+            <p className="mt-2 text-muted-foreground">
+
+              Review completed police emergency operations.
+
+            </p>
+
+          </div>
 
         </div>
 
-        <div>
+        <div className="rounded-2xl bg-primary/5 px-6 py-4 text-center">
 
-          <h1 className="text-4xl font-bold tracking-tight">
+          <p className="text-xs uppercase tracking-wider text-muted-foreground">
 
-            Case History
+            Total Cases
 
-          </h1>
+          </p>
 
-          <p className="text-muted-foreground">
+          <p className="mt-1 text-3xl font-black text-primary">
 
-            View previously handled police cases.
+            {isLoading ? "--" : history.length}
 
           </p>
 
@@ -63,13 +106,13 @@ export default function PoliceHistoryPage() {
 
       </div>
 
-      <Card>
+      <Card className="rounded-3xl">
 
         <CardHeader>
 
           <CardTitle>
 
-            Police Case History
+            Completed Cases
 
           </CardTitle>
 
@@ -79,76 +122,64 @@ export default function PoliceHistoryPage() {
 
           {isLoading ? (
 
-            <div className="py-10 text-center text-muted-foreground">
+            <div className="flex h-56 items-center justify-center text-muted-foreground">
 
-              Loading history...
+              Loading police history...
 
             </div>
 
           ) : history.length === 0 ? (
 
-            <div className="py-10 text-center text-muted-foreground">
+            <div className="flex h-56 flex-col items-center justify-center text-center">
 
-              No completed police cases found.
+              <History className="mb-4 h-12 w-12 text-muted-foreground" />
+
+              <h3 className="text-lg font-semibold">
+
+                No History Found
+
+              </h3>
+
+              <p className="mt-2 text-sm text-muted-foreground">
+
+                Completed police cases will appear here.
+
+              </p>
 
             </div>
 
           ) : (
 
-            <div className="overflow-x-auto">
+            <div className="space-y-5">
 
-              <table className="w-full">
+              {history.map((item) => (
 
-                <thead>
+                <div
+                  key={item.id}
+                  className="group rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:bg-primary/5"
+                >
 
-                  <tr className="border-b">
+                  <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
 
-                    <th className="py-3 text-left">
+                    {/* Left */}
 
-                      Incident
+                    <div className="space-y-4">
 
-                    </th>
+                      <div className="flex items-center gap-3">
 
-                    <th className="py-3 text-left">
+                        <div className="rounded-xl bg-primary/10 p-2">
 
-                      Citizen
+                          <ShieldCheck className="h-5 w-5 text-primary" />
 
-                    </th>
-
-                    <th className="py-3 text-left">
-
-                      Status
-
-                    </th>
-
-                    <th className="py-3 text-left">
-
-                      Accepted
-
-                    </th>
-
-                  </tr>
-
-                </thead>
-
-                <tbody>
-
-                  {history.map((item) => (
-
-                    <tr
-                      key={item.id}
-                      className="border-b hover:bg-muted/30"
-                    >
-
-                      <td className="py-4">
+                        </div>
 
                         <div>
 
-                          <p className="font-medium">
+                          <h3 className="font-semibold">
 
                             {item.incidentNumber}
 
-                          </p>
+                          </h3>
 
                           <p className="text-sm text-muted-foreground">
 
@@ -158,41 +189,53 @@ export default function PoliceHistoryPage() {
 
                         </div>
 
-                      </td>
+                      </div>
 
-                      <td>
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+
+                        <UserRound className="h-4 w-4" />
 
                         {item.citizenName}
 
-                      </td>
+                      </div>
 
-                      <td>
+                    </div>
 
-                        <Badge>
+                    {/* Right */}
 
-                          {item.status}
+                    <div className="flex flex-wrap items-center gap-4">
 
-                        </Badge>
+                      <Badge>
 
-                      </td>
+                        {item.status}
 
-                      <td>
+                      </Badge>
 
-                        {item.acceptedAt
-                          ? new Date(
-                              item.acceptedAt
-                            ).toLocaleString()
-                          : "-"}
+                      <div className="flex items-center gap-2 rounded-xl bg-muted/50 px-3 py-2 text-sm">
 
-                      </td>
+                        <CalendarDays className="h-4 w-4 text-primary" />
 
-                    </tr>
+                        <span>
 
-                  ))}
+                          {item.acceptedAt
 
-                </tbody>
+                            ? new Date(
+                                item.acceptedAt
+                              ).toLocaleString()
 
-              </table>
+                            : "-"}
+
+                        </span>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              ))}
 
             </div>
 

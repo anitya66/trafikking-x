@@ -1,19 +1,48 @@
-import { Inbox } from "lucide-react";
+import { Inbox, Radio } from "lucide-react";
 
 export default function EmptyIncidentFeed() {
+
   return (
-    <div className="flex min-h-[300px] flex-col items-center justify-center rounded-2xl border border-dashed border-border">
 
-      <Inbox className="mb-4 h-12 w-12 text-muted-foreground" />
+    <div className="rounded-3xl border border-dashed border-border bg-card/40 p-12">
 
-      <h3 className="text-lg font-semibold">
-        No Active Incidents
-      </h3>
+      <div className="flex flex-col items-center text-center">
 
-      <p className="mt-2 text-center text-sm text-muted-foreground">
-        All emergency incidents have been resolved.
-      </p>
+        <div className="mb-6 rounded-3xl bg-primary/10 p-6">
+
+          <Inbox className="h-12 w-12 text-primary" />
+
+        </div>
+
+        <h3 className="text-2xl font-bold">
+
+          No Active Incidents
+
+        </h3>
+
+        <p className="mt-3 max-w-md text-muted-foreground">
+
+          Great job! There are currently no active emergency
+          incidents waiting for dispatcher attention.
+
+        </p>
+
+        <div className="mt-8 flex items-center gap-2 rounded-full bg-emerald-500/10 px-5 py-2">
+
+          <Radio className="h-4 w-4 text-emerald-500" />
+
+          <span className="text-sm font-medium text-emerald-500">
+
+            System Running Normally
+
+          </span>
+
+        </div>
+
+      </div>
 
     </div>
+
   );
+
 }

@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -25,370 +24,327 @@ import {
 } from "@/components/ui/select";
 
 import { RELATIONSHIPS } from "../constants/relationships";
-
 import { emergencyContactSchema } from "../schemas/emergencyContactSchema";
 
 import { useCreateEmergencyContact } from "../hooks/useCreateEmergencyContact";
 import { useUpdateEmergencyContact } from "../hooks/useUpdateEmergencyContact";
 
 export default function ContactDialog({
-
   open,
-
   onOpenChange,
-
   mode = "create",
-
   contact = null,
-
 }) {
-
   const createContact = useCreateEmergencyContact();
-
   const updateContact = useUpdateEmergencyContact();
 
   const {
-
     register,
-
     handleSubmit,
-
     watch,
-
     setValue,
-
     reset,
-
     formState: {
-
       errors,
-
     },
-
   } = useForm({
-
     resolver: zodResolver(emergencyContactSchema),
-
     defaultValues: {
-
       contactName: "",
-
       contactPhone: "",
-
       relationship: "",
-
       priority: 1,
-
       primaryContact: false,
-
     },
-
   });
 
   useEffect(() => {
-
     if (mode === "edit" && contact) {
-
       reset({
-
         contactName: contact.contactName,
-
         contactPhone: contact.contactPhone,
-
         relationship: contact.relationship,
-
         priority: contact.priority,
-
         primaryContact: contact.primaryContact,
-
       });
-
     } else {
-
       reset({
-
         contactName: "",
-
         contactPhone: "",
-
         relationship: "",
-
         priority: 1,
-
         primaryContact: false,
-
       });
-
     }
-
   }, [
-
     mode,
-
     contact,
-
     reset,
-
   ]);
 
   async function onSubmit(values) {
-
     try {
-
       if (mode === "create") {
-
         await createContact.mutateAsync(values);
-
       } else {
-
         await updateContact.mutateAsync({
-
           id: contact.id,
-
           payload: values,
-
         });
-
       }
 
       reset();
-
       onOpenChange(false);
-
     } catch {
-
-      // Errors are handled inside mutation hooks
-
+      // handled by mutation hooks
     }
-
   }
 
   return (
-
     <Dialog
       open={open}
       onOpenChange={(value) => {
-
         if (!value) {
-
           reset();
-
         }
 
         onOpenChange(value);
-
       }}
     >
+      <DialogContent className="max-h-[92vh] overflow-y-auto sm:max-w-3xl">
 
-      <DialogContent className="sm:max-w-2xl">
+        <DialogHeader className="space-y-6 border-b border-border pb-6">
 
-        <DialogHeader>
+          <div className="flex items-start justify-between">
 
-          <DialogTitle>
+            <div>
 
-            {mode === "create"
+              <div className="mb-4 inline-flex rounded-full bg-primary/10 px-3 py-1">
 
-              ? "Add Emergency Contact"
+                <span className="text-xs font-semibold uppercase tracking-wider text-primary">
 
-              : "Edit Emergency Contact"}
+                  Emergency Contacts
 
-          </DialogTitle>
+                </span>
 
-          <DialogDescription>
+              </div>
 
-            {mode === "create"
+              <DialogTitle className="text-3xl font-bold">
 
-              ? "Add someone responders can contact during an emergency."
+                {mode === "create"
+                  ? "Add Trusted Contact"
+                  : "Edit Trusted Contact"}
 
-              : "Update emergency contact information."}
+              </DialogTitle>
 
-          </DialogDescription>
+              <DialogDescription className="mt-3 max-w-xl leading-7">
+
+                {mode === "create"
+                  ? "Add someone responders can immediately contact during an emergency."
+                  : "Update emergency contact information."}
+
+              </DialogDescription>
+
+            </div>
+
+            <div className="hidden rounded-2xl bg-primary/10 p-5 lg:block">
+
+              ❤️
+
+            </div>
+
+          </div>
 
         </DialogHeader>
 
         <form
-
           onSubmit={handleSubmit(onSubmit)}
-
-          className="space-y-6"
+          className="space-y-8 pt-2"
         >
-                      {/* Contact Name */}
 
-          <div className="space-y-2">
+          <div className="grid gap-6 md:grid-cols-2">
 
-            <label className="text-sm font-medium">
-              Contact Name
-            </label>
+            <div className="space-y-2">
 
-            <Input
-              placeholder="Enter contact name"
-              {...register("contactName")}
-            />
+              <label className="text-sm font-medium">
 
-            {errors.contactName && (
+                Contact Name
 
-              <p className="text-sm text-red-500">
+              </label>
 
-                {errors.contactName.message}
+              <Input
+                placeholder="John Doe"
+                {...register("contactName")}
+              />
 
-              </p>
+              {errors.contactName && (
 
-            )}
+                <p className="text-sm text-red-500">
 
-          </div>
+                  {errors.contactName.message}
 
-          {/* Phone Number */}
+                </p>
 
-          <div className="space-y-2">
+              )}
 
-            <label className="text-sm font-medium">
-              Phone Number
-            </label>
+            </div>
 
-            <Input
-              placeholder="9876543210"
-              {...register("contactPhone")}
-            />
+            <div className="space-y-2">
 
-            {errors.contactPhone && (
+              <label className="text-sm font-medium">
 
-              <p className="text-sm text-red-500">
+                Phone Number
 
-                {errors.contactPhone.message}
+              </label>
 
-              </p>
+              <Input
+                placeholder="+91 9876543210"
+                {...register("contactPhone")}
+              />
 
-            )}
+              {errors.contactPhone && (
 
-          </div>
+                <p className="text-sm text-red-500">
 
-          {/* Relationship */}
+                  {errors.contactPhone.message}
 
-          <div className="space-y-2">
+                </p>
 
-            <label className="text-sm font-medium">
-              Relationship
-            </label>
+              )}
 
-            <Select
-              value={watch("relationship")}
-              onValueChange={(value) =>
-                setValue("relationship", value, {
-                  shouldValidate: true,
-                })
-              }
-            >
-
-              <SelectTrigger className="w-full">
-
-                <SelectValue placeholder="Select relationship" />
-
-              </SelectTrigger>
-
-              <SelectContent>
-
-                {RELATIONSHIPS.map((relationship) => (
-
-                  <SelectItem
-                    key={relationship.value}
-                    value={relationship.value}
-                  >
-
-                    {relationship.label}
-
-                  </SelectItem>
-
-                ))}
-
-              </SelectContent>
-
-            </Select>
-
-            {errors.relationship && (
-
-              <p className="text-sm text-red-500">
-
-                {errors.relationship.message}
-
-              </p>
-
-            )}
+            </div>
 
           </div>
 
-          {/* Priority */}
+          <div className="grid gap-6 md:grid-cols-2">
 
-          <div className="space-y-2">
+            <div className="space-y-2">
 
-            <label className="text-sm font-medium">
-              Priority
-            </label>
+              <label className="text-sm font-medium">
 
-            <Select
-              value={String(watch("priority"))}
-              onValueChange={(value) =>
-                setValue(
-                  "priority",
-                  Number(value),
-                  {
+                Relationship
+
+              </label>
+
+              <Select
+                value={watch("relationship")}
+                onValueChange={(value) =>
+                  setValue("relationship", value, {
                     shouldValidate: true,
-                  }
-                )
-              }
-            >
+                  })
+                }
+              >
 
-              <SelectTrigger className="w-full">
+                <SelectTrigger>
 
-                <SelectValue placeholder="Select priority" />
+                  <SelectValue placeholder="Select relationship" />
 
-              </SelectTrigger>
+                </SelectTrigger>
 
-              <SelectContent>
+                <SelectContent>
 
-                {[1, 2, 3, 4, 5].map((priority) => (
+                  {RELATIONSHIPS.map((relationship) => (
 
-                  <SelectItem
-                    key={priority}
-                    value={String(priority)}
-                  >
+                    <SelectItem
+                      key={relationship.value}
+                      value={relationship.value}
+                    >
 
-                    Priority {priority}
+                      {relationship.label}
 
-                  </SelectItem>
+                    </SelectItem>
 
-                ))}
+                  ))}
 
-              </SelectContent>
+                </SelectContent>
 
-            </Select>
+              </Select>
 
-            {errors.priority && (
+              {errors.relationship && (
 
-              <p className="text-sm text-red-500">
+                <p className="text-sm text-red-500">
 
-                {errors.priority.message}
+                  {errors.relationship.message}
 
-              </p>
+                </p>
 
-            )}
+              )}
+
+            </div>
+
+            <div className="space-y-2">
+
+              <label className="text-sm font-medium">
+
+                Priority
+
+              </label>
+
+              <Select
+                value={String(watch("priority"))}
+                onValueChange={(value) =>
+                  setValue(
+                    "priority",
+                    Number(value),
+                    {
+                      shouldValidate: true,
+                    }
+                  )
+                }
+              >
+
+                <SelectTrigger>
+
+                  <SelectValue />
+
+                </SelectTrigger>
+
+                <SelectContent>
+
+                  {[1, 2, 3, 4, 5].map((priority) => (
+
+                    <SelectItem
+                      key={priority}
+                      value={String(priority)}
+                    >
+
+                      Priority {priority}
+
+                    </SelectItem>
+
+                  ))}
+
+                </SelectContent>
+
+              </Select>
+
+              {errors.priority && (
+
+                <p className="text-sm text-red-500">
+
+                  {errors.priority.message}
+
+                </p>
+
+              )}
+
+            </div>
 
           </div>
 
-          {/* Primary Contact */}
-
-          <div className="flex items-center justify-between rounded-2xl border border-border bg-card p-4">
+          <div className="flex items-center justify-between rounded-3xl border border-primary/20 bg-primary/5 p-6">
 
             <div>
 
-              <h3 className="font-medium">
+              <h3 className="font-semibold">
 
                 Primary Contact
 
               </h3>
 
-              <p className="text-sm text-muted-foreground">
+              <p className="mt-1 text-sm text-muted-foreground">
 
-                Make this your primary emergency contact.
+                This contact will be notified first during emergencies.
 
               </p>
 
@@ -408,54 +364,63 @@ export default function ContactDialog({
             />
 
           </div>
-                    <DialogFooter>
 
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => {
+          <DialogFooter className="border-t border-border pt-6">
 
-                reset();
+            <div className="flex w-full items-center justify-between">
 
-                onOpenChange(false);
+              <p className="text-sm text-muted-foreground">
 
-              }}
-            >
+                Trusted contacts help responders notify your family faster.
 
-              Cancel
+              </p>
 
-            </Button>
+              <div className="flex gap-3">
 
-            <Button
-              type="submit"
-              disabled={
-                createContact.isPending ||
-                updateContact.isPending
-              }
-            >
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    reset();
+                    onOpenChange(false);
+                  }}
+                >
 
-              {mode === "create"
-                ? (
-                  createContact.isPending
-                    ? "Adding Contact..."
-                    : "Add Contact"
-                )
-                : (
-                  updateContact.isPending
-                    ? "Saving Changes..."
-                    : "Save Changes"
-                )}
+                  Cancel
 
-            </Button>
+                </Button>
+
+                <Button
+                  type="submit"
+                  disabled={
+                    createContact.isPending ||
+                    updateContact.isPending
+                  }
+                >
+
+                  {mode === "create"
+                    ? (
+                        createContact.isPending
+                          ? "Adding..."
+                          : "Add Contact"
+                      )
+                    : (
+                        updateContact.isPending
+                          ? "Saving..."
+                          : "Save Changes"
+                      )}
+
+                </Button>
+
+              </div>
+
+            </div>
 
           </DialogFooter>
 
         </form>
 
       </DialogContent>
-
     </Dialog>
-
   );
-
 }

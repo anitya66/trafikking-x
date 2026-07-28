@@ -1,5 +1,10 @@
 import { useNavigate, useParams } from "react-router-dom";
 
+import {
+  AlertTriangle,
+  Shield,
+} from "lucide-react";
+
 import { usePoliceCase } from "../hooks/usePoliceCase";
 import { useAcceptPoliceCase } from "../hooks/useAcceptPoliceCase";
 import { useUpdatePoliceCase } from "../hooks/useUpdatePoliceCase";
@@ -42,9 +47,19 @@ export default function PoliceCaseDetailsPage() {
 
     return (
 
-      <div className="flex h-60 items-center justify-center">
+      <div className="flex h-[60vh] flex-col items-center justify-center gap-4">
 
-        Loading...
+        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
+
+          <Shield className="h-8 w-8 animate-pulse text-primary" />
+
+        </div>
+
+        <p className="text-muted-foreground">
+
+          Loading police case...
+
+        </p>
 
       </div>
 
@@ -56,9 +71,21 @@ export default function PoliceCaseDetailsPage() {
 
     return (
 
-      <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-6 text-red-400">
+      <div className="rounded-3xl border border-red-500/20 bg-red-500/5 p-12 text-center">
 
-        Failed to load police case.
+        <AlertTriangle className="mx-auto mb-5 h-12 w-12 text-red-500" />
+
+        <h2 className="text-2xl font-bold">
+
+          Failed to Load Police Case
+
+        </h2>
+
+        <p className="mt-3 text-muted-foreground">
+
+          Unable to retrieve the requested police case.
+
+        </p>
 
       </div>
 
@@ -95,11 +122,15 @@ export default function PoliceCaseDetailsPage() {
         policeCase={policeCase}
 
         acceptLoading={
+
           acceptMutation.isPending
+
         }
 
         updateLoading={
+
           updateMutation.isPending
+
         }
 
         onAccept={(notes) =>

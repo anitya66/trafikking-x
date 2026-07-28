@@ -3,6 +3,7 @@ import {
   Phone,
   ArrowRight,
   User,
+  ShieldCheck,
 } from "lucide-react";
 
 import { useNavigate } from "react-router-dom";
@@ -19,7 +20,6 @@ import { Button } from "@/components/ui/button";
 import { useEmergencyContacts } from "@/features/emergency-contacts";
 
 export default function EmergencyContactsWidget() {
-
   const navigate = useNavigate();
 
   const {
@@ -30,15 +30,17 @@ export default function EmergencyContactsWidget() {
   return (
     <Card className="group relative overflow-hidden">
 
+      {/* Hover Glow */}
+
       <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
       <CardHeader className="relative">
 
-        <CardTitle className="flex items-center gap-2">
+        <CardTitle className="flex items-center gap-3">
 
           <HeartHandshake className="h-5 w-5 text-red-500" />
 
-          Emergency Contacts
+          <span>Emergency Contacts</span>
 
         </CardTitle>
 
@@ -46,15 +48,17 @@ export default function EmergencyContactsWidget() {
 
       <CardContent className="relative">
 
+        {/* Loading */}
+
         {isLoading ? (
 
-          <div className="space-y-3">
+          <div className="space-y-4">
 
             {[1, 2, 3].map((item) => (
 
               <div
                 key={item}
-                className="h-14 animate-pulse rounded-xl bg-muted"
+                className="h-20 animate-pulse rounded-2xl bg-muted"
               />
 
             ))}
@@ -63,37 +67,36 @@ export default function EmergencyContactsWidget() {
 
         ) : contacts.length === 0 ? (
 
-          <div className="rounded-xl border border-dashed p-8 text-center">
+          <div className="rounded-2xl border border-dashed p-10 text-center">
 
-            <Phone className="mx-auto mb-4 h-10 w-10 text-muted-foreground" />
+            <Phone className="mx-auto mb-5 h-12 w-12 text-muted-foreground" />
 
-            <h3 className="text-lg font-semibold">
+            <h3 className="text-xl font-semibold">
 
-              No Contacts Added
+              No Emergency Contacts
 
             </h3>
 
-            <p className="mt-2 text-sm text-muted-foreground">
+            <p className="mt-3 text-sm leading-6 text-muted-foreground">
 
-              Add trusted emergency contacts to notify them quickly during an emergency.
+              Add trusted family members or friends who
+              can be notified immediately during an emergency.
 
             </p>
 
-            <div className="mt-6 flex justify-end">
+            <Button
+              variant="outline"
+              className="mt-8"
+              onClick={() =>
+                navigate("/citizen/contacts")
+              }
+            >
 
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => navigate("/citizen/contacts")}
-              >
+              Add Contact
 
-                Add Contact
+              <ArrowRight className="ml-2 h-4 w-4" />
 
-                <ArrowRight className="ml-2 h-4 w-4" />
-
-              </Button>
-
-            </div>
+            </Button>
 
           </div>
 
@@ -105,64 +108,72 @@ export default function EmergencyContactsWidget() {
 
               <div
                 key={contact.id}
-                className="flex items-center justify-between rounded-xl border p-4 transition hover:border-primary/30"
+                className="group/item rounded-2xl border border-border bg-card/50 p-5 transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/10"
               >
 
-                <div className="flex items-center gap-3">
+                <div className="flex items-start justify-between gap-4">
 
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                  <div className="flex items-center gap-4 min-w-0">
 
-                    <User className="h-5 w-5 text-primary" />
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10">
+
+                      <User className="h-6 w-6 text-primary" />
+
+                    </div>
+
+                    <div className="min-w-0">
+
+                      <h4 className="truncate font-semibold">
+
+                        {contact.contactName}
+
+                      </h4>
+
+                      <p className="mt-1 text-sm text-muted-foreground">
+
+                        {contact.relationship.replaceAll("_", " ")}
+
+                      </p>
+
+                    </div>
 
                   </div>
 
-                  <div>
+                  {contact.primaryContact && (
 
-                    <h4 className="font-medium">
+                    <div className="flex shrink-0 items-center gap-2 rounded-full bg-green-500/10 px-3 py-1">
 
-                      {contact.contactName}
+                      <ShieldCheck className="h-3.5 w-3.5 text-green-500" />
 
-                    </h4>
+                      <span className="text-xs font-semibold text-green-500">
 
-                    <p className="text-sm text-muted-foreground">
+                        Primary
 
-                      {contact.relationship.replaceAll("_", " ")}
+                      </span>
 
-                    </p>
+                    </div>
 
-                  </div>
+                  )}
 
                 </div>
-
-                {contact.primaryContact && (
-
-                  <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-
-                    Primary
-
-                  </span>
-
-                )}
 
               </div>
 
             ))}
 
-            <div className="flex justify-end">
+            <Button
+              variant="outline"
+              className="mt-2 w-full"
+              onClick={() =>
+                navigate("/citizen/contacts")
+              }
+            >
 
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => navigate("/citizen/contacts")}
-              >
+              View All Contacts
 
-                View All
+              <ArrowRight className="ml-2 h-4 w-4" />
 
-                <ArrowRight className="ml-2 h-4 w-4" />
-
-              </Button>
-
-            </div>
+            </Button>
 
           </div>
 
@@ -172,5 +183,4 @@ export default function EmergencyContactsWidget() {
 
     </Card>
   );
-
 }

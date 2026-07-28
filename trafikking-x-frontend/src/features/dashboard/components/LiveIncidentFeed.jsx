@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { ArrowRight } from "lucide-react";
+
+import {
+  ArrowRight,
+  Radio,
+} from "lucide-react";
 
 import IncidentCard from "./IncidentCard";
 import IncidentCardSkeleton from "./IncidentCardSkeleton";
@@ -9,18 +13,27 @@ import IncidentFeedError from "./IncidentFeedError";
 import { useRecentIncidents } from "../hooks/useRecentIncidents";
 
 export default function LiveIncidentFeed({
+
   onIncidentSelect,
+
 }) {
 
   const {
+
     data: incidents = [],
+
     isLoading,
+
     isError,
+
   } = useRecentIncidents();
 
   const [
+
     selectedIncidentId,
+
     setSelectedIncidentId,
+
   ] = useState(null);
 
   function handleSelect(incident) {
@@ -38,11 +51,15 @@ export default function LiveIncidentFeed({
   if (isLoading) {
 
     content = (
-      <div className="space-y-5">
+
+      <div className="space-y-6">
+
         <IncidentCardSkeleton />
         <IncidentCardSkeleton />
         <IncidentCardSkeleton />
+
       </div>
+
     );
 
   } else if (isError) {
@@ -56,7 +73,8 @@ export default function LiveIncidentFeed({
   } else {
 
     content = (
-      <div className="space-y-5">
+
+      <div className="space-y-6">
 
         {incidents.map((incident) => (
 
@@ -74,28 +92,46 @@ export default function LiveIncidentFeed({
         ))}
 
       </div>
+
     );
 
   }
 
   return (
-    <section className="space-y-5">
 
-      <div className="flex items-center justify-between">
+    <section className="space-y-8">
 
-        <div>
+      {/* Header */}
 
-          <h2 className="text-xl font-semibold">
-            🚨 Live Incident Feed
-          </h2>
+      <div className="flex flex-col gap-5 rounded-3xl border border-primary/10 bg-card/60 p-6 backdrop-blur lg:flex-row lg:items-center lg:justify-between">
 
-          <p className="mt-1 text-sm text-muted-foreground">
-            Real-time emergency incidents reported by citizens.
-          </p>
+        <div className="flex items-center gap-4">
+
+          <div className="rounded-2xl bg-primary/10 p-4">
+
+            <Radio className="h-7 w-7 text-primary" />
+
+          </div>
+
+          <div>
+
+            <h2 className="text-3xl font-bold tracking-tight">
+
+              Live Incident Feed
+
+            </h2>
+
+            <p className="mt-1 text-muted-foreground">
+
+              Monitor real-time emergency incidents reported by citizens.
+
+            </p>
+
+          </div>
 
         </div>
 
-        <button className="flex items-center gap-2 text-sm font-medium text-primary transition hover:gap-3">
+        <button className="flex items-center justify-center gap-2 rounded-xl border px-5 py-3 text-sm font-semibold transition-all hover:border-primary hover:text-primary hover:gap-3">
 
           View All
 
@@ -108,5 +144,7 @@ export default function LiveIncidentFeed({
       {content}
 
     </section>
+
   );
+
 }

@@ -1,26 +1,39 @@
 import StatusBadge from "@/shared/components/StatusBadge";
 
-export default function IncidentHeader({ incident }) {
+export default function IncidentHeader({
+  incident,
+}) {
 
   if (!incident) return null;
 
   return (
-    <div className="flex items-center justify-between">
 
-      <div>
+    <div className="rounded-3xl border border-border bg-card/50 p-6">
 
-        <p className="text-sm text-muted-foreground">
-          Incident Number
-        </p>
+      <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
 
-        <h2 className="text-2xl font-bold">
-          {incident.incidentNumber}
-        </h2>
+        <div>
+
+          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+
+            Incident Number
+
+          </p>
+
+          <h2 className="mt-2 text-3xl font-black">
+
+            {incident.incidentNumber}
+
+          </h2>
+
+        </div>
+
+        <StatusBadge status={incident.status} />
 
       </div>
 
-      <StatusBadge status={incident.status} />
-
     </div>
+
   );
+
 }

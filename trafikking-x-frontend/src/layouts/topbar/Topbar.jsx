@@ -7,6 +7,7 @@ import {
 
 import NotificationBell from "@/features/notification/components/NotificationBell";
 import UserMenu from "@/shared/components/user-menu/UserMenu";
+import MobileSidebar from "../sidebar/MobileSidebar";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -70,28 +71,34 @@ function handleLogout() {
   return (
     <header className="sticky top-0 z-30 border-b border-border bg-background/80 backdrop-blur-xl">
 
-      <div className="flex h-20 items-center justify-between px-8">
+      <div className="flex h-20 items-center justify-between gap-4 px-4 md:px-6 lg:px-8">
 
-        {/* Search */}
+       {/* Left Side */}
 
-        <div className="relative w-full max-w-md">
+<div className="flex flex-1 items-center gap-3">
 
-          <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+  <MobileSidebar />
 
-          <Input
-            placeholder="Search incidents, citizens, hospitals..."
-            className="pl-11"
-          />
+  <div className="relative hidden w-full max-w-md md:block">
 
-        </div>
+    <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+
+    <Input
+      placeholder="Search incidents, citizens, hospitals..."
+      className="pl-11"
+    />
+
+  </div>
+
+</div>
 
         {/* Right Side */}
 
-        <div className="flex items-center gap-3">
+       <div className="flex items-center gap-2 md:gap-3">
 
           {/* System Status */}
 
-          <div className="flex items-center gap-2 rounded-xl border border-border bg-card px-4 py-2">
+          <div className="hidden items-center gap-2 rounded-xl border border-border bg-card px-4 py-2 md:flex">
 
             <Circle className="h-2.5 w-2.5 fill-green-500 text-green-500" />
 
@@ -104,9 +111,10 @@ function handleLogout() {
           {/* AI */}
 
           <Button
-            variant="outline"
-            size="icon"
-          >
+  variant="outline"
+  size="icon"
+  className="hidden md:flex"
+>
             <BrainCircuit className="h-5 w-5" />
           </Button>
 

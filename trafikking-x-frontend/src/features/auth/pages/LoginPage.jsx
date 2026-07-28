@@ -4,8 +4,8 @@ import LoginForm from "../components/LoginForm";
 export default function LoginPage() {
   return (
     <AuthLayout
-      title="Emergency Command Center"
-      subtitle="Sign in to access TRAFIKKING X and manage emergency response operations in real time."
+      title="TRAFIKKING X"
+      subtitle="AI-Powered Emergency Response Ecosystem. Sign in to access the command center and coordinate emergency operations in real time."
     >
       <LoginForm />
     </AuthLayout>

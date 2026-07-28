@@ -16,7 +16,7 @@ export default function CitizenList({
 
   return (
 
-    <div className="space-y-5">
+    <div className="grid gap-6 xl:grid-cols-2">
 
       {citizens.map((citizen) => (
 

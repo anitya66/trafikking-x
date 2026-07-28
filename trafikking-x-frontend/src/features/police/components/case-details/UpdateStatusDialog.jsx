@@ -1,15 +1,21 @@
 import { useState } from "react";
 
 import {
+  RefreshCcw,
+  FileText,
+  Shield,
+} from "lucide-react";
+
+import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
 
 import { Button } from "@/components/ui/button";
-
 import { Textarea } from "@/components/ui/textarea";
 
 import {
@@ -21,10 +27,15 @@ import {
 } from "@/components/ui/select";
 
 export default function UpdateStatusDialog({
+
   open,
+
   onOpenChange,
+
   loading,
+
   onUpdate,
+
 }) {
 
   const [status, setStatus] =
@@ -36,8 +47,11 @@ export default function UpdateStatusDialog({
   function handleSubmit() {
 
     onUpdate({
+
       status,
+
       notes,
+
     });
 
     setNotes("");
@@ -53,64 +67,134 @@ export default function UpdateStatusDialog({
       onOpenChange={onOpenChange}
     >
 
-      <DialogContent>
+      <DialogContent className="overflow-hidden rounded-3xl sm:max-w-xl">
 
-        <DialogHeader>
+        {/* Gradient Accent */}
 
-          <DialogTitle>
+        <div className="h-1 bg-gradient-to-r from-primary via-cyan-500 to-violet-500" />
 
-            Update Police Case
+        <DialogHeader className="space-y-4">
 
-          </DialogTitle>
+          <div className="flex items-center gap-4">
+
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10">
+
+              <RefreshCcw className="h-7 w-7 text-primary" />
+
+            </div>
+
+            <div>
+
+              <DialogTitle className="text-2xl">
+
+                Update Police Case
+
+              </DialogTitle>
+
+              <DialogDescription>
+
+                Update the current police operation
+                and notify command center.
+
+              </DialogDescription>
+
+            </div>
+
+          </div>
 
         </DialogHeader>
 
-        <div className="space-y-4">
+        <div className="space-y-6 py-2">
 
-          <Select
-            value={status}
-            onValueChange={setStatus}
-          >
+          {/* Status */}
 
-            <SelectTrigger>
+          <div>
 
-              <SelectValue />
+            <label className="mb-3 flex items-center gap-2 text-sm font-medium">
 
-            </SelectTrigger>
+              <Shield className="h-4 w-4 text-primary" />
 
-            <SelectContent>
+              Case Status
 
-              <SelectItem value="EN_ROUTE">
-                En Route
-              </SelectItem>
+            </label>
 
-              <SelectItem value="ON_SCENE">
-                On Scene
-              </SelectItem>
+            <Select
+              value={status}
+              onValueChange={setStatus}
+            >
 
-              <SelectItem value="INVESTIGATION_STARTED">
-                Investigation Started
-              </SelectItem>
+              <SelectTrigger className="rounded-2xl">
 
-              <SelectItem value="CASE_CLOSED">
-                Case Closed
-              </SelectItem>
+                <SelectValue />
 
-            </SelectContent>
+              </SelectTrigger>
 
-          </Select>
+              <SelectContent>
 
-          <Textarea
-            placeholder="Update notes..."
-            value={notes}
-            onChange={(e) =>
-              setNotes(e.target.value)
-            }
-          />
+                <SelectItem value="EN_ROUTE">
+
+                  En Route
+
+                </SelectItem>
+
+                <SelectItem value="ON_SCENE">
+
+                  On Scene
+
+                </SelectItem>
+
+                <SelectItem value="INVESTIGATION_STARTED">
+
+                  Investigation Started
+
+                </SelectItem>
+
+                <SelectItem value="CASE_CLOSED">
+
+                  Case Closed
+
+                </SelectItem>
+
+              </SelectContent>
+
+            </Select>
+
+          </div>
+
+          {/* Notes */}
+
+          <div>
+
+            <label className="mb-3 flex items-center gap-2 text-sm font-medium">
+
+              <FileText className="h-4 w-4 text-primary" />
+
+              Officer Notes
+
+            </label>
+
+            <Textarea
+              rows={5}
+              value={notes}
+              placeholder="Add investigation updates, field observations, officer remarks, evidence details..."
+              className="resize-none rounded-2xl"
+              onChange={(e) =>
+                setNotes(e.target.value)
+              }
+            />
+
+            <p className="mt-2 text-xs text-muted-foreground">
+
+              These updates will be visible to
+              dispatchers and other authorized personnel.
+
+            </p>
+
+          </div>
 
         </div>
 
-        <DialogFooter>
+        <DialogFooter className="flex-col-reverse gap-3 sm:flex-row sm:justify-end">
 
           <Button
             variant="outline"
@@ -118,16 +202,23 @@ export default function UpdateStatusDialog({
               onOpenChange(false)
             }
           >
+
             Cancel
+
           </Button>
 
           <Button
             disabled={loading}
+            className="min-w-[170px] gap-2"
             onClick={handleSubmit}
           >
+
+            <RefreshCcw className="h-4 w-4" />
+
             {loading
               ? "Updating..."
-              : "Update"}
+              : "Update Status"}
+
           </Button>
 
         </DialogFooter>

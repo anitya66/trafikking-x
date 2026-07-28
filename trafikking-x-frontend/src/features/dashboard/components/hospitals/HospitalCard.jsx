@@ -1,3 +1,11 @@
+import {
+  Bed,
+  Building2,
+  HeartPulse,
+  MapPin,
+  Phone,
+} from "lucide-react";
+
 import { Card, CardContent } from "@/components/ui/card";
 
 import HospitalStatusBadge
@@ -11,25 +19,41 @@ export default function HospitalCard({
 
   return (
 
-    <Card>
+    <Card className="group overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-xl hover:shadow-primary/10">
 
-      <CardContent className="space-y-4 p-6">
+      {/* Top Accent */}
 
-        <div className="flex items-center justify-between">
+      <div className="h-1 bg-gradient-to-r from-cyan-500 via-primary to-emerald-500" />
 
-          <div>
+      <CardContent className="space-y-6 p-6">
 
-            <h3 className="font-semibold">
+        {/* Header */}
 
-              {hospital.hospitalName}
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
 
-            </h3>
+          <div className="flex items-center gap-4">
 
-            <p className="text-sm text-muted-foreground">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10">
 
-              {hospital.hospitalType}
+              <Building2 className="h-7 w-7 text-primary" />
 
-            </p>
+            </div>
+
+            <div>
+
+              <h3 className="text-lg font-semibold">
+
+                {hospital.hospitalName}
+
+              </h3>
+
+              <p className="mt-1 text-sm text-muted-foreground">
+
+                {hospital.hospitalType?.replaceAll("_", " ")}
+
+              </p>
+
+            </div>
 
           </div>
 
@@ -41,55 +65,113 @@ export default function HospitalCard({
 
         </div>
 
-        <div className="grid gap-2 text-sm">
+        {/* Information */}
 
-          <p>
+        <div className="grid gap-4 rounded-2xl bg-muted/40 p-4 sm:grid-cols-2">
 
-            City:
+          <div className="flex items-center gap-3">
 
-            {" "}
+            <MapPin className="h-4 w-4 text-primary" />
 
-            {hospital.city}
+            <div>
 
-          </p>
+              <p className="text-xs text-muted-foreground">
 
-          <p>
+                City
 
-            Contact:
+              </p>
 
-            {" "}
+              <p className="font-medium">
 
-            {hospital.contactNumber}
+                {hospital.city}
 
-          </p>
+              </p>
 
-          <p>
+            </div>
 
-            Beds:
+          </div>
 
-            {" "}
+          <div className="flex items-center gap-3">
 
-            {hospital.availableBeds}
+            <Phone className="h-4 w-4 text-primary" />
 
-            {" / "}
+            <div>
 
-            {hospital.totalBeds}
+              <p className="text-xs text-muted-foreground">
 
-          </p>
+                Contact
 
-          <p>
+              </p>
 
-            ICU:
+              <p className="font-medium">
 
-            {" "}
+                {hospital.contactNumber}
 
-            {hospital.availableIcuBeds}
+              </p>
 
-            {" / "}
+            </div>
 
-            {hospital.icuBeds}
+          </div>
 
-          </p>
+          <div className="flex items-center gap-3">
+
+            <Bed className="h-4 w-4 text-primary" />
+
+            <div>
+
+              <p className="text-xs text-muted-foreground">
+
+                Available Beds
+
+              </p>
+
+              <p className="font-semibold">
+
+                {hospital.availableBeds}
+
+                <span className="text-muted-foreground">
+
+                  {" / "}
+
+                  {hospital.totalBeds}
+
+                </span>
+
+              </p>
+
+            </div>
+
+          </div>
+
+          <div className="flex items-center gap-3">
+
+            <HeartPulse className="h-4 w-4 text-red-500" />
+
+            <div>
+
+              <p className="text-xs text-muted-foreground">
+
+                ICU Beds
+
+              </p>
+
+              <p className="font-semibold">
+
+                {hospital.availableIcuBeds}
+
+                <span className="text-muted-foreground">
+
+                  {" / "}
+
+                  {hospital.icuBeds}
+
+                </span>
+
+              </p>
+
+            </div>
+
+          </div>
 
         </div>
 

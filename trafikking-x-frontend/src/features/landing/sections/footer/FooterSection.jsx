@@ -1,4 +1,8 @@
-import { Ambulance, Github, Mail } from "lucide-react";
+import {
+  Ambulance,
+  Mail,
+  Globe,
+} from "lucide-react";
 
 import { FOOTER_LINKS } from "./footerLinks";
 import FooterColumn from "./FooterColumn";
@@ -7,10 +11,10 @@ export default function FooterSection() {
   return (
     <footer className="relative overflow-hidden border-t border-white/10 bg-slate-950">
 
-      {/* Background Glow */}
-
+      {/* Top Glow */}
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
 
+      {/* Background Glow */}
       <div className="absolute left-1/2 top-0 h-64 w-64 -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
 
       <div className="relative mx-auto max-w-7xl px-6 py-20">
@@ -18,7 +22,6 @@ export default function FooterSection() {
         <div className="grid gap-14 lg:grid-cols-4">
 
           {/* Brand */}
-
           <div>
 
             <div className="flex items-center gap-3">
@@ -44,11 +47,9 @@ export default function FooterSection() {
             </div>
 
             <p className="mt-6 leading-8 text-slate-400">
-
               AI-powered emergency response platform connecting
               citizens, dispatchers, hospitals, ambulances and
               police through one intelligent ecosystem.
-
             </p>
 
             <div className="mt-8 flex items-center gap-4">
@@ -57,7 +58,7 @@ export default function FooterSection() {
                 type="button"
                 className="rounded-xl border border-white/10 p-3 text-slate-400 transition hover:border-primary/30 hover:text-primary"
               >
-                <Github className="h-5 w-5" />
+                <Globe className="h-5 w-5" />
               </button>
 
               <button
@@ -71,15 +72,13 @@ export default function FooterSection() {
 
           </div>
 
-          {Object.entries(FOOTER_LINKS).map(
-            ([title, links]) => (
-              <FooterColumn
-                key={title}
-                title={title}
-                links={links}
-              />
-            )
-          )}
+          {Object.entries(FOOTER_LINKS).map(([title, links]) => (
+            <FooterColumn
+              key={title}
+              title={title}
+              links={links}
+            />
+          ))}
 
         </div>
 

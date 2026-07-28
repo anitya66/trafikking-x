@@ -15,9 +15,13 @@ export default function ActiveCasesPage() {
   if (isError) {
 
     return (
-      <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-6 text-red-400">
+
+      <div className="rounded-2xl border border-red-500/20 bg-red-500/10 p-8 text-red-400">
+
         Failed to load police cases.
+
       </div>
+
     );
 
   }
@@ -26,31 +30,36 @@ export default function ActiveCasesPage() {
 
     <div className="space-y-8">
 
-      <div>
+      {/* Header */}
 
-        <div className="flex items-center gap-3">
+      <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
 
-          <div className="rounded-xl bg-primary/10 p-3">
+        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
 
-            <Shield className="h-6 w-6 text-primary" />
+          <Shield className="h-8 w-8 text-primary" />
 
-          </div>
+        </div>
 
-          <div>
+        <div>
 
-            <h1 className="text-4xl font-bold tracking-tight">
-              Active Cases
-            </h1>
+          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
 
-            <p className="text-muted-foreground">
-              View and manage incoming police incidents.
-            </p>
+            Active Cases
 
-          </div>
+          </h1>
+
+          <p className="mt-2 max-w-2xl text-muted-foreground">
+
+            Monitor and manage active police incidents assigned
+            to your station in real time.
+
+          </p>
 
         </div>
 
       </div>
+
+      {/* Content */}
 
       <ActiveCasesTable
         cases={cases}

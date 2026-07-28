@@ -1,6 +1,8 @@
 import {
   Clock3,
   UserRound,
+  Siren,
+  Activity,
 } from "lucide-react";
 
 import {
@@ -11,89 +13,120 @@ import {
 } from "@/components/ui/card";
 
 function priorityColor(priority) {
-
   switch ((priority || "").toUpperCase()) {
-
     case "CRITICAL":
-      return "bg-red-500/10 text-red-500 border-red-500/20";
+      return "border-red-500/20 bg-red-500/10 text-red-500";
 
     case "HIGH":
-      return "bg-orange-500/10 text-orange-500 border-orange-500/20";
+      return "border-orange-500/20 bg-orange-500/10 text-orange-500";
 
     case "MEDIUM":
-      return "bg-yellow-500/10 text-yellow-500 border-yellow-500/20";
+      return "border-yellow-500/20 bg-yellow-500/10 text-yellow-500";
 
     default:
-      return "bg-green-500/10 text-green-500 border-green-500/20";
-
+      return "border-green-500/20 bg-green-500/10 text-green-500";
   }
-
 }
 
 export default function IncomingPatientsCard({
-
   patients = [],
-
 }) {
-
   return (
+    <Card className="group relative overflow-hidden">
 
-    <Card>
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
-      <CardHeader className="pb-4">
+      <CardHeader className="relative pb-5">
 
         <CardTitle className="flex items-center justify-between">
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
 
-            <UserRound className="h-5 w-5 text-primary" />
+            <div className="rounded-xl bg-primary/10 p-2">
 
-            <span>Incoming Patients</span>
+              <UserRound className="h-5 w-5 text-primary" />
+
+            </div>
+
+            <div>
+
+              <h2 className="text-lg font-bold">
+
+                Incoming Patients
+
+              </h2>
+
+              <p className="text-sm font-normal text-muted-foreground">
+
+                Patients currently heading to your hospital
+
+              </p>
+
+            </div>
 
           </div>
 
-          <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+          <div className="rounded-full bg-primary/10 px-4 py-1 text-sm font-bold text-primary">
 
             {patients.length}
 
-          </span>
+          </div>
 
         </CardTitle>
 
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="relative">
 
         {patients.length === 0 ? (
 
-          <div className="flex h-40 items-center justify-center rounded-xl border border-dashed text-sm text-muted-foreground">
+          <div className="flex h-56 flex-col items-center justify-center rounded-2xl border border-dashed">
 
-            No incoming patients.
+            <Activity className="mb-4 h-12 w-12 text-muted-foreground" />
+
+            <h3 className="text-lg font-semibold">
+
+              No Incoming Patients
+
+            </h3>
+
+            <p className="mt-2 text-center text-sm text-muted-foreground">
+
+              New emergency patients assigned to your
+              hospital will appear here.
+
+            </p>
 
           </div>
 
         ) : (
 
-          <div className="space-y-4">
+          <div className="space-y-5">
 
             {patients.map((patient, index) => (
 
               <div
                 key={patient.incidentNumber ?? index}
-                className="rounded-xl border p-4 transition-all hover:border-primary/40 hover:bg-primary/5"
+                className="rounded-2xl border border-border bg-card/40 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/10"
               >
 
-                <div className="flex items-start justify-between gap-4">
+                <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
 
                   <div className="min-w-0 flex-1">
 
-                    <h3 className="font-semibold">
+                    <div className="flex items-center gap-2">
 
-                      {patient.patientName}
+                      <Siren className="h-4 w-4 text-red-500" />
 
-                    </h3>
+                      <h3 className="truncate text-lg font-semibold">
 
-                    <p className="mt-1 text-sm text-muted-foreground">
+                        {patient.patientName}
+
+                      </h3>
+
+                    </div>
+
+                    <p className="mt-2 text-sm text-muted-foreground">
 
                       {patient.incidentType?.replaceAll("_", " ")}
 
@@ -102,30 +135,48 @@ export default function IncomingPatientsCard({
                   </div>
 
                   <span
-                    className={`rounded-full border px-2 py-1 text-xs font-medium ${priorityColor(
+                    className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold ${priorityColor(
                       patient.severity
                     )}`}
                   >
-
                     {patient.severity}
-
                   </span>
 
                 </div>
 
-                <div className="mt-4 flex items-center justify-between">
+                <div className="mt-6 grid gap-4 sm:grid-cols-2">
 
-                  <div className="text-xs text-muted-foreground">
+                  <div>
 
-                    {patient.incidentNumber}
+                    <p className="text-xs uppercase tracking-wide text-muted-foreground">
+
+                      Incident Number
+
+                    </p>
+
+                    <p className="mt-1 font-semibold">
+
+                      {patient.incidentNumber}
+
+                    </p>
 
                   </div>
 
-                  <div className="flex items-center gap-2 text-sm font-semibold">
+                  <div className="sm:text-right">
 
-                    <Clock3 className="h-4 w-4 text-primary" />
+                    <p className="text-xs uppercase tracking-wide text-muted-foreground">
 
-                    {patient.etaMinutes} min
+                      Estimated Arrival
+
+                    </p>
+
+                    <div className="mt-1 inline-flex items-center gap-2 font-semibold text-primary">
+
+                      <Clock3 className="h-4 w-4" />
+
+                      {patient.etaMinutes} min
+
+                    </div>
 
                   </div>
 
@@ -142,7 +193,5 @@ export default function IncomingPatientsCard({
       </CardContent>
 
     </Card>
-
   );
-
 }

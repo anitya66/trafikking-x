@@ -1,4 +1,10 @@
-import { ClipboardList } from "lucide-react";
+import { useState } from "react";
+import { formatDistanceToNow } from "date-fns";
+import {
+  ClipboardList,
+  ArrowRight,
+  MapPin,
+} from "lucide-react";
 
 import {
   Card,
@@ -7,84 +13,52 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import { useState } from "react";
-
 import IncidentDetailsDialog from "@/features/incidents/components/IncidentDetailsDialog";
-
 import { useMyIncidents } from "@/features/incidents/hooks/useMyIncidents";
-import { formatDistanceToNow } from "date-fns";
-import { ArrowRight, MapPin } from "lucide-react";
 
 export default function ActiveIncidentsWidget() {
-
   const {
     data: incidents = [],
     isLoading,
     isError,
   } = useMyIncidents();
 
-  const [selectedIncident, setSelectedIncident] =
-  useState(null);
-
-const [dialogOpen, setDialogOpen] =
-  useState(false);
+  const [selectedIncident, setSelectedIncident] = useState(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   return (
-    <Card className="group relative overflow-hidden">
+    <>
+      <Card className="group relative overflow-hidden">
 
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+        {/* Hover Glow */}
 
-      <CardHeader className="relative">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
-        <CardTitle className="flex items-center gap-2">
+        <CardHeader className="relative">
 
-          <ClipboardList className="h-5 w-5 text-primary" />
+          <CardTitle className="flex items-center gap-3">
 
-          My Active Emergencies
+            <ClipboardList className="h-5 w-5 text-primary" />
 
-        </CardTitle>
+            <span>My Active Emergencies</span>
 
-      </CardHeader>
+          </CardTitle>
 
-      <CardContent className="relative">
+        </CardHeader>
 
-        {isLoading && (
+        <CardContent className="relative">
 
-          <div className="rounded-xl border border-dashed p-8 text-center">
+          {/* Loading */}
 
-            Loading...
+          {isLoading && (
 
-          </div>
+            <div className="rounded-2xl border border-dashed p-10 text-center">
 
-        )}
+              <ClipboardList className="mx-auto mb-4 h-10 w-10 animate-pulse text-primary" />
 
-        {isError && (
+              <p className="text-muted-foreground">
 
-          <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-8 text-center text-red-400">
-
-            Failed to load incidents.
-
-          </div>
-
-        )}
-
-        {!isLoading &&
-          !isError &&
-          incidents.length === 0 && (
-
-            <div className="rounded-xl border border-dashed p-8 text-center">
-
-              <ClipboardList className="mx-auto mb-4 h-10 w-10 text-muted-foreground" />
-
-              <h3 className="text-lg font-semibold">
-
-                No Active Incidents
-
-              </h3>
-
-              <p className="mt-2 text-sm text-muted-foreground">
-
-                You don't have any active emergency requests at the moment.
+                Loading your emergency requests...
 
               </p>
 
@@ -92,92 +66,171 @@ const [dialogOpen, setDialogOpen] =
 
           )}
 
-        {!isLoading &&
-          !isError &&
-          incidents.length > 0 && (
+          {/* Error */}
 
-            <div className="space-y-4">
+          {isError && (
 
-              {incidents.map((incident) => (
+            <div className="rounded-2xl border border-red-500/20 bg-red-500/10 p-8 text-center">
 
-                <div
-  key={incident.id}
-  className="rounded-2xl border border-border bg-card/50 p-5 transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/10"
->
+              <h3 className="font-semibold text-red-400">
 
-  <div className="flex items-start justify-between">
+                Failed to load incidents
 
-    <div>
+              </h3>
 
-      <h3 className="text-lg font-semibold">
-        {incident.incidentNumber}
-      </h3>
+              <p className="mt-2 text-sm text-red-300">
 
-      <p className="mt-2 font-medium">
-        {incident.incidentType.replaceAll("_", " ")}
-      </p>
+                Please refresh the page and try again.
 
-    </div>
-
-    <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-      {incident.status}
-    </span>
-
-  </div>
-
-  <div className="mt-4 flex items-start gap-2 text-sm text-muted-foreground">
-
-    <MapPin className="mt-0.5 h-4 w-4" />
-
-    <span>{incident.address}</span>
-
-  </div>
-
-  <div className="mt-5 flex items-center justify-between">
-
-    <span className="text-xs text-muted-foreground">
-
-      {formatDistanceToNow(
-        new Date(incident.reportedAt),
-        {
-          addSuffix: true,
-        }
-      )}
-
-    </span>
-
-    <button
-  onClick={() => {
-    setSelectedIncident(incident);
-    setDialogOpen(true);
-  }}
-  className="flex items-center gap-2 text-sm font-medium text-primary transition hover:gap-3"
->
-
-  View Details
-
-  <ArrowRight className="h-4 w-4" />
-
-</button>
-
-  </div>
-
-</div>
-
-              ))}
+              </p>
 
             </div>
 
           )}
 
-      </CardContent>
+          {/* Empty */}
+
+          {!isLoading &&
+            !isError &&
+            incidents.length === 0 && (
+
+              <div className="rounded-2xl border border-dashed p-10 text-center">
+
+                <ClipboardList className="mx-auto mb-5 h-12 w-12 text-muted-foreground" />
+
+                <h3 className="text-xl font-semibold">
+
+                  No Active Emergencies
+
+                </h3>
+
+                <p className="mt-3 text-sm leading-6 text-muted-foreground">
+
+                  You currently don't have any emergency requests.
+                  When you report an emergency, it will appear here
+                  with live updates.
+
+                </p>
+
+              </div>
+
+            )}
+
+          {/* List */}
+
+          {!isLoading &&
+            !isError &&
+            incidents.length > 0 && (
+
+              <div className="space-y-5">
+
+                {incidents.map((incident) => (
+
+                  <div
+                    key={incident.id}
+                    className="group rounded-3xl border border-border bg-card/60 p-6 transition-all duration-300 hover:border-primary/30 hover:shadow-xl hover:shadow-primary/10"
+                  >
+
+                    {/* Header */}
+
+                    <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+
+                      <div>
+
+                        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+
+                          Incident
+
+                        </p>
+
+                        <h3 className="mt-2 text-xl font-bold">
+
+                          {incident.incidentNumber}
+
+                        </h3>
+
+                        <p className="mt-2 text-muted-foreground">
+
+                          {incident.incidentType.replaceAll("_", " ")}
+
+                        </p>
+
+                      </div>
+
+                      <span className="w-fit rounded-full bg-primary/10 px-4 py-2 text-xs font-semibold text-primary">
+
+                        {incident.status}
+
+                      </span>
+
+                    </div>
+
+                    {/* Location */}
+
+                    <div className="mt-6 rounded-2xl bg-background/40 p-4">
+
+                      <div className="flex items-start gap-3">
+
+                        <MapPin className="mt-0.5 h-5 w-5 text-primary" />
+
+                        <span className="text-sm text-muted-foreground">
+
+                          {incident.address}
+
+                        </span>
+
+                      </div>
+
+                    </div>
+
+                    {/* Footer */}
+
+                    <div className="mt-6 flex flex-col gap-4 border-t border-border pt-5 md:flex-row md:items-center md:justify-between">
+
+                      <span className="text-sm text-muted-foreground">
+
+                        {formatDistanceToNow(
+                          new Date(incident.reportedAt),
+                          {
+                            addSuffix: true,
+                          }
+                        )}
+
+                      </span>
+
+                      <button
+                        onClick={() => {
+                          setSelectedIncident(incident);
+                          setDialogOpen(true);
+                        }}
+                        className="inline-flex items-center gap-2 font-medium text-primary transition-all duration-300 hover:gap-3"
+                      >
+
+                        View Mission
+
+                        <ArrowRight className="h-4 w-4" />
+
+                      </button>
+
+                    </div>
+
+                  </div>
+
+                ))}
+
+              </div>
+
+            )}
+
+        </CardContent>
+
+      </Card>
 
       <IncidentDetailsDialog
-  open={dialogOpen}
-  onOpenChange={setDialogOpen}
-  incident={selectedIncident}
-/>
-
-    </Card>
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        incident={selectedIncident}
+      />
+    </>
   );
 }

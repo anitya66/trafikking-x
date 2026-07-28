@@ -1,6 +1,8 @@
 import {
   Truck,
   MapPinned,
+  Activity,
+  Route,
 } from "lucide-react";
 
 import {
@@ -9,7 +11,10 @@ import {
   useState,
 } from "react";
 
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+} from "@/components/ui/card";
 
 import ETAChip from "./ETAChip";
 import DispatchTimeline from "./DispatchTimeline";
@@ -18,16 +23,23 @@ import { useTracking } from "../hooks/useTracking";
 import { useLiveEta } from "../hooks/useLiveEta";
 
 export default function TrackingPanel({
+
   dispatchId,
+
 }) {
 
   const {
+
     data,
+
     isLoading,
+
     isError,
+
   } = useTracking(dispatchId);
 
-  const [liveEta, setLiveEta] = useState(null);
+  const [liveEta, setLiveEta] =
+    useState(null);
 
   useEffect(() => {
 
@@ -43,7 +55,9 @@ export default function TrackingPanel({
     useCallback((event) => {
 
       if (event.dispatchId !== dispatchId) {
+
         return;
+
       }
 
       setLiveEta((previous) => ({
@@ -60,19 +74,34 @@ export default function TrackingPanel({
 
     }, [dispatchId]);
 
-  useLiveEta(
-    handleEtaUpdate
-  );
+  useLiveEta(handleEtaUpdate);
 
   if (!dispatchId) {
 
     return (
 
-      <Card>
+      <Card className="rounded-3xl">
 
-        <CardContent className="flex h-[220px] items-center justify-center">
+        <CardContent className="flex min-h-[260px] flex-col items-center justify-center p-8 text-center">
 
-          Select a dispatch to view tracking.
+          <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-3xl bg-primary/10">
+
+            <Truck className="h-10 w-10 text-primary" />
+
+          </div>
+
+          <h3 className="text-xl font-semibold">
+
+            No Dispatch Selected
+
+          </h3>
+
+          <p className="mt-2 max-w-sm text-muted-foreground">
+
+            Select a dispatch from the queue to
+            monitor its live progress.
+
+          </p>
 
         </CardContent>
 
@@ -86,11 +115,11 @@ export default function TrackingPanel({
 
     return (
 
-      <Card>
+      <Card className="rounded-3xl">
 
-        <CardContent className="flex h-[220px] items-center justify-center">
+        <CardContent className="flex min-h-[260px] items-center justify-center">
 
-          Loading tracking...
+          Loading live tracking...
 
         </CardContent>
 
@@ -104,11 +133,11 @@ export default function TrackingPanel({
 
     return (
 
-      <Card>
+      <Card className="rounded-3xl">
 
-        <CardContent className="flex h-[220px] items-center justify-center text-red-500">
+        <CardContent className="flex min-h-[260px] items-center justify-center text-red-500">
 
-          Failed to load tracking.
+          Failed to load tracking information.
 
         </CardContent>
 
@@ -120,27 +149,37 @@ export default function TrackingPanel({
 
   return (
 
-    <Card>
+    <Card className="rounded-3xl">
 
-      <CardContent className="space-y-6 p-6">
+      <CardContent className="space-y-8 p-6 lg:p-8">
 
-        <div className="flex items-center justify-between">
+        {/* Header */}
 
-          <div>
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
 
-            <h2 className="flex items-center gap-2 text-xl font-bold">
+          <div className="flex items-center gap-4">
 
-              <Truck className="h-6 w-6 text-primary" />
+            <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-primary/10">
 
-              Live Dispatch Tracking
+              <Truck className="h-8 w-8 text-primary" />
 
-            </h2>
+            </div>
 
-            <p className="text-sm text-muted-foreground">
+            <div>
 
-              Current dispatch progress
+              <h2 className="text-2xl font-bold">
 
-            </p>
+                Live Dispatch Tracking
+
+              </h2>
+
+              <p className="mt-1 text-muted-foreground">
+
+                Monitor ambulance movement in real time.
+
+              </p>
+
+            </div>
 
           </div>
 
@@ -150,43 +189,88 @@ export default function TrackingPanel({
 
         </div>
 
-        <div className="flex items-center gap-2 text-sm">
+        {/* Live Stats */}
 
-          <MapPinned className="h-4 w-4 text-primary" />
+        <div className="grid gap-4 md:grid-cols-2">
 
-          Remaining Distance:
+          <div className="rounded-2xl border p-5">
 
-          <strong>
+            <div className="mb-3 flex items-center gap-2">
 
-            {liveEta?.remainingDistanceKm?.toFixed(2)} km
+              <MapPinned className="h-5 w-5 text-primary" />
 
-          </strong>
+              <span className="text-sm text-muted-foreground">
 
-        </div>
+                Remaining Distance
 
-        <div>
+              </span>
 
-          <p className="mb-3 text-sm font-semibold">
+            </div>
 
-            Current Status
+            <p className="text-2xl font-bold">
 
-          </p>
+              {liveEta?.remainingDistanceKm?.toFixed(2) ??
+                "--"}
 
-          <div className="inline-flex rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
+              <span className="ml-2 text-base font-normal text-muted-foreground">
 
-            {data.currentStatus}
+                km
+
+              </span>
+
+            </p>
+
+          </div>
+
+          <div className="rounded-2xl border p-5">
+
+            <div className="mb-3 flex items-center gap-2">
+
+              <Activity className="h-5 w-5 text-primary" />
+
+              <span className="text-sm text-muted-foreground">
+
+                Current Status
+
+              </span>
+
+            </div>
+
+            <div className="inline-flex rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
+
+              {data.currentStatus}
+
+            </div>
 
           </div>
 
         </div>
 
-        <div>
+        {/* Timeline */}
 
-          <h3 className="mb-4 font-semibold">
+        <div className="space-y-5">
 
-            Timeline
+          <div className="flex items-center gap-3">
 
-          </h3>
+            <Route className="h-6 w-6 text-primary" />
+
+            <div>
+
+              <h3 className="text-xl font-semibold">
+
+                Dispatch Timeline
+
+              </h3>
+
+              <p className="text-sm text-muted-foreground">
+
+                Chronological tracking events.
+
+              </p>
+
+            </div>
+
+          </div>
 
           <DispatchTimeline
             timeline={data.timeline}

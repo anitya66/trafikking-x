@@ -1,5 +1,12 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Clock3 } from "lucide-react";
+
+import {
+  Activity,
+  ArrowRight,
+  Clock3,
+  History,
+  UserRound,
+} from "lucide-react";
 
 import {
   Card,
@@ -16,29 +23,57 @@ import { usePoliceHistory } from "../../hooks/usePoliceHistory";
 export default function RecentDispatchesCard() {
 
   const {
+
     data: history = [],
+
     isLoading,
+
   } = usePoliceHistory();
 
   return (
-    <Card>
 
-      <CardHeader className="flex flex-row items-center justify-between">
+    <Card className="rounded-3xl">
 
-        <CardTitle>
+      <CardHeader className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
-          Recent Dispatches
+        <div className="flex items-center gap-3">
 
-        </CardTitle>
+          <div className="rounded-xl bg-primary/10 p-2">
+
+            <History className="h-5 w-5 text-primary" />
+
+          </div>
+
+          <div>
+
+            <CardTitle>
+
+              Recent Dispatches
+
+            </CardTitle>
+
+            <p className="text-sm text-muted-foreground">
+
+              Recently completed police responses.
+
+            </p>
+
+          </div>
+
+        </div>
 
         <Button
           asChild
           size="sm"
-          variant="ghost"
+          variant="outline"
         >
+
           <Link to="/police/history">
+
             View History
+
           </Link>
+
         </Button>
 
       </CardHeader>
@@ -47,19 +82,31 @@ export default function RecentDispatchesCard() {
 
         {isLoading ? (
 
-          <p className="text-muted-foreground">
+          <div className="flex h-44 items-center justify-center text-muted-foreground">
 
-            Loading history...
+            Loading dispatch history...
 
-          </p>
+          </div>
 
         ) : history.length === 0 ? (
 
-          <p className="py-8 text-center text-muted-foreground">
+          <div className="flex h-44 flex-col items-center justify-center text-center">
 
-            No dispatch history available.
+            <History className="mb-4 h-10 w-10 text-muted-foreground" />
 
-          </p>
+            <h3 className="font-semibold">
+
+              No Dispatch History
+
+            </h3>
+
+            <p className="mt-2 text-sm text-muted-foreground">
+
+              Completed police dispatches will appear here.
+
+            </p>
+
+          </div>
 
         ) : (
 
@@ -69,50 +116,89 @@ export default function RecentDispatchesCard() {
 
               <div
                 key={item.id}
-                className="flex items-center justify-between rounded-xl border p-4 transition-all hover:bg-muted/40"
+                className="group rounded-2xl border p-5 transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:bg-primary/5"
               >
 
-                <div className="space-y-1">
+                <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
 
-                  <p className="font-semibold">
+                  {/* Left */}
 
-                    {item.incidentNumber}
+                  <div className="space-y-3">
 
-                  </p>
+                    <div className="flex items-center gap-3">
 
-                  <p className="text-sm text-muted-foreground">
+                      <div className="rounded-xl bg-primary/10 p-2">
 
-                    {item.citizenName}
+                        <Activity className="h-5 w-5 text-primary" />
 
-                  </p>
+                      </div>
 
-                </div>
+                      <div>
 
-                <div className="flex items-center gap-3">
+                        <h4 className="font-semibold">
 
-                  <Badge>
+                          {item.incidentNumber}
 
-                    {item.status}
+                        </h4>
 
-                  </Badge>
+                        <p className="text-sm text-muted-foreground">
 
-                  <Clock3 className="h-4 w-4 text-muted-foreground" />
+                          Dispatch Completed
 
-                  <Button
-                    asChild
-                    size="icon"
-                    variant="ghost"
-                  >
+                        </p>
 
-                    <Link
-                      to={`/police/history/${item.id}`}
+                      </div>
+
+                    </div>
+
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+
+                      <UserRound className="h-4 w-4" />
+
+                      {item.citizenName}
+
+                    </div>
+
+                  </div>
+
+                  {/* Right */}
+
+                  <div className="flex flex-wrap items-center gap-3">
+
+                    <Badge>
+
+                      {item.status}
+
+                    </Badge>
+
+                    <Badge
+                      variant="secondary"
+                      className="gap-1"
                     >
 
-                      <ArrowRight className="h-4 w-4" />
+                      <Clock3 className="h-3 w-3" />
 
-                    </Link>
+                      Completed
 
-                  </Button>
+                    </Badge>
+
+                    <Button
+                      asChild
+                      size="icon"
+                      variant="outline"
+                    >
+
+                      <Link
+                        to={`/police/history/${item.id}`}
+                      >
+
+                        <ArrowRight className="h-4 w-4" />
+
+                      </Link>
+
+                    </Button>
+
+                  </div>
 
                 </div>
 
@@ -127,6 +213,7 @@ export default function RecentDispatchesCard() {
       </CardContent>
 
     </Card>
+
   );
 
 }

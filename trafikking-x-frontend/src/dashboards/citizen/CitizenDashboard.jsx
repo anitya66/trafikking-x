@@ -8,22 +8,40 @@ import CitizenLiveTrackingCard from "@/features/citizens/tracking/components/Cit
 
 export default function CitizenDashboard() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 lg:space-y-8">
+
+      {/* Summary Cards */}
       <CitizenSummaryCards />
 
-      <div className="grid gap-6 xl:grid-cols-3">
-        <div className="space-y-6 xl:col-span-2">
+      {/* Main Layout */}
+      <div className="grid grid-cols-1 gap-6 2xl:grid-cols-12">
+
+        {/* Main Content */}
+
+        <div className="space-y-6 2xl:col-span-8">
+
           <QuickEmergencyCard />
+
           <ActiveIncidentsWidget />
+
           <CitizenLiveTrackingCard />
+
           <AIEmergencyAssistantCard />
+
         </div>
 
-        <div className="space-y-6">
+        {/* Right Sidebar */}
+
+        <div className="space-y-6 2xl:col-span-4">
+
           <NearbyHospitalsWidget />
+
           <EmergencyContactsWidget />
+
         </div>
+
       </div>
+
     </div>
   );
 }

@@ -1,62 +1,118 @@
+import {
+  MapPin,
+  Siren,
+  TriangleAlert,
+} from "lucide-react";
+
 import { Card, CardContent } from "@/components/ui/card";
 
 import IncidentStatusBadge from "./IncidentStatusBadge";
 import IncidentSeverityBadge from "./IncidentSeverityBadge";
 
 export default function IncidentCard({
+
   incident,
+
 }) {
+
   return (
-    <Card>
 
-      <CardContent className="space-y-4 p-6">
+    <Card className="group overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-xl hover:shadow-primary/10">
 
-        <div className="flex items-center justify-between">
+      <div className="h-1 bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500" />
 
-          <div>
+      <CardContent className="space-y-5 p-6">
 
-            <h3 className="font-semibold">
+        {/* Header */}
 
-              {incident.incidentNumber}
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
 
-            </h3>
+          <div className="flex items-center gap-4">
 
-            <p className="text-sm text-muted-foreground">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10">
 
-              {incident.incidentType}
+              <Siren className="h-7 w-7 text-primary" />
 
-            </p>
+            </div>
+
+            <div>
+
+              <h3 className="text-lg font-semibold">
+
+                {incident.incidentNumber}
+
+              </h3>
+
+              <p className="mt-1 text-sm text-muted-foreground">
+
+                {incident.incidentType?.replaceAll("_", " ")}
+
+              </p>
+
+            </div>
 
           </div>
 
           <IncidentSeverityBadge
+
             severity={incident.severity}
+
           />
 
         </div>
 
-        <p className="text-sm">
+        {/* Description */}
 
-          {incident.description}
+        <div className="rounded-2xl bg-muted/40 p-4">
 
-        </p>
+          <div className="mb-2 flex items-center gap-2">
 
-        <div className="flex items-center justify-between">
+            <TriangleAlert className="h-4 w-4 text-primary" />
+
+            <span className="font-medium">
+
+              Incident Description
+
+            </span>
+
+          </div>
+
+          <p className="text-sm leading-6 text-muted-foreground">
+
+            {incident.description}
+
+          </p>
+
+        </div>
+
+        {/* Footer */}
+
+        <div className="flex flex-col gap-4 border-t pt-4 sm:flex-row sm:items-center sm:justify-between">
 
           <IncidentStatusBadge
+
             status={incident.status}
+
           />
 
-          <span className="text-sm text-muted-foreground">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
 
-            {incident.address}
+            <MapPin className="h-4 w-4 text-primary" />
 
-          </span>
+            <span className="truncate">
+
+              {incident.address}
+
+            </span>
+
+          </div>
 
         </div>
 
       </CardContent>
 
     </Card>
+
   );
+
 }

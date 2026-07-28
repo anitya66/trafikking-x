@@ -5,29 +5,34 @@ import {
 
 const STEPS = [
   {
-    title: "Reported",
+    title: "Emergency Reported",
     status: "REPORTED",
-    description: "Emergency reported successfully.",
+    description:
+      "Citizen successfully submitted the emergency report.",
   },
   {
     title: "Dispatcher Assigned",
     status: "ASSIGNED",
-    description: "Waiting for dispatcher assignment.",
+    description:
+      "Emergency has been assigned to a dispatcher.",
   },
   {
     title: "Ambulance Assigned",
     status: "AMBULANCE_ASSIGNED",
-    description: "Nearest ambulance will be assigned.",
+    description:
+      "Nearest ambulance has been selected.",
   },
   {
     title: "Hospital Assigned",
     status: "HOSPITAL_ASSIGNED",
-    description: "Receiving hospital will be selected.",
+    description:
+      "Receiving hospital has been reserved.",
   },
   {
-    title: "Resolved",
+    title: "Emergency Resolved",
     status: "RESOLVED",
-    description: "Emergency has been resolved.",
+    description:
+      "Emergency response has been completed.",
   },
 ];
 
@@ -42,67 +47,138 @@ const STATUS_ORDER = {
 export default function IncidentTimeline({
   incident,
 }) {
+  const currentStep =
+    STATUS_ORDER[incident.status] ?? 0;
 
   return (
+    <div className="rounded-3xl border border-border bg-card/50 p-6">
 
-    <div className="rounded-xl border p-5">
+      <div className="mb-8 flex items-center justify-between">
 
-      <h3 className="mb-6 text-lg font-semibold">
+        <div>
 
-        Incident Timeline
+          <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
 
-      </h3>
+            Live Progress
 
-      <div className="space-y-5">
+          </p>
+
+          <h3 className="mt-2 text-2xl font-bold">
+
+            Dispatch Timeline
+
+          </h3>
+
+        </div>
+
+        <span className="rounded-full bg-primary/10 px-4 py-2 text-xs font-semibold text-primary">
+
+          STEP {currentStep + 1} / {STEPS.length}
+
+        </span>
+
+      </div>
+
+      <div className="space-y-8">
 
         {STEPS.map((step, index) => {
 
-          const currentStep =
-  STATUS_ORDER[incident.status] ?? 0;
+          const stepIndex =
+            STATUS_ORDER[step.status];
 
-const stepIndex =
-  STATUS_ORDER[step.status];
+          const completed =
+            stepIndex <= currentStep;
 
-const completed =
-  stepIndex <= currentStep;
+          const active =
+            stepIndex === currentStep;
 
           return (
-<div
-  key={step.status}
-  className="relative flex items-start gap-4"
->
 
-             {completed ? (
+            <div
+              key={step.status}
+              className="relative flex gap-5"
+            >
 
-                <CheckCircle2 className="mt-0.5 h-5 w-5 text-emerald-500" />
+              {/* Timeline */}
 
-              ) : (
+              <div className="relative flex flex-col items-center">
 
-                <Circle className="mt-0.5 h-5 w-5 text-muted-foreground" />
+                <div
+                  className={`flex h-10 w-10 items-center justify-center rounded-full border transition-all ${
+                    completed
+                      ? "border-emerald-500 bg-emerald-500 text-white"
+                      : "border-border bg-background"
+                  }`}
+                >
 
-              )}
-              
-              {index !== STEPS.length - 1 && (
-  <div className="absolute left-[9px] top-6 h-10 w-px bg-border" />
-)}
+                  {completed ? (
+                    <CheckCircle2 className="h-5 w-5" />
+                  ) : (
+                    <Circle className="h-5 w-5 text-muted-foreground" />
+                  )}
 
-             <div className="flex-1">
+                </div>
 
-  <p
-    className={
-      completed
-        ? "font-semibold"
-        : "text-muted-foreground"
-    }
-  >
-    {step.title}
-  </p>
+                {index !== STEPS.length - 1 && (
 
-  <p className="mt-1 text-xs text-muted-foreground">
-    {step.description}
-  </p>
+                  <div
+                    className={`mt-2 w-px flex-1 ${
+                      completed
+                        ? "bg-emerald-500/40"
+                        : "bg-border"
+                    }`}
+                    style={{
+                      minHeight: "52px",
+                    }}
+                  />
 
-</div>
+                )}
+
+              </div>
+
+              {/* Content */}
+
+              <div
+                className={`flex-1 rounded-2xl border p-5 transition-all ${
+                  active
+                    ? "border-primary bg-primary/5"
+                    : "border-border bg-background/40"
+                }`}
+              >
+
+                <div className="flex items-center justify-between">
+
+                  <h4
+                    className={`font-semibold ${
+                      completed
+                        ? "text-foreground"
+                        : "text-muted-foreground"
+                    }`}
+                  >
+
+                    {step.title}
+
+                  </h4>
+
+                  {active && (
+
+                    <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+
+                      CURRENT
+
+                    </span>
+
+                  )}
+
+                </div>
+
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">
+
+                  {step.description}
+
+                </p>
+
+              </div>
 
             </div>
 
@@ -113,7 +189,5 @@ const completed =
       </div>
 
     </div>
-
   );
-
 }

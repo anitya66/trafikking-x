@@ -8,16 +8,20 @@ import {
 } from "@/components/ui/dialog";
 
 import {
+  Building2,
   MapPin,
   Phone,
   Mail,
   Bed,
   HeartPulse,
   ShieldCheck,
-  Building2,
+  ExternalLink,
+  Loader2,
+  AlertTriangle,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 import { useHospital } from "../hooks/useHospital";
 
@@ -32,13 +36,9 @@ export default function HospitalDetailsDialog({
 }) {
 
   const {
-
     data,
-
     isLoading,
-
     isError,
-
   } = useHospital(hospital?.id);
 
   if (!hospital) return null;
@@ -52,11 +52,23 @@ export default function HospitalDetailsDialog({
         onOpenChange={onOpenChange}
       >
 
-        <DialogContent>
+        <DialogContent className="sm:max-w-2xl">
 
-          <div className="py-10 text-center">
+          <div className="flex flex-col items-center py-14">
 
-            Loading hospital...
+            <Loader2 className="h-10 w-10 animate-spin text-primary" />
+
+            <h3 className="mt-5 text-xl font-bold">
+
+              Loading Hospital
+
+            </h3>
+
+            <p className="mt-2 text-muted-foreground">
+
+              Fetching hospital information...
+
+            </p>
 
           </div>
 
@@ -77,11 +89,23 @@ export default function HospitalDetailsDialog({
         onOpenChange={onOpenChange}
       >
 
-        <DialogContent>
+        <DialogContent className="sm:max-w-xl">
 
-          <div className="py-10 text-center text-red-500">
+          <div className="flex flex-col items-center py-14 text-center">
 
-            Failed to load hospital.
+            <AlertTriangle className="h-10 w-10 text-red-500" />
+
+            <h3 className="mt-5 text-xl font-bold">
+
+              Failed To Load Hospital
+
+            </h3>
+
+            <p className="mt-2 text-muted-foreground">
+
+              Please try again in a few moments.
+
+            </p>
 
           </div>
 
@@ -93,6 +117,16 @@ export default function HospitalDetailsDialog({
 
   }
 
+  const bedPercentage =
+    data.totalBeds > 0
+      ? (data.availableBeds / data.totalBeds) * 100
+      : 0;
+
+  const icuPercentage =
+    data.icuBeds > 0
+      ? (data.availableIcuBeds / data.icuBeds) * 100
+      : 0;
+
   return (
 
     <Dialog
@@ -100,7 +134,7 @@ export default function HospitalDetailsDialog({
       onOpenChange={onOpenChange}
     >
 
-      <DialogContent className="sm:max-w-3xl">
+      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-4xl">
 
         <DialogHeader>
 
@@ -112,37 +146,108 @@ export default function HospitalDetailsDialog({
 
           <DialogDescription>
 
-            View complete hospital information.
+            Complete hospital profile and emergency capabilities.
 
           </DialogDescription>
 
         </DialogHeader>
 
-                <div className="space-y-6">
+        {/* Header */}
 
-          {/* Hospital Header */}
+        <div className="rounded-3xl border bg-card p-6">
 
-          <div className="rounded-2xl border border-border bg-card p-6">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-5">
 
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
+              <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-primary/10">
 
-                <Building2 className="h-8 w-8 text-primary" />
+                <Building2 className="h-10 w-10 text-primary" />
 
               </div>
 
               <div>
 
-                <h2 className="text-2xl font-bold">
+                <h2 className="text-3xl font-bold">
 
                   {data.hospitalName}
 
                 </h2>
 
-                <p className="text-muted-foreground">
+                <p className="mt-2 text-muted-foreground">
 
-                  {data.hospitalType.replaceAll("_", " ")}
+                  {data.hospitalType?.replaceAll("_", " ")}
+
+                </p>
+
+              </div>
+
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+
+              {data.emergencyAvailable && (
+
+                <Badge className="bg-red-500 text-white">
+
+                  Emergency
+
+                </Badge>
+
+              )}
+
+              {data.traumaCenter && (
+
+                <Badge
+                  variant="outline"
+                  className="border-emerald-500/20 bg-emerald-500/10 text-emerald-500"
+                >
+
+                  Trauma Center
+
+                </Badge>
+
+              )}
+
+            </div>
+
+          </div>
+
+        </div>
+
+        {/* Information */}
+
+        <div className="grid gap-6 lg:grid-cols-2">
+
+          <div className="rounded-2xl border p-5">
+
+            <div className="flex items-center gap-3">
+
+              <MapPin className="h-5 w-5 text-primary" />
+
+              <div>
+
+                <p className="text-xs uppercase text-muted-foreground">
+
+                  Address
+
+                </p>
+
+                <p className="font-medium">
+
+                  {data.address}
+
+                </p>
+
+                <p className="text-sm text-muted-foreground">
+
+                  {data.city}, {data.state}
+
+                </p>
+
+                <p className="text-sm text-muted-foreground">
+
+                  {data.country} • {data.postalCode}
 
                 </p>
 
@@ -152,257 +257,245 @@ export default function HospitalDetailsDialog({
 
           </div>
 
-          {/* Address */}
+          <div className="rounded-2xl border p-5 space-y-5">
+
+            <div className="flex items-center gap-3">
+
+              <Phone className="h-5 w-5 text-primary" />
+
+              <div>
+
+                <p className="text-xs uppercase text-muted-foreground">
+
+                  Contact
+
+                </p>
+
+                <p className="font-medium">
+
+                  {data.contactNumber}
+
+                </p>
+
+              </div>
+
+            </div>
+
+            <div className="flex items-center gap-3">
+
+              <Mail className="h-5 w-5 text-cyan-500" />
+
+              <div>
+
+                <p className="text-xs uppercase text-muted-foreground">
+
+                  Email
+
+                </p>
+
+                <p className="break-all font-medium">
+
+                  {data.email}
+
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        {/* Capacity */}
+
+        <div className="grid gap-6 lg:grid-cols-2">
 
           <div className="rounded-2xl border p-5">
 
             <div className="mb-4 flex items-center gap-2">
 
-              <MapPin className="h-5 w-5 text-primary" />
+              <Bed className="h-5 w-5 text-primary" />
 
-              <h3 className="font-semibold">
+              <span className="font-semibold">
 
-                Address
+                Bed Availability
 
-              </h3>
-
-            </div>
-
-            <p>
-
-              {data.address}
-
-            </p>
-
-            <p className="text-muted-foreground">
-
-              {data.city}, {data.state}, {data.country}
-
-            </p>
-
-            <p className="text-muted-foreground">
-
-              {data.postalCode}
-
-            </p>
-
-          </div>
-
-          {/* Contact */}
-
-          <div className="grid gap-6 md:grid-cols-2">
-
-            <div className="rounded-2xl border p-5">
-
-              <div className="mb-3 flex items-center gap-2">
-
-                <Phone className="h-5 w-5 text-primary" />
-
-                <h3 className="font-semibold">
-
-                  Contact Number
-
-                </h3>
-
-              </div>
-
-              <p>
-
-                {data.contactNumber}
-
-              </p>
+              </span>
 
             </div>
 
-            <div className="rounded-2xl border p-5">
+            <div className="mb-3 flex justify-between">
 
-              <div className="mb-3 flex items-center gap-2">
+              <span>
 
-                <Mail className="h-5 w-5 text-primary" />
+                {data.availableBeds} / {data.totalBeds}
 
-                <h3 className="font-semibold">
+              </span>
 
-                  Email
+              <span className="font-bold">
 
-                </h3>
+                {Math.round(bedPercentage)}%
 
-              </div>
+              </span>
 
-              <p className="break-all">
+            </div>
 
-                {data.email}
+            <div className="h-3 rounded-full bg-muted">
 
-              </p>
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-primary to-cyan-400 transition-all duration-700"
+                style={{
+                  width: `${bedPercentage}%`,
+                }}
+              />
 
             </div>
 
           </div>
 
-          {/* Beds */}
+          <div className="rounded-2xl border p-5">
 
-          <div className="grid gap-6 md:grid-cols-2">
+            <div className="mb-4 flex items-center gap-2">
 
-            <div className="rounded-2xl border p-5">
+              <HeartPulse className="h-5 w-5 text-red-500" />
 
-              <div className="mb-3 flex items-center gap-2">
+              <span className="font-semibold">
 
-                <Bed className="h-5 w-5 text-primary" />
+                ICU Availability
 
-                <h3 className="font-semibold">
-
-                  Bed Availability
-
-                </h3>
-
-              </div>
-
-              <p className="text-2xl font-bold">
-
-                {data.availableBeds}
-
-                <span className="text-base font-normal text-muted-foreground">
-
-                  {" "}
-                  / {data.totalBeds}
-
-                </span>
-
-              </p>
+              </span>
 
             </div>
 
-            <div className="rounded-2xl border p-5">
+            <div className="mb-3 flex justify-between">
 
-              <div className="mb-3 flex items-center gap-2">
+              <span>
 
-                <HeartPulse className="h-5 w-5 text-red-500" />
+                {data.availableIcuBeds} / {data.icuBeds}
 
-                <h3 className="font-semibold">
+              </span>
 
-                  ICU Availability
+              <span className="font-bold">
 
-                </h3>
+                {Math.round(icuPercentage)}%
 
-              </div>
+              </span>
 
-              <p className="text-2xl font-bold">
+            </div>
 
-                {data.availableIcuBeds}
+            <div className="h-3 rounded-full bg-muted">
 
-                <span className="text-base font-normal text-muted-foreground">
-
-                  {" "}
-                  / {data.icuBeds}
-
-                </span>
-
-              </p>
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-red-500 to-rose-400 transition-all duration-700"
+                style={{
+                  width: `${icuPercentage}%`,
+                }}
+              />
 
             </div>
 
           </div>
 
-                    {/* Hospital Features */}
+        </div>
 
-          <div className="grid gap-6 md:grid-cols-2">
+        {/* Services */}
 
-            <div className="rounded-2xl border p-5">
+        <div className="grid gap-6 lg:grid-cols-2">
 
-              <div className="mb-3 flex items-center gap-2">
+          <div className="rounded-2xl border p-5">
 
-                <HeartPulse className="h-5 w-5 text-red-500" />
+            <div className="flex items-center gap-3">
 
-                <h3 className="font-semibold">
+              <HeartPulse className="h-5 w-5 text-red-500" />
+
+              <div>
+
+                <p className="text-xs uppercase text-muted-foreground">
 
                   Emergency Services
 
-                </h3>
+                </p>
+
+                <p className="font-semibold">
+
+                  {data.emergencyAvailable
+                    ? "Available 24×7"
+                    : "Unavailable"}
+
+                </p>
 
               </div>
 
-              <p
-                className={
-                  data.emergencyAvailable
-                    ? "font-medium text-emerald-600"
-                    : "font-medium text-red-500"
-                }
-              >
-
-                {data.emergencyAvailable
-                  ? "Available"
-                  : "Not Available"}
-
-              </p>
-
             </div>
 
-            <div className="rounded-2xl border p-5">
+          </div>
 
-              <div className="mb-3 flex items-center gap-2">
+          <div className="rounded-2xl border p-5">
 
-                <ShieldCheck className="h-5 w-5 text-primary" />
+            <div className="flex items-center gap-3">
 
-                <h3 className="font-semibold">
+              <ShieldCheck className="h-5 w-5 text-emerald-500" />
+
+              <div>
+
+                <p className="text-xs uppercase text-muted-foreground">
 
                   Trauma Center
 
-                </h3>
+                </p>
+
+                <p className="font-semibold">
+
+                  {data.traumaCenter
+                    ? "Level Trauma Facility"
+                    : "Not Available"}
+
+                </p>
 
               </div>
-
-              <p
-                className={
-                  data.traumaCenter
-                    ? "font-medium text-emerald-600"
-                    : "font-medium text-muted-foreground"
-                }
-              >
-
-                {data.traumaCenter
-                  ? "Available"
-                  : "Not Available"}
-
-              </p>
 
             </div>
 
           </div>
 
-          {/* Actions */}
+        </div>
 
-          <div className="flex flex-wrap gap-3">
+        {/* Actions */}
 
-            <Button
-              onClick={() =>
-                window.open(
-                  `https://www.google.com/maps?q=${data.latitude},${data.longitude}`,
-                  "_blank"
-                )
-              }
-            >
+        <div className="flex flex-col gap-3 sm:flex-row">
 
-              <MapPin className="mr-2 h-4 w-4" />
+          <Button
+            className="flex-1"
+            onClick={() =>
+              window.open(
+                `https://www.google.com/maps?q=${data.latitude},${data.longitude}`,
+                "_blank"
+              )
+            }
+          >
 
-              Open in Maps
+            <MapPin className="mr-2 h-4 w-4" />
 
-            </Button>
+            Open In Maps
 
-            <Button
-              variant="outline"
-              onClick={() =>
-                window.open(
-                  `tel:${data.contactNumber}`
-                )
-              }
-            >
+            <ExternalLink className="ml-2 h-4 w-4" />
 
-              <Phone className="mr-2 h-4 w-4" />
+          </Button>
 
-              Call Hospital
+          <Button
+            variant="outline"
+            className="flex-1"
+            onClick={() =>
+              window.open(`tel:${data.contactNumber}`)
+            }
+          >
 
-            </Button>
+            <Phone className="mr-2 h-4 w-4" />
 
-          </div>
+            Call Hospital
+
+          </Button>
 
         </div>
 

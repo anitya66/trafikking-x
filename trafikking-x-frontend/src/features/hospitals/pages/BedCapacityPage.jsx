@@ -1,27 +1,53 @@
-import BedCapacityCard from "../components/beds/BedCapacityCard";
-import AIRecommendationCard from "../components/dashboard/AIRecommendationCard";
+import {
+  BedDouble,
+  AlertTriangle,
+  Loader2,
+} from "lucide-react";
 
-import { useHospitalDashboard } from "../hooks/useHospitalDashboard";
+import BedCapacityCard
+  from "../components/beds/BedCapacityCard";
+
+import AIRecommendationCard
+  from "../components/dashboard/AIRecommendationCard";
+
+import { useHospitalDashboard }
+  from "../hooks/useHospitalDashboard";
 
 export default function BedCapacityPage() {
 
   const {
-
     data,
-
     isLoading,
-
     isError,
-
   } = useHospitalDashboard();
 
   if (isLoading) {
 
     return (
 
-      <div className="flex h-60 items-center justify-center">
+      <div className="flex justify-center">
 
-        Loading...
+        <div className="w-full rounded-3xl border bg-card p-20">
+
+          <div className="text-center">
+
+            <Loader2 className="mx-auto h-10 w-10 animate-spin text-primary" />
+
+            <h2 className="mt-6 text-2xl font-bold">
+
+              Loading Bed Capacity
+
+            </h2>
+
+            <p className="mt-2 text-muted-foreground">
+
+              Fetching live hospital occupancy...
+
+            </p>
+
+          </div>
+
+        </div>
 
       </div>
 
@@ -33,9 +59,34 @@ export default function BedCapacityPage() {
 
     return (
 
-      <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-6 text-red-400">
+      <div className="rounded-3xl border border-red-500/20 bg-red-500/5 p-10">
 
-        Failed to load bed capacity.
+        <div className="flex items-start gap-4">
+
+          <div className="rounded-2xl bg-red-500/10 p-3">
+
+            <AlertTriangle className="h-7 w-7 text-red-500" />
+
+          </div>
+
+          <div>
+
+            <h2 className="text-2xl font-bold text-red-500">
+
+              Failed To Load Bed Capacity
+
+            </h2>
+
+            <p className="mt-2 text-muted-foreground">
+
+              Unable to retrieve current bed occupancy.
+              Please refresh and try again.
+
+            </p>
+
+          </div>
+
+        </div>
 
       </div>
 
@@ -49,31 +100,65 @@ export default function BedCapacityPage() {
 
       {/* Header */}
 
-      <div>
+      <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
 
-        <h1 className="text-4xl font-bold">
+        <div className="flex items-center gap-4">
 
-          Bed Capacity
+          <div className="rounded-2xl bg-primary/10 p-4">
 
-        </h1>
+            <BedDouble className="h-7 w-7 text-primary" />
 
-        <p className="mt-2 text-muted-foreground">
+          </div>
 
-          Live hospital and ICU bed occupancy.
+          <div>
 
-        </p>
+            <h1 className="text-3xl font-black tracking-tight lg:text-5xl">
+
+              Bed Capacity
+
+            </h1>
+
+            <p className="mt-2 max-w-2xl text-muted-foreground">
+
+              Monitor live hospital bed availability,
+              ICU utilization and AI capacity recommendations.
+
+            </p>
+
+          </div>
+
+        </div>
+
+        <div className="rounded-2xl border border-primary/20 bg-primary/5 px-6 py-4 text-center">
+
+          <p className="text-xs uppercase tracking-widest text-muted-foreground">
+
+            Live Monitoring
+
+          </p>
+
+          <h2 className="mt-1 text-3xl font-black text-primary">
+
+            24×7
+
+          </h2>
+
+        </div>
 
       </div>
 
+      {/* Capacity */}
+
       <BedCapacityCard
-
-        bedOccupancy={data.bedOccupancy}
-
-        icuOccupancy={data.icuOccupancy}
-
+        bedOccupancy={data?.bedOccupancy}
+        icuOccupancy={data?.icuOccupancy}
       />
 
-      <AIRecommendationCard />
+      {/* AI */}
+
+      <AIRecommendationCard
+        recommendation={data?.aiRecommendation}
+      />
 
     </div>
 

@@ -2,8 +2,9 @@ import { formatDistanceToNow } from "date-fns";
 
 import {
   Bell,
-  Trash2,
   CheckCircle2,
+  Clock3,
+  Trash2,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -23,68 +24,117 @@ export default function NotificationCard({
 
   return (
 
-    <div className="rounded-xl border bg-card p-5 transition hover:border-primary">
+    <div className="group overflow-hidden rounded-3xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-xl hover:shadow-primary/10">
 
-      <div className="flex items-start justify-between gap-4">
+      {/* Top Accent */}
 
-        <div className="flex gap-4">
+      <div className="h-1 bg-gradient-to-r from-primary via-cyan-400 to-blue-500" />
 
-          <div className="rounded-full bg-primary/10 p-3">
-            <Bell className="h-5 w-5 text-primary" />
-          </div>
+      <div className="p-6">
 
-          <div>
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
 
-            <h3 className="font-semibold">
-              {notification.title}
-            </h3>
+          {/* Left */}
 
-            <p className="mt-2 text-sm text-muted-foreground">
-              {notification.message}
-            </p>
+          <div className="flex flex-1 gap-4">
 
-            <div className="mt-3 flex items-center gap-3">
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-primary/10">
 
-              <NotificationStatusBadge
-                isRead={notification.isRead}
-              />
+              <Bell className="h-7 w-7 text-primary" />
 
-              <span className="text-xs text-muted-foreground">
+            </div>
+
+            <div className="min-w-0 flex-1">
+
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+
+                <h3 className="text-lg font-semibold">
+
+                  {notification.title}
+
+                </h3>
+
+                <NotificationStatusBadge
+
+                  isRead={notification.isRead}
+
+                />
+
+              </div>
+
+              <p className="mt-4 leading-7 text-muted-foreground">
+
+                {notification.message}
+
+              </p>
+
+              <div className="mt-5 flex items-center gap-2 text-sm text-muted-foreground">
+
+                <Clock3 className="h-4 w-4" />
+
                 {formatDistanceToNow(
+
                   new Date(notification.createdAt),
+
                   {
+
                     addSuffix: true,
+
                   }
+
                 )}
-              </span>
+
+              </div>
 
             </div>
 
           </div>
 
-        </div>
+          {/* Actions */}
 
-        <div className="flex gap-2">
+          <div className="flex shrink-0 gap-3 self-end lg:self-start">
 
-          {!notification.isRead && (
+            {!notification.isRead && (
+
+              <Button
+
+                variant="outline"
+
+                size="icon"
+
+                onClick={() =>
+
+                  onRead(notification.id)
+
+                }
+
+              >
+
+                <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+
+              </Button>
+
+            )}
 
             <Button
+
+              variant="destructive"
+
               size="icon"
-              variant="outline"
-              onClick={() => onRead(notification.id)}
+
+              onClick={() =>
+
+                onDelete(notification.id)
+
+              }
+
             >
-              <CheckCircle2 className="h-4 w-4" />
+
+              <Trash2 className="h-4 w-4" />
+
             </Button>
 
-          )}
-
-          <Button
-            size="icon"
-            variant="destructive"
-            onClick={() => onDelete(notification.id)}
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
+          </div>
 
         </div>
 

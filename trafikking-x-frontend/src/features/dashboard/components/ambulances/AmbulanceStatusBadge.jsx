@@ -1,38 +1,73 @@
+import {
+  Ambulance,
+  CheckCircle2,
+  Radio,
+  Settings,
+  Truck,
+} from "lucide-react";
+
 import { Badge } from "@/components/ui/badge";
 
-const colors = {
+const variants = {
 
-  AVAILABLE:
-    "bg-green-500/15 text-green-400 border-green-500/20",
+  AVAILABLE: {
+    className:
+      "border-emerald-500/20 bg-emerald-500/10 text-emerald-500",
+    icon: CheckCircle2,
+  },
 
-  ASSIGNED:
-    "bg-yellow-500/15 text-yellow-400 border-yellow-500/20",
+  ASSIGNED: {
+    className:
+      "border-yellow-500/20 bg-yellow-500/10 text-yellow-500",
+    icon: Ambulance,
+  },
 
-  DISPATCHED:
-    "bg-blue-500/15 text-blue-400 border-blue-500/20",
+  DISPATCHED: {
+    className:
+      "border-blue-500/20 bg-blue-500/10 text-blue-500",
+    icon: Radio,
+  },
 
-  ON_DUTY:
-    "bg-purple-500/15 text-purple-400 border-purple-500/20",
+  ON_DUTY: {
+    className:
+      "border-purple-500/20 bg-purple-500/10 text-purple-500",
+    icon: Truck,
+  },
 
-  MAINTENANCE:
-    "bg-red-500/15 text-red-400 border-red-500/20",
+  MAINTENANCE: {
+    className:
+      "border-red-500/20 bg-red-500/10 text-red-500",
+    icon: Settings,
+  },
 
 };
 
 export default function AmbulanceStatusBadge({
+
   status,
+
 }) {
+
+  const variant =
+    variants[status] ??
+    {
+      className:
+        "border-border bg-muted text-muted-foreground",
+      icon: Ambulance,
+    };
+
+  const Icon = variant.icon;
 
   return (
 
     <Badge
-      className={
-        colors[status] ??
-        "bg-muted text-foreground"
-      }
+      variant="outline"
+      className={`gap-1 px-3 py-1 ${variant.className}`}
     >
 
-      {status}
+      <Icon className="h-3.5 w-3.5" />
+
+      {status?.replaceAll("_", " ")}
 
     </Badge>
 

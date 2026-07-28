@@ -1,70 +1,162 @@
 import {
   CheckCircle2,
   Circle,
+  Clock3,
+  Stethoscope,
+  UserCheck,
+  Users,
 } from "lucide-react";
 
 const STEPS = [
-  "ACCEPTED",
-  "PREPARING_TEAM",
-  "PATIENT_ARRIVED",
-  "TREATMENT_STARTED",
-  "TREATMENT_COMPLETED",
-  "DISCHARGED",
+  {
+    status: "ACCEPTED",
+    title: "Case Accepted",
+    description:
+      "Hospital has accepted the incoming emergency case.",
+    icon: CheckCircle2,
+  },
+  {
+    status: "PREPARING_TEAM",
+    title: "Preparing Medical Team",
+    description:
+      "Doctors and emergency staff are getting ready.",
+    icon: Users,
+  },
+  {
+    status: "PATIENT_ARRIVED",
+    title: "Patient Arrived",
+    description:
+      "Patient has reached the hospital.",
+    icon: Clock3,
+  },
+  {
+    status: "TREATMENT_STARTED",
+    title: "Treatment Started",
+    description:
+      "Emergency treatment is currently in progress.",
+    icon: Stethoscope,
+  },
+  {
+    status: "TREATMENT_COMPLETED",
+    title: "Treatment Completed",
+    description:
+      "Primary medical treatment has been completed.",
+    icon: UserCheck,
+  },
+  {
+    status: "DISCHARGED",
+    title: "Patient Discharged",
+    description:
+      "Patient has been discharged successfully.",
+    icon: CheckCircle2,
+  },
 ];
 
 export default function HospitalCaseTimeline({
-
   status,
-
 }) {
 
-  const current =
-    STEPS.indexOf(status);
+  const currentStep =
+    STEPS.findIndex(
+      (step) => step.status === status
+    );
 
   return (
 
-    <div className="rounded-2xl border bg-card p-6">
+    <div className="rounded-3xl border bg-card p-6">
 
-      <h2 className="mb-6 text-lg font-semibold">
+      <div className="mb-8">
 
-        Treatment Timeline
+        <h2 className="text-xl font-bold">
 
-      </h2>
+          Treatment Timeline
 
-      <div className="space-y-5">
+        </h2>
+
+        <p className="mt-1 text-sm text-muted-foreground">
+
+          Live progress of the patient's hospital journey.
+
+        </p>
+
+      </div>
+
+      <div className="space-y-6">
 
         {STEPS.map((step, index) => {
 
           const completed =
-            index <= current;
+            index <= currentStep;
+
+          const Icon =
+            step.icon;
 
           return (
 
             <div
-              key={step}
-              className="flex items-center gap-4"
+              key={step.status}
+              className="relative flex gap-5"
             >
 
-              {completed ? (
+              {/* Vertical Line */}
 
-                <CheckCircle2 className="h-6 w-6 text-primary" />
+              {index !== STEPS.length - 1 && (
 
-              ) : (
-
-                <Circle className="h-6 w-6 text-muted-foreground" />
+                <div
+                  className={`absolute left-5 top-12 h-12 w-0.5 ${
+                    completed
+                      ? "bg-primary"
+                      : "bg-border"
+                  }`}
+                />
 
               )}
 
-              <span
-                className={
-                  completed
-                    ? "font-semibold"
-                    : "text-muted-foreground"
-                }
-              >
-                {step.replaceAll("_", " ")}
+              {/* Icon */}
 
-              </span>
+              <div
+                className={`relative z-10 flex h-10 w-10 items-center justify-center rounded-full border ${
+                  completed
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "border-border bg-background text-muted-foreground"
+                }`}
+              >
+
+                {completed ? (
+
+                  <CheckCircle2 className="h-5 w-5" />
+
+                ) : (
+
+                  <Icon className="h-5 w-5" />
+
+                )}
+
+              </div>
+
+              {/* Content */}
+
+              <div className="flex-1 pb-4">
+
+                <h3
+                  className={`font-semibold ${
+                    completed
+                      ? "text-foreground"
+                      : "text-muted-foreground"
+                  }`}
+                >
+
+                  {step.title}
+
+                </h3>
+
+                <p className="mt-1 text-sm text-muted-foreground">
+
+                  {step.description}
+
+                </p>
+
+              </div>
 
             </div>
 

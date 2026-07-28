@@ -2,6 +2,7 @@ import {
   ArrowRight,
   Building2,
   HeartPulse,
+  MapPin,
 } from "lucide-react";
 
 import { useNavigate } from "react-router-dom";
@@ -18,7 +19,6 @@ import { Button } from "@/components/ui/button";
 import { useHospitals } from "@/features/hospitals";
 
 export default function NearbyHospitalsWidget() {
-
   const navigate = useNavigate();
 
   const {
@@ -32,18 +32,19 @@ export default function NearbyHospitalsWidget() {
   const hospitals = data?.content ?? [];
 
   return (
-
     <Card className="group relative overflow-hidden">
+
+      {/* Hover Glow */}
 
       <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
       <CardHeader className="relative">
 
-        <CardTitle className="flex items-center gap-2">
+        <CardTitle className="flex items-center gap-3">
 
           <Building2 className="h-5 w-5 text-primary" />
 
-          Hospitals
+          <span>Nearby Hospitals</span>
 
         </CardTitle>
 
@@ -53,13 +54,13 @@ export default function NearbyHospitalsWidget() {
 
         {isLoading ? (
 
-          <div className="space-y-3">
+          <div className="space-y-4">
 
             {[1, 2, 3].map((item) => (
 
               <div
                 key={item}
-                className="h-14 animate-pulse rounded-xl bg-muted"
+                className="h-20 animate-pulse rounded-2xl bg-muted"
               />
 
             ))}
@@ -68,37 +69,36 @@ export default function NearbyHospitalsWidget() {
 
         ) : hospitals.length === 0 ? (
 
-          <div className="rounded-xl border border-dashed p-8 text-center">
+          <div className="rounded-2xl border border-dashed p-10 text-center">
 
-            <Building2 className="mx-auto mb-4 h-10 w-10 text-muted-foreground" />
+            <Building2 className="mx-auto mb-5 h-12 w-12 text-muted-foreground" />
 
-            <h3 className="text-lg font-semibold">
+            <h3 className="text-xl font-semibold">
 
               No Hospitals Found
 
             </h3>
 
-            <p className="mt-2 text-sm text-muted-foreground">
+            <p className="mt-3 text-sm leading-6 text-muted-foreground">
 
-              Browse registered hospitals available in the system.
+              Browse registered hospitals available
+              in your emergency response network.
 
             </p>
 
-            <div className="mt-6 flex justify-end">
+            <Button
+              variant="outline"
+              className="mt-8"
+              onClick={() =>
+                navigate("/citizen/hospitals")
+              }
+            >
 
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => navigate("/citizen/hospitals")}
-              >
+              View Hospitals
 
-                View Hospitals
+              <ArrowRight className="ml-2 h-4 w-4" />
 
-                <ArrowRight className="ml-2 h-4 w-4" />
-
-              </Button>
-
-            </div>
+            </Button>
 
           </div>
 
@@ -110,32 +110,68 @@ export default function NearbyHospitalsWidget() {
 
               <div
                 key={hospital.id}
-                className="rounded-xl border p-4 transition hover:border-primary/30"
+                className="group/item rounded-2xl border border-border bg-card/50 p-5 transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/10"
               >
 
-                <div className="flex items-center justify-between">
+                <div className="flex items-start justify-between gap-4">
 
-                  <div>
+                  <div className="min-w-0 flex-1">
 
-                    <h4 className="font-medium">
+                    <h4 className="truncate text-base font-semibold">
 
                       {hospital.hospitalName}
 
                     </h4>
 
-                    <p className="text-sm text-muted-foreground">
+                    <div className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
 
-                      {hospital.city}
+                      <MapPin className="h-4 w-4 shrink-0" />
 
-                    </p>
+                      <span className="truncate">
+
+                        {hospital.city}
+
+                      </span>
+
+                    </div>
 
                   </div>
 
                   {hospital.emergencyAvailable && (
 
-                    <HeartPulse className="h-5 w-5 text-red-500" />
+                    <div className="rounded-full bg-red-500/10 p-2">
+
+                      <HeartPulse className="h-5 w-5 text-red-500" />
+
+                    </div>
 
                   )}
+
+                </div>
+
+                <div className="mt-5 border-t border-border pt-4">
+
+                  <div className="flex items-center justify-between">
+
+                    <span className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+
+                      Emergency Service
+
+                    </span>
+
+                    <span
+                      className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                        hospital.emergencyAvailable
+                          ? "bg-green-500/10 text-green-500"
+                          : "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      {hospital.emergencyAvailable
+                        ? "Available"
+                        : "Unavailable"}
+                    </span>
+
+                  </div>
 
                 </div>
 
@@ -143,21 +179,19 @@ export default function NearbyHospitalsWidget() {
 
             ))}
 
-            <div className="flex justify-end">
+            <Button
+              variant="outline"
+              className="mt-2 w-full"
+              onClick={() =>
+                navigate("/citizen/hospitals")
+              }
+            >
 
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => navigate("/citizen/hospitals")}
-              >
+              View All Hospitals
 
-                View All
+              <ArrowRight className="ml-2 h-4 w-4" />
 
-                <ArrowRight className="ml-2 h-4 w-4" />
-
-              </Button>
-
-            </div>
+            </Button>
 
           </div>
 
@@ -166,7 +200,5 @@ export default function NearbyHospitalsWidget() {
       </CardContent>
 
     </Card>
-
   );
-
 }

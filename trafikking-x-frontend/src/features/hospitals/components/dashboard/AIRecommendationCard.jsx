@@ -2,6 +2,8 @@ import {
   Brain,
   Lightbulb,
   TriangleAlert,
+  Sparkles,
+  ArrowUpRight,
 } from "lucide-react";
 
 import {
@@ -12,78 +14,145 @@ import {
 } from "@/components/ui/card";
 
 export default function AIRecommendationCard({
-
   recommendation,
-
 }) {
-
   return (
+    <Card className="group relative overflow-hidden">
 
-    <Card>
+      {/* Background Glow */}
 
-      <CardHeader>
+      <div className="absolute inset-0 bg-gradient-to-br from-violet-500/10 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
-        <CardTitle className="flex items-center gap-2">
+      <CardHeader className="relative pb-5">
 
-          <Brain className="h-5 w-5 text-primary" />
+        <CardTitle className="flex items-center gap-3">
 
-          AI Recommendation
+          <div className="rounded-xl bg-violet-500/10 p-2">
+
+            <Brain className="h-5 w-5 text-violet-500" />
+
+          </div>
+
+          <div>
+
+            <h2 className="text-lg font-bold">
+
+              AI Recommendation
+
+            </h2>
+
+            <p className="text-sm font-normal text-muted-foreground">
+
+              Real-time hospital intelligence
+
+            </p>
+
+          </div>
 
         </CardTitle>
 
       </CardHeader>
 
-      <CardContent className="space-y-4">
+      <CardContent className="relative space-y-5">
 
-        <div className="rounded-xl border border-cyan-500/20 bg-cyan-500/5 p-4">
+        {/* Recommendation */}
+
+        <div className="rounded-2xl border border-violet-500/20 bg-violet-500/5 p-5">
 
           <div className="flex items-center gap-2">
 
-            <Lightbulb className="h-4 w-4 text-cyan-500" />
+            <Sparkles className="h-5 w-5 text-violet-500" />
 
-            <span className="font-medium">
+            <span className="font-semibold">
 
-              {recommendation?.title ?? "AI Recommendation"}
+              AI Analysis
 
             </span>
 
           </div>
 
-          <p className="mt-3 text-sm text-muted-foreground">
+          <h3 className="mt-4 text-lg font-bold">
+
+            {recommendation?.title ??
+              "Awaiting AI Analysis"}
+
+          </h3>
+
+          <p className="mt-3 leading-7 text-muted-foreground">
 
             {recommendation?.recommendation ??
-              "No recommendation available."}
+              "No recommendation available. AI will automatically analyze incoming emergency cases and suggest optimal actions."}
 
           </p>
 
         </div>
 
-        <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4">
+        {/* Priority */}
 
-          <div className="flex items-center gap-2">
+        <div className="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-5">
 
-            <TriangleAlert className="h-4 w-4 text-amber-500" />
+          <div className="flex items-center justify-between">
 
-            <span className="font-medium">
+            <div className="flex items-center gap-2">
 
-              Priority
+              <TriangleAlert className="h-5 w-5 text-amber-500" />
+
+              <span className="font-semibold">
+
+                Priority Level
+
+              </span>
+
+            </div>
+
+            <ArrowUpRight className="h-4 w-4 text-amber-500" />
+
+          </div>
+
+          <div className="mt-4">
+
+            <span className="inline-flex rounded-full bg-amber-500/10 px-4 py-2 text-sm font-bold text-amber-500">
+
+              {recommendation?.priority ??
+                "NORMAL"}
 
             </span>
 
           </div>
 
-          <p className="mt-3 text-sm font-semibold">
+        </div>
 
-            {recommendation?.priority ?? "--"}
+        {/* AI Status */}
 
-          </p>
+        <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-4">
+
+          <div className="flex items-center gap-3">
+
+            <Lightbulb className="h-5 w-5 text-emerald-500" />
+
+            <div>
+
+              <p className="font-semibold">
+
+                AI Engine Status
+
+              </p>
+
+              <p className="text-sm text-muted-foreground">
+
+                Continuously analyzing hospital load,
+                patient severity and resource utilization.
+
+              </p>
+
+            </div>
+
+          </div>
 
         </div>
 
       </CardContent>
 
     </Card>
-
   );
-
 }

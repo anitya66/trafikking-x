@@ -1,4 +1,4 @@
-import { Bell } from "lucide-react";
+import { Bell, BellRing } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
@@ -42,9 +42,25 @@ export default function NotificationsPage() {
 
     return (
 
-      <div className="rounded-xl border p-12 text-center">
+      <div className="rounded-3xl border bg-card/40 p-12">
 
-        Loading notifications...
+        <div className="flex flex-col items-center text-center">
+
+          <BellRing className="mb-5 h-10 w-10 animate-pulse text-primary" />
+
+          <h3 className="text-xl font-semibold">
+
+            Loading Notifications...
+
+          </h3>
+
+          <p className="mt-2 text-muted-foreground">
+
+            Fetching your latest notifications.
+
+          </p>
+
+        </div>
 
       </div>
 
@@ -56,9 +72,26 @@ export default function NotificationsPage() {
 
     return (
 
-      <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-6 text-red-400">
+      <div className="rounded-3xl border border-red-500/20 bg-red-500/5 p-12">
 
-        Failed to load notifications.
+        <div className="flex flex-col items-center text-center">
+
+          <Bell className="mb-5 h-10 w-10 text-red-500" />
+
+          <h3 className="text-2xl font-bold text-red-500">
+
+            Unable To Load Notifications
+
+          </h3>
+
+          <p className="mt-3 max-w-md text-muted-foreground">
+
+            Something went wrong while loading
+            your notification center.
+
+          </p>
+
+        </div>
 
       </div>
 
@@ -70,27 +103,30 @@ export default function NotificationsPage() {
 
     <div className="space-y-8">
 
-      <div className="flex items-center justify-between">
+      {/* Header */}
 
-        <div className="flex items-center gap-3">
+      <div className="flex flex-col gap-6 rounded-3xl border border-primary/10 bg-card/60 p-6 backdrop-blur lg:flex-row lg:items-center lg:justify-between">
 
-          <div className="rounded-xl bg-primary/10 p-3">
+        <div className="flex items-center gap-4">
 
-            <Bell className="h-6 w-6 text-primary" />
+          <div className="rounded-2xl bg-primary/10 p-4">
+
+            <Bell className="h-7 w-7 text-primary" />
 
           </div>
 
           <div>
 
-            <h1 className="text-4xl font-bold">
+            <h1 className="text-3xl font-bold tracking-tight lg:text-4xl">
 
               Notifications
 
             </h1>
 
-            <p className="text-muted-foreground">
+            <p className="mt-2 text-muted-foreground">
 
-              View and manage system notifications.
+              Stay updated with emergency alerts,
+              dispatch updates and system events.
 
             </p>
 
@@ -98,13 +134,42 @@ export default function NotificationsPage() {
 
         </div>
 
-        <Button
-          onClick={() =>
-            readAllMutation.mutate()
-          }
-        >
-          Mark All Read
-        </Button>
+        <div className="flex flex-col gap-3 sm:flex-row">
+
+          <div className="rounded-2xl bg-primary/5 px-6 py-4 text-center">
+
+            <p className="text-xs uppercase tracking-wider text-muted-foreground">
+
+              Total
+
+            </p>
+
+            <p className="mt-1 text-3xl font-black text-primary">
+
+              {notifications.length}
+
+            </p>
+
+          </div>
+
+          <Button
+            size="lg"
+            disabled={
+              readAllMutation.isPending ||
+              notifications.length === 0
+            }
+            onClick={() =>
+              readAllMutation.mutate()
+            }
+          >
+
+            {readAllMutation.isPending
+              ? "Marking..."
+              : "Mark All Read"}
+
+          </Button>
+
+        </div>
 
       </div>
 

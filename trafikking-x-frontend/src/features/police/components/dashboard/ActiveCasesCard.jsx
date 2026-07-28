@@ -1,5 +1,11 @@
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+
+import {
+  Activity,
+  ArrowRight,
+  Clock3,
+  UserRound,
+} from "lucide-react";
 
 import {
   Card,
@@ -12,26 +18,57 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
 export default function ActiveCasesCard({
+
   cases = [],
+
   isLoading,
+
 }) {
+
   return (
-    <Card>
 
-      <CardHeader className="flex flex-row items-center justify-between">
+    <Card className="rounded-3xl">
 
-        <CardTitle>
-          Active Cases
-        </CardTitle>
+      <CardHeader className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+
+        <div className="flex items-center gap-3">
+
+          <div className="rounded-xl bg-primary/10 p-2">
+
+            <Activity className="h-5 w-5 text-primary" />
+
+          </div>
+
+          <div>
+
+            <CardTitle>
+
+              Active Cases
+
+            </CardTitle>
+
+            <p className="text-sm text-muted-foreground">
+
+              Police units currently responding.
+
+            </p>
+
+          </div>
+
+        </div>
 
         <Button
           asChild
           size="sm"
-          variant="ghost"
+          variant="outline"
         >
+
           <Link to="/police/cases">
+
             View All
+
           </Link>
+
         </Button>
 
       </CardHeader>
@@ -40,15 +77,31 @@ export default function ActiveCasesCard({
 
         {isLoading ? (
 
-          <p className="text-muted-foreground">
+          <div className="flex h-44 items-center justify-center text-muted-foreground">
+
             Loading active cases...
-          </p>
+
+          </div>
 
         ) : cases.length === 0 ? (
 
-          <p className="py-10 text-center text-muted-foreground">
-            No active police cases.
-          </p>
+          <div className="flex h-44 flex-col items-center justify-center text-center">
+
+            <Activity className="mb-4 h-10 w-10 text-muted-foreground" />
+
+            <h3 className="font-semibold">
+
+              No Active Cases
+
+            </h3>
+
+            <p className="mt-2 text-sm text-muted-foreground">
+
+              There are currently no police cases assigned.
+
+            </p>
+
+          </div>
 
         ) : (
 
@@ -58,46 +111,91 @@ export default function ActiveCasesCard({
 
               <div
                 key={item.dispatchId}
-                className="flex items-center justify-between rounded-xl border p-4 transition-all hover:bg-muted/40"
+                className="group rounded-2xl border p-5 transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:bg-primary/5"
               >
 
-                <div>
+                <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
 
-                  <h4 className="font-semibold">
-                    {item.incidentNumber}
-                  </h4>
+                  {/* Left */}
 
-                  <p className="text-sm text-muted-foreground">
-                    {item.citizenName}
-                  </p>
+                  <div className="space-y-3">
 
-                  <p className="mt-1 text-sm">
-                    {item.incidentType}
-                  </p>
+                    <div className="flex items-center gap-3">
 
-                </div>
+                      <div className="rounded-xl bg-primary/10 p-2">
 
-                <div className="flex items-center gap-3">
+                        <Activity className="h-5 w-5 text-primary" />
 
-                  <Badge variant="destructive">
-                    {item.severity}
-                  </Badge>
+                      </div>
 
-                  <Badge variant="secondary">
-                    ETA {item.etaMinutes} min
-                  </Badge>
+                      <div>
 
-                  <Button
-                    asChild
-                    size="icon"
-                    variant="ghost"
-                  >
-                    <Link
-                      to={`/police/cases/${item.dispatchId}`}
+                        <h4 className="font-semibold">
+
+                          {item.incidentNumber}
+
+                        </h4>
+
+                        <p className="text-sm text-muted-foreground">
+
+                          {item.incidentType}
+
+                        </p>
+
+                      </div>
+
+                    </div>
+
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+
+                      <UserRound className="h-4 w-4" />
+
+                      {item.citizenName}
+
+                    </div>
+
+                  </div>
+
+                  {/* Right */}
+
+                  <div className="flex flex-wrap items-center gap-3">
+
+                    <Badge
+                      variant="destructive"
                     >
-                      <ArrowRight className="h-4 w-4" />
-                    </Link>
-                  </Button>
+
+                      {item.severity}
+
+                    </Badge>
+
+                    <Badge
+                      variant="secondary"
+                      className="gap-1"
+                    >
+
+                      <Clock3 className="h-3 w-3" />
+
+                      {item.etaMinutes} min
+
+                    </Badge>
+
+                    <Button
+                      asChild
+                      size="icon"
+                      variant="outline"
+                    >
+
+                      <Link
+                        to={`/police/cases/${item.dispatchId}`}
+                      >
+
+                        <ArrowRight className="h-4 w-4" />
+
+                      </Link>
+
+                    </Button>
+
+                  </div>
 
                 </div>
 
@@ -112,5 +210,7 @@ export default function ActiveCasesCard({
       </CardContent>
 
     </Card>
+
   );
+
 }

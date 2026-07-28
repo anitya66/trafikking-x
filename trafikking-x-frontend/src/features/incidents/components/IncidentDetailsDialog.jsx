@@ -67,19 +67,48 @@ if (isError) {
       open={open}
       onOpenChange={onOpenChange}
     >
-      <DialogContent className="sm:max-w-3xl">
+      <DialogContent className="max-h-[92vh] overflow-y-auto sm:max-w-4xl">
+<DialogHeader className="space-y-6 border-b border-border pb-6">
 
-        <DialogHeader>
+  <div className="flex items-start justify-between">
 
-          <DialogTitle>
-            Incident Details
-          </DialogTitle>
+    <div>
 
-          <DialogDescription>
-            Emergency incident information.
-          </DialogDescription>
+      <div className="mb-4 inline-flex rounded-full bg-primary/10 px-3 py-1">
 
-        </DialogHeader>
+        <span className="text-xs font-semibold uppercase tracking-wider text-primary">
+
+          Live Emergency
+
+        </span>
+
+      </div>
+
+      <DialogTitle className="text-3xl font-bold">
+
+        Incident Command Center
+
+      </DialogTitle>
+
+      <DialogDescription className="mt-3 max-w-2xl leading-7">
+
+        View live emergency information,
+        AI recommendations and dispatch
+        progress for this incident.
+
+      </DialogDescription>
+
+    </div>
+
+    <div className="hidden rounded-2xl bg-primary/10 p-5 lg:block">
+
+      🚨
+
+    </div>
+
+  </div>
+
+</DialogHeader>
 
        <div className="space-y-6">
 
@@ -111,16 +140,17 @@ if (isError) {
 
 </div>
 
-        <DialogFooter>
+       <DialogFooter className="border-t border-border pt-6">
 
-          <Button
-            variant="outline"
-            onClick={() => onOpenChange(false)}
-          >
-            Close
-          </Button>
+  <Button
+    variant="outline"
+    size="lg"
+    onClick={() => onOpenChange(false)}
+  >
+    Close Incident
+  </Button>
 
-        </DialogFooter>
+</DialogFooter>
 
       </DialogContent>
     </Dialog>

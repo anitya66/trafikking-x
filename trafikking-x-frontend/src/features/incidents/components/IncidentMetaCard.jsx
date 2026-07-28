@@ -1,5 +1,4 @@
 import { formatDistanceToNow } from "date-fns";
-
 import {
   Clock3,
   ShieldAlert,
@@ -8,25 +7,32 @@ import {
 export default function IncidentMetaCard({
   incident,
 }) {
-
   return (
-    <div className="grid gap-4 md:grid-cols-2">
+    <div className="grid gap-5 md:grid-cols-2">
 
-      <div className="rounded-xl border p-5">
+      <div className="rounded-3xl border border-border bg-card/50 p-6">
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
 
-          <ShieldAlert className="h-5 w-5 text-primary" />
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10">
+
+            <ShieldAlert className="h-6 w-6 text-primary" />
+
+          </div>
 
           <div>
 
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+
               Severity
+
             </p>
 
-            <p className="mt-1 font-semibold">
+            <h3 className="mt-2 text-xl font-bold">
+
               {incident.severity}
-            </p>
+
+            </h3>
 
           </div>
 
@@ -34,19 +40,25 @@ export default function IncidentMetaCard({
 
       </div>
 
-      <div className="rounded-xl border p-5">
+      <div className="rounded-3xl border border-border bg-card/50 p-6">
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
 
-          <Clock3 className="h-5 w-5 text-primary" />
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10">
+
+            <Clock3 className="h-6 w-6 text-primary" />
+
+          </div>
 
           <div>
 
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+
               Reported
+
             </p>
 
-            <p className="mt-1">
+            <h3 className="mt-2 text-lg font-semibold">
 
               {incident.reportedAt &&
                 formatDistanceToNow(
@@ -56,7 +68,7 @@ export default function IncidentMetaCard({
                   }
                 )}
 
-            </p>
+            </h3>
 
           </div>
 
@@ -66,5 +78,4 @@ export default function IncidentMetaCard({
 
     </div>
   );
-
 }

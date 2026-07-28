@@ -1,3 +1,8 @@
+import {
+  BadgeCheck,
+  CircleAlert,
+} from "lucide-react";
+
 import { Badge } from "@/components/ui/badge";
 
 export default function CitizenStatusBadge({
@@ -9,16 +14,27 @@ export default function CitizenStatusBadge({
   return (
 
     <Badge
+      variant="outline"
       className={
         completed
-          ? "bg-green-500/15 text-green-400 border-green-500/20"
-          : "bg-yellow-500/15 text-yellow-400 border-yellow-500/20"
+          ? "gap-1 border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-emerald-500"
+          : "gap-1 border-yellow-500/20 bg-yellow-500/10 px-3 py-1 text-yellow-500"
       }
     >
 
+      {completed ? (
+
+        <BadgeCheck className="h-3.5 w-3.5" />
+
+      ) : (
+
+        <CircleAlert className="h-3.5 w-3.5" />
+
+      )}
+
       {completed
-        ? "PROFILE COMPLETE"
-        : "INCOMPLETE"}
+        ? "Profile Complete"
+        : "Incomplete"}
 
     </Badge>
 

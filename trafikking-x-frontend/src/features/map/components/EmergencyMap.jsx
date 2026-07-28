@@ -1,8 +1,11 @@
 import "leaflet/dist/leaflet.css";
 
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  Map,
+  TriangleAlert,
+} from "lucide-react";
 
-import RouteLayer from "../layers/RouteLayer";
+import { Card, CardContent } from "@/components/ui/card";
 
 import {
   MapContainer,
@@ -13,6 +16,7 @@ import L from "leaflet";
 
 import AutoFitBounds from "./AutoFitBounds";
 
+import RouteLayer from "../layers/RouteLayer";
 import IncidentLayer from "../layers/IncidentLayer";
 import HospitalLayer from "../layers/HospitalLayer";
 import AmbulanceLayer from "../layers/AmbulanceLayer";
@@ -25,12 +29,22 @@ import markerShadow from "leaflet/dist/images/marker-shadow.png";
 delete L.Icon.Default.prototype._getIconUrl;
 
 L.Icon.Default.mergeOptions({
+
   iconRetinaUrl: markerIcon2x,
+
   iconUrl: markerIcon,
+
   shadowUrl: markerShadow,
+
 });
 
-const DEFAULT_CENTER = [28.6139, 77.2090];
+const DEFAULT_CENTER = [
+
+  28.6139,
+
+  77.2090,
+
+];
 
 export default function EmergencyMap({
 
@@ -46,11 +60,24 @@ export default function EmergencyMap({
 
     return (
 
-      <Card>
+      <Card className="overflow-hidden rounded-3xl">
 
-        <CardContent className="flex h-[520px] items-center justify-center">
+        <CardContent className="flex h-[650px] flex-col items-center justify-center gap-4">
 
-          Loading map...
+          <Map className="h-10 w-10 animate-pulse text-primary" />
+
+          <h3 className="text-xl font-semibold">
+
+            Loading Emergency Map
+
+          </h3>
+
+          <p className="text-center text-muted-foreground">
+
+            Fetching live incidents, ambulances,
+            hospitals and police stations.
+
+          </p>
 
         </CardContent>
 
@@ -64,11 +91,23 @@ export default function EmergencyMap({
 
     return (
 
-      <Card className="overflow-hidden">
+      <Card className="overflow-hidden rounded-3xl border-red-500/20">
 
-        <CardContent className="flex h-[520px] items-center justify-center text-red-500">
+        <CardContent className="flex h-[650px] flex-col items-center justify-center gap-4">
 
-          Failed to load map.
+          <TriangleAlert className="h-10 w-10 text-red-500" />
+
+          <h3 className="text-xl font-semibold">
+
+            Unable To Load Emergency Map
+
+          </h3>
+
+          <p className="text-center text-muted-foreground">
+
+            Please refresh the page and try again.
+
+          </p>
 
         </CardContent>
 
@@ -80,47 +119,77 @@ export default function EmergencyMap({
 
   return (
 
-    <Card className="overflow-hidden">
+    <Card className="overflow-hidden rounded-3xl border shadow-sm">
 
-      <CardContent className="p-0">
+      <CardContent className="relative p-0">
+
+        {/* Live Badge */}
+
+        <div className="absolute left-4 top-4 z-[1000] rounded-full border bg-background/90 px-4 py-2 backdrop-blur">
+
+          <div className="flex items-center gap-2">
+
+            <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+
+            <span className="text-xs font-semibold">
+
+              LIVE MAP
+
+            </span>
+
+          </div>
+
+        </div>
 
         <MapContainer
+
           center={DEFAULT_CENTER}
+
           zoom={12}
+
           scrollWheelZoom
+
           className="h-[650px] w-full"
+
         >
 
           <TileLayer
+
             attribution="&copy; OpenStreetMap contributors"
+
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+
           />
 
           <AutoFitBounds
-            incidents={overview?.incidents}
+
+            incidents={overview?.incidents ?? []}
+
           />
 
           <IncidentLayer
-            incidents={overview?.incidents}
+
+            incidents={overview?.incidents ?? []}
+
           />
 
-          {overview?.assignments?.map((assignment) => {
+          {(overview?.assignments ?? []).map((assignment) => {
 
             const ambulance =
               overview?.ambulances?.find(
 
-                (a) =>
+                (item) =>
 
-                  a.id === assignment.ambulanceId
+                  item.id === assignment.ambulanceId
 
               );
 
             const incident =
               overview?.incidents?.find(
 
-                (i) =>
+                (item) =>
 
-                  i.id === assignment.incidentId
+                  item.id === assignment.incidentId
 
               );
 
@@ -159,15 +228,21 @@ export default function EmergencyMap({
           })}
 
           <HospitalLayer
-            hospitals={overview?.hospitals}
+
+            hospitals={overview?.hospitals ?? []}
+
           />
 
           <AmbulanceLayer
-            ambulances={overview?.ambulances}
+
+            ambulances={overview?.ambulances ?? []}
+
           />
 
           <PoliceLayer
-            policeStations={overview?.policeStations}
+
+            policeStations={overview?.policeStations ?? []}
+
           />
 
         </MapContainer>

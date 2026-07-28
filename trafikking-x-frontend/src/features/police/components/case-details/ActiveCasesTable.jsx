@@ -1,5 +1,11 @@
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+
+import {
+  Activity,
+  ArrowRight,
+  Clock3,
+  UserRound,
+} from "lucide-react";
 
 import {
   Card,
@@ -9,25 +15,47 @@ import {
 } from "@/components/ui/card";
 
 import { Badge } from "@/components/ui/badge";
-
 import { Button } from "@/components/ui/button";
 
 export default function ActiveCasesTable({
+
   cases = [],
+
   isLoading,
+
 }) {
 
   return (
 
-    <Card>
+    <Card className="rounded-3xl">
 
-      <CardHeader>
+      <CardHeader className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
-        <CardTitle>
+        <div className="flex items-center gap-3">
 
-          Assigned Cases
+          <div className="rounded-xl bg-primary/10 p-2">
 
-        </CardTitle>
+            <Activity className="h-5 w-5 text-primary" />
+
+          </div>
+
+          <div>
+
+            <CardTitle>
+
+              Assigned Cases
+
+            </CardTitle>
+
+            <p className="text-sm text-muted-foreground">
+
+              Police emergency assignments.
+
+            </p>
+
+          </div>
+
+        </div>
 
       </CardHeader>
 
@@ -35,72 +63,64 @@ export default function ActiveCasesTable({
 
         {isLoading ? (
 
-          <div className="py-10 text-center text-muted-foreground">
+          <div className="flex h-52 items-center justify-center text-muted-foreground">
 
-            Loading cases...
+            Loading assigned cases...
 
           </div>
 
         ) : cases.length === 0 ? (
 
-          <div className="py-10 text-center text-muted-foreground">
+          <div className="flex h-52 flex-col items-center justify-center text-center">
 
-            No active police cases available.
+            <Activity className="mb-4 h-10 w-10 text-muted-foreground" />
+
+            <h3 className="font-semibold">
+
+              No Assigned Cases
+
+            </h3>
+
+            <p className="mt-2 text-sm text-muted-foreground">
+
+              There are currently no active police assignments.
+
+            </p>
 
           </div>
 
         ) : (
 
-          <div className="overflow-x-auto">
+          <div className="space-y-4">
 
-            <table className="w-full">
+            {cases.map((item) => (
 
-              <thead>
+              <div
+                key={item.dispatchId}
+                className="group rounded-2xl border p-5 transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:bg-primary/5"
+              >
 
-                <tr className="border-b">
+                <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
 
-                  <th className="py-3 text-left">
-                    Incident
-                  </th>
+                  {/* Left */}
 
-                  <th className="py-3 text-left">
-                    Citizen
-                  </th>
+                  <div className="space-y-3">
 
-                  <th className="py-3 text-left">
-                    Severity
-                  </th>
+                    <div className="flex items-center gap-3">
 
-                  <th className="py-3 text-left">
-                    ETA
-                  </th>
+                      <div className="rounded-xl bg-primary/10 p-2">
 
-                  <th className="py-3 text-right">
-                    Action
-                  </th>
+                        <Activity className="h-5 w-5 text-primary" />
 
-                </tr>
-
-              </thead>
-
-              <tbody>
-
-                {cases.map((item) => (
-
-                  <tr
-                    key={item.dispatchId}
-                    className="border-b transition-colors hover:bg-muted/30"
-                  >
-
-                    <td className="py-4">
+                      </div>
 
                       <div>
 
-                        <p className="font-medium">
+                        <h3 className="font-semibold">
 
                           {item.incidentNumber}
 
-                        </p>
+                        </h3>
 
                         <p className="text-sm text-muted-foreground">
 
@@ -110,64 +130,69 @@ export default function ActiveCasesTable({
 
                       </div>
 
-                    </td>
+                    </div>
 
-                    <td>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+
+                      <UserRound className="h-4 w-4" />
 
                       {item.citizenName}
 
-                    </td>
+                    </div>
 
-                    <td>
+                  </div>
 
-                      <Badge
-                        variant={
-                          item.severity === "HIGH" ||
-                          item.severity === "CRITICAL"
-                            ? "destructive"
-                            : "secondary"
-                        }
+                  {/* Right */}
+
+                  <div className="flex flex-wrap items-center gap-3">
+
+                    <Badge
+                      variant={
+                        item.severity === "HIGH" ||
+                        item.severity === "CRITICAL"
+                          ? "destructive"
+                          : "secondary"
+                      }
+                    >
+
+                      {item.severity}
+
+                    </Badge>
+
+                    <Badge
+                      variant="outline"
+                      className="gap-1"
+                    >
+
+                      <Clock3 className="h-3 w-3" />
+
+                      {item.etaMinutes} min
+
+                    </Badge>
+
+                    <Button
+                      asChild
+                      size="icon"
+                      variant="outline"
+                    >
+
+                      <Link
+                        to={`/police/cases/${item.dispatchId}`}
                       >
 
-                        {item.severity}
+                        <ArrowRight className="h-4 w-4" />
 
-                      </Badge>
+                      </Link>
 
-                    </td>
+                    </Button>
 
-                    <td>
+                  </div>
 
-                      {item.etaMinutes} mins
+                </div>
 
-                    </td>
+              </div>
 
-                    <td className="text-right">
-
-                      <Button
-                        asChild
-                        variant="ghost"
-                        size="icon"
-                      >
-
-                        <Link
-                          to={`/police/cases/${item.dispatchId}`}
-                        >
-
-                          <ArrowRight className="h-4 w-4" />
-
-                        </Link>
-
-                      </Button>
-
-                    </td>
-
-                  </tr>
-
-                ))}
-
-              </tbody>
-
-            </table>
+            ))}
 
           </div>
 

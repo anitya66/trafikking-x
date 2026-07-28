@@ -3,22 +3,29 @@ import { FileText } from "lucide-react";
 export default function IncidentDescriptionCard({
   incident,
 }) {
-
   return (
-    <div className="rounded-xl border p-5">
+    <div className="rounded-3xl border border-border bg-card/50 p-6">
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-start gap-4">
 
-        <FileText className="h-5 w-5 text-primary" />
+        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10">
 
-        <div>
+          <FileText className="h-6 w-6 text-primary" />
 
-          <p className="text-sm text-muted-foreground">
-            Description
+        </div>
+
+        <div className="flex-1">
+
+          <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+
+            Incident Description
+
           </p>
 
-          <p className="mt-1">
+          <p className="mt-3 leading-7 text-muted-foreground">
+
             {incident.description}
+
           </p>
 
         </div>
@@ -27,5 +34,4 @@ export default function IncidentDescriptionCard({
 
     </div>
   );
-
 }

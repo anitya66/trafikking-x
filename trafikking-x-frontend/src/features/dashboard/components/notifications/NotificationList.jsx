@@ -19,7 +19,7 @@ export default function NotificationList({
 
   return (
 
-    <div className="space-y-4">
+    <div className="space-y-6">
 
       {notifications.map((notification) => (
 

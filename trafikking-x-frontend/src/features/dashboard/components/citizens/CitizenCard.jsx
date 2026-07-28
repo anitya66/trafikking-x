@@ -1,3 +1,11 @@
+import {
+  Droplets,
+  Mail,
+  MapPin,
+  Phone,
+  User,
+} from "lucide-react";
+
 import { Card, CardContent } from "@/components/ui/card";
 
 import CitizenStatusBadge
@@ -11,25 +19,47 @@ export default function CitizenCard({
 
   return (
 
-    <Card>
+    <Card className="group overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-xl hover:shadow-primary/10">
 
-      <CardContent className="space-y-4 p-6">
+      {/* Top Accent */}
 
-        <div className="flex items-center justify-between">
+      <div className="h-1 bg-gradient-to-r from-primary via-cyan-500 to-emerald-500" />
 
-          <div>
+      <CardContent className="space-y-6 p-6">
 
-            <h3 className="font-semibold">
+        {/* Header */}
 
-              {citizen.fullName}
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
 
-            </h3>
+          <div className="flex items-center gap-4">
 
-            <p className="text-sm text-muted-foreground">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10">
 
-              {citizen.email}
+              <User className="h-7 w-7 text-primary" />
 
-            </p>
+            </div>
+
+            <div>
+
+              <h3 className="text-lg font-semibold">
+
+                {citizen.fullName}
+
+              </h3>
+
+              <div className="mt-1 flex items-center gap-2 text-sm text-muted-foreground">
+
+                <Mail className="h-4 w-4" />
+
+                <span className="break-all">
+
+                  {citizen.email}
+
+                </span>
+
+              </div>
+
+            </div>
 
           </div>
 
@@ -41,47 +71,97 @@ export default function CitizenCard({
 
         </div>
 
-        <div className="grid gap-2 text-sm">
+        {/* Details */}
 
-          <p>
+        <div className="grid gap-4 rounded-2xl bg-muted/40 p-4 sm:grid-cols-2">
 
-            Phone:
+          <div className="flex items-center gap-3">
 
-            {" "}
+            <Phone className="h-4 w-4 text-primary" />
 
-            {citizen.phoneNumber}
+            <div>
 
-          </p>
+              <p className="text-xs text-muted-foreground">
 
-          <p>
+                Phone
 
-            Blood Group:
+              </p>
 
-            {" "}
+              <p className="font-medium">
 
-            {citizen.bloodGroup ?? "N/A"}
+                {citizen.phoneNumber}
 
-          </p>
+              </p>
 
-          <p>
+            </div>
 
-            City:
+          </div>
 
-            {" "}
+          <div className="flex items-center gap-3">
 
-            {citizen.city ?? "N/A"}
+            <Droplets className="h-4 w-4 text-red-500" />
 
-          </p>
+            <div>
 
-          <p>
+              <p className="text-xs text-muted-foreground">
 
-            Gender:
+                Blood Group
 
-            {" "}
+              </p>
 
-            {citizen.gender ?? "N/A"}
+              <p className="font-medium">
 
-          </p>
+                {citizen.bloodGroup ?? "N/A"}
+
+              </p>
+
+            </div>
+
+          </div>
+
+          <div className="flex items-center gap-3">
+
+            <MapPin className="h-4 w-4 text-primary" />
+
+            <div>
+
+              <p className="text-xs text-muted-foreground">
+
+                City
+
+              </p>
+
+              <p className="font-medium">
+
+                {citizen.city ?? "N/A"}
+
+              </p>
+
+            </div>
+
+          </div>
+
+          <div className="flex items-center gap-3">
+
+            <User className="h-4 w-4 text-primary" />
+
+            <div>
+
+              <p className="text-xs text-muted-foreground">
+
+                Gender
+
+              </p>
+
+              <p className="font-medium">
+
+                {citizen.gender ?? "N/A"}
+
+              </p>
+
+            </div>
+
+          </div>
 
         </div>
 

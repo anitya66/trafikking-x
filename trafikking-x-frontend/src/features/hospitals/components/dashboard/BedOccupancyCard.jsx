@@ -1,4 +1,8 @@
-import { BedDouble } from "lucide-react";
+import {
+  BedDouble,
+  CheckCircle2,
+  AlertTriangle,
+} from "lucide-react";
 
 import {
   Card,
@@ -8,42 +12,65 @@ import {
 } from "@/components/ui/card";
 
 export default function BedOccupancyCard({
-
   occupancy,
-
 }) {
+  const percentage =
+    occupancy?.occupancyPercentage ?? 0;
 
   return (
+    <Card className="group relative overflow-hidden">
 
-    <Card>
+      {/* Background Glow */}
 
-      <CardHeader>
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
-        <CardTitle className="flex items-center gap-2">
+      <CardHeader className="relative pb-5">
 
-          <BedDouble className="h-5 w-5 text-primary" />
+        <CardTitle className="flex items-center gap-3">
 
-          Bed Occupancy
+          <div className="rounded-xl bg-blue-500/10 p-2">
+
+            <BedDouble className="h-5 w-5 text-blue-500" />
+
+          </div>
+
+          <div>
+
+            <h2 className="text-lg font-bold">
+
+              Bed Occupancy
+
+            </h2>
+
+            <p className="text-sm font-normal text-muted-foreground">
+
+              Live hospital capacity
+
+            </p>
+
+          </div>
 
         </CardTitle>
 
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="relative space-y-6">
+
+        {/* Percentage */}
 
         <div>
 
-          <div className="mb-2 flex justify-between">
+          <div className="mb-3 flex items-center justify-between">
 
-            <span className="text-sm">
+            <span className="text-sm text-muted-foreground">
 
-              Occupied
+              Occupancy
 
             </span>
 
-            <span className="font-semibold">
+            <span className="text-xl font-black text-primary">
 
-              {occupancy?.occupancyPercentage ?? 0}%
+              {percentage}%
 
             </span>
 
@@ -52,9 +79,9 @@ export default function BedOccupancyCard({
           <div className="h-3 overflow-hidden rounded-full bg-muted">
 
             <div
-              className="h-full rounded-full bg-primary transition-all duration-500"
+              className="h-full rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 transition-all duration-700"
               style={{
-                width: `${occupancy?.occupancyPercentage ?? 0}%`,
+                width: `${percentage}%`,
               }}
             />
 
@@ -62,53 +89,101 @@ export default function BedOccupancyCard({
 
         </div>
 
-        <div className="mt-5 space-y-2 text-sm">
+        {/* Statistics */}
 
-          <div className="flex justify-between">
+        <div className="grid gap-4 sm:grid-cols-3">
 
-            <span className="text-muted-foreground">
+          <div className="rounded-2xl border bg-card/40 p-4">
 
-              Total Beds
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">
 
-            </span>
+              Total
 
-            <span>
+            </p>
+
+            <h3 className="mt-2 text-2xl font-bold">
 
               {occupancy?.totalBeds ?? 0}
 
-            </span>
+            </h3>
 
           </div>
 
-          <div className="flex justify-between">
+          <div className="rounded-2xl border bg-card/40 p-4">
 
-            <span className="text-muted-foreground">
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">
 
               Occupied
 
-            </span>
+            </p>
 
-            <span>
+            <h3 className="mt-2 text-2xl font-bold text-orange-500">
 
               {occupancy?.occupiedBeds ?? 0}
 
-            </span>
+            </h3>
 
           </div>
 
-          <div className="flex justify-between">
+          <div className="rounded-2xl border bg-card/40 p-4">
 
-            <span className="text-muted-foreground">
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">
 
               Available
 
-            </span>
+            </p>
 
-            <span className="font-semibold">
+            <h3 className="mt-2 text-2xl font-bold text-emerald-500">
 
               {occupancy?.availableBeds ?? 0}
 
-            </span>
+            </h3>
+
+          </div>
+
+        </div>
+
+        {/* Capacity Status */}
+
+        <div
+          className={`rounded-2xl border p-4 ${
+            percentage >= 85
+              ? "border-red-500/20 bg-red-500/5"
+              : "border-emerald-500/20 bg-emerald-500/5"
+          }`}
+        >
+
+          <div className="flex items-center gap-3">
+
+            {percentage >= 85 ? (
+
+              <AlertTriangle className="h-5 w-5 text-red-500" />
+
+            ) : (
+
+              <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+
+            )}
+
+            <div>
+
+              <p className="font-semibold">
+
+                {percentage >= 85
+                  ? "High Occupancy"
+                  : "Healthy Capacity"}
+
+              </p>
+
+              <p className="text-sm text-muted-foreground">
+
+                {percentage >= 85
+                  ? "Hospital is nearing full capacity."
+                  : "Beds are available for incoming emergencies."}
+
+              </p>
+
+            </div>
 
           </div>
 
@@ -117,7 +192,5 @@ export default function BedOccupancyCard({
       </CardContent>
 
     </Card>
-
   );
-
 }

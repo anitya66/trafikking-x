@@ -1,6 +1,10 @@
 import { useState } from "react";
 
-import { AlertTriangle, ArrowRight } from "lucide-react";
+import {
+  AlertTriangle,
+  ArrowRight,
+  Sparkles,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
@@ -14,50 +18,68 @@ import {
 import ReportEmergencyDialog from "@/features/incidents/components/ReportEmergencyDialog";
 
 export default function QuickEmergencyCard() {
-
-    const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
-    <Card className="group relative overflow-hidden">
+    <>
+      <Card className="group relative overflow-hidden border-red-500/15 transition-all duration-300 hover:border-red-500/30">
 
-      <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+        {/* Background Glow */}
 
-      <CardHeader className="relative">
+        <div className="absolute inset-0 bg-gradient-to-br from-red-500/15 via-transparent to-transparent opacity-70 transition-opacity duration-300 group-hover:opacity-100" />
 
-        <CardTitle className="flex items-center gap-2">
+        <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-red-500/10 blur-3xl" />
 
-          <AlertTriangle className="h-5 w-5 text-red-500" />
+        <CardHeader className="relative">
 
-          Report Emergency
+          <div className="mb-4 inline-flex w-fit items-center gap-2 rounded-full border border-red-500/20 bg-red-500/10 px-3 py-1">
 
-        </CardTitle>
+            <Sparkles className="h-4 w-4 text-red-400" />
 
-      </CardHeader>
+            <span className="text-xs font-semibold uppercase tracking-wider text-red-300">
+              Emergency Action
+            </span>
 
-      <CardContent className="relative space-y-6">
+          </div>
 
-        <p className="text-sm text-muted-foreground">
-          Quickly report a medical, fire, accident or crime emergency.
-          Our AI will help classify and dispatch the nearest responders.
-        </p>
+          <CardTitle className="flex items-center gap-3 text-2xl">
 
-        <Button
-  className="w-full"
-  size="lg"
-  onClick={() => setOpen(true)}
->
-          Report Emergency
+            <AlertTriangle className="h-7 w-7 text-red-500" />
 
-          <ArrowRight className="ml-2 h-4 w-4" />
-        </Button>
+            Report Emergency
 
-      </CardContent>
+          </CardTitle>
+
+        </CardHeader>
+
+        <CardContent className="relative">
+
+          <p className="max-w-2xl text-sm leading-7 text-muted-foreground">
+
+            Instantly report medical, fire, accident or crime emergencies.
+            Our AI analyzes the situation and dispatches the nearest available
+            emergency responders in real time.
+
+          </p>
+
+          <Button
+            size="lg"
+            className="mt-8 h-12 w-full md:w-auto"
+            onClick={() => setOpen(true)}
+          >
+            Report Emergency Now
+
+            <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+          </Button>
+
+        </CardContent>
+
+      </Card>
 
       <ReportEmergencyDialog
-  open={open}
-  onOpenChange={setOpen}
-/>
-
-    </Card>
+        open={open}
+        onOpenChange={setOpen}
+      />
+    </>
   );
 }

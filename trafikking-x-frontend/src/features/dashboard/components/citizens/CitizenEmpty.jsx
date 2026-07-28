@@ -1,24 +1,48 @@
-import { Users } from "lucide-react";
+import {
+  CheckCircle2,
+  Users,
+} from "lucide-react";
 
 export default function CitizenEmpty() {
 
   return (
 
-    <div className="flex flex-col items-center justify-center rounded-xl border border-dashed p-16 text-center">
+    <div className="rounded-3xl border border-dashed border-border bg-card/40 p-16">
 
-      <Users className="mb-4 h-12 w-12 text-muted-foreground" />
+      <div className="flex flex-col items-center text-center">
 
-      <h3 className="text-lg font-semibold">
+        <div className="mb-6 rounded-3xl bg-primary/10 p-6">
 
-        No Citizens Found
+          <Users className="h-12 w-12 text-primary" />
 
-      </h3>
+        </div>
 
-      <p className="mt-2 text-sm text-muted-foreground">
+        <h3 className="text-2xl font-bold">
 
-        There are no registered citizens.
+          No Citizens Found
 
-      </p>
+        </h3>
+
+        <p className="mt-3 max-w-md text-muted-foreground">
+
+          There are currently no registered citizens
+          in the emergency response network.
+
+        </p>
+
+        <div className="mt-8 flex items-center gap-2 rounded-full bg-primary/10 px-5 py-2">
+
+          <CheckCircle2 className="h-4 w-4 text-primary" />
+
+          <span className="text-sm font-medium text-primary">
+
+            Database Ready
+
+          </span>
+
+        </div>
+
+      </div>
 
     </div>
 

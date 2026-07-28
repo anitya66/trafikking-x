@@ -1,5 +1,18 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  AlertTriangle,
+  Loader2,
+} from "lucide-react";
+
+import {
+  useNavigate,
+  useParams,
+} from "react-router-dom";
+
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 
 import { toast } from "sonner";
 
@@ -26,13 +39,9 @@ export default function HospitalCaseDetailsPage() {
   const queryClient = useQueryClient();
 
   const {
-
     data: hospitalCase,
-
     isLoading,
-
     isError,
-
   } = useQuery({
 
     queryKey: ["hospital-case", id],
@@ -58,9 +67,7 @@ export default function HospitalCaseDetailsPage() {
         `/hospital-cases/${id}/status`,
 
         {
-
           status,
-
         }
 
       );
@@ -72,25 +79,19 @@ export default function HospitalCaseDetailsPage() {
     onSuccess: () => {
 
       toast.success(
-        "Hospital case updated."
+        "Hospital case updated successfully."
       );
 
       queryClient.invalidateQueries({
-
         queryKey: ["hospital-case", id],
-
       });
 
       queryClient.invalidateQueries({
-
         queryKey: ["hospital-case-history"],
-
       });
 
       queryClient.invalidateQueries({
-
         queryKey: ["hospital-dashboard"],
-
       });
 
     },
@@ -101,9 +102,29 @@ export default function HospitalCaseDetailsPage() {
 
     return (
 
-      <div className="flex h-60 items-center justify-center">
+      <div className="space-y-6">
 
-        Loading...
+        <div className="flex items-center justify-center rounded-3xl border bg-card p-20">
+
+          <div className="text-center">
+
+            <Loader2 className="mx-auto h-10 w-10 animate-spin text-primary" />
+
+            <h2 className="mt-6 text-xl font-bold">
+
+              Loading Hospital Case
+
+            </h2>
+
+            <p className="mt-2 text-muted-foreground">
+
+              Fetching patient information...
+
+            </p>
+
+          </div>
+
+        </div>
 
       </div>
 
@@ -115,9 +136,34 @@ export default function HospitalCaseDetailsPage() {
 
     return (
 
-      <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-6 text-red-400">
+      <div className="rounded-3xl border border-red-500/20 bg-red-500/5 p-10">
 
-        Failed to load hospital case.
+        <div className="flex items-start gap-4">
+
+          <div className="rounded-2xl bg-red-500/10 p-3">
+
+            <AlertTriangle className="h-7 w-7 text-red-500" />
+
+          </div>
+
+          <div>
+
+            <h2 className="text-2xl font-bold text-red-500">
+
+              Failed To Load Hospital Case
+
+            </h2>
+
+            <p className="mt-2 text-muted-foreground">
+
+              We couldn't retrieve this hospital case.
+              Please refresh the page or try again later.
+
+            </p>
+
+          </div>
+
+        </div>
 
       </div>
 
@@ -130,38 +176,37 @@ export default function HospitalCaseDetailsPage() {
     <div className="space-y-8">
 
       <HospitalCaseHeader
-
         hospitalCase={hospitalCase}
-
         onBack={() => navigate(-1)}
-
       />
 
       <HospitalCaseInfoCard
-
         hospitalCase={hospitalCase}
-
       />
 
-      <HospitalCaseTimeline
+      <div className="grid gap-8 xl:grid-cols-3">
 
-        status={hospitalCase.status}
+        <div className="xl:col-span-2">
 
-      />
+          <HospitalCaseTimeline
+            status={hospitalCase.status}
+          />
 
-      <HospitalCaseActions
+        </div>
 
-        hospitalCase={hospitalCase}
+        <div>
 
-        loading={updateMutation.isPending}
+          <HospitalCaseActions
+            hospitalCase={hospitalCase}
+            loading={updateMutation.isPending}
+            onUpdate={(status) =>
+              updateMutation.mutate(status)
+            }
+          />
 
-        onUpdate={(status) =>
+        </div>
 
-          updateMutation.mutate(status)
-
-        }
-
-      />
+      </div>
 
     </div>
 
