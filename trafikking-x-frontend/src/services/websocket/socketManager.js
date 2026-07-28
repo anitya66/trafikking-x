@@ -1,40 +1,26 @@
 import { Client } from "@stomp/stompjs";
+
 import SockJS from "sockjs-client/dist/sockjs";
+
+import { WEBSOCKET_URL } from "@/config/env";
 
 let client = null;
 
 const subscriptions = new Map();
 
-/*
-Map Structure
-
-destination
-      ↓
-Set<callback>
-
-Example
-
-"/topic/tracking/live"
-
-↓
-
-Set(
-   callback1,
-   callback2,
-   callback3
-)
-*/
-
 export function connectSocket() {
 
   if (client?.active || client?.connected) {
+
     return client;
+
   }
 
   client = new Client({
 
     webSocketFactory: () =>
-      new SockJS("http://localhost:8080/ws"),
+
+      new SockJS(WEBSOCKET_URL),
 
     reconnectDelay: 5000,
 
@@ -63,6 +49,7 @@ export function connectSocket() {
   client.activate();
 
   return client;
+
 }
 
 export function subscribe(destination, callback) {
@@ -71,16 +58,11 @@ export function subscribe(destination, callback) {
 
   if (!subscriptions.has(destination)) {
 
-    subscriptions.set(
-      destination,
-      new Set()
-    );
+    subscriptions.set(destination, new Set());
 
   }
 
-  subscriptions
-    .get(destination)
-    .add(callback);
+  subscriptions.get(destination).add(callback);
 
   if (client.connected) {
 
@@ -91,7 +73,9 @@ export function subscribe(destination, callback) {
       (message) => {
 
         subscriptions
+
           .get(destination)
+
           ?.forEach((listener) => {
 
             listener(message);
@@ -108,16 +92,14 @@ export function subscribe(destination, callback) {
 
 }
 
-export function unsubscribe(
-  destination,
-  callback
-) {
+export function unsubscribe(destination, callback) {
 
-  const listeners =
-    subscriptions.get(destination);
+  const listeners = subscriptions.get(destination);
 
   if (!listeners) {
+
     return;
+
   }
 
   listeners.delete(callback);
@@ -132,8 +114,7 @@ export function unsubscribe(
 
 export function disconnectSocket() {
 
-  // Intentionally left empty.
-  // Keep one socket connection alive
-  // for the entire application lifecycle.
+  // Keep socket alive
+  // for entire application lifecycle.
 
 }
