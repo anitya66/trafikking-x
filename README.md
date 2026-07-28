@@ -532,12 +532,12 @@ This project is licensed under the MIT License.
 
 # 👨‍💻 Author
 
-**Anitya Kumar**
+**Anitya Anitya**
 
 Java Full Stack Developer
 
 - GitHub: https://github.com/anitya66
-- LinkedIn: *(Add your LinkedIn profile here)*
+- LinkedIn: (https://www.linkedin.com/in/anitya-anand-602011299/)
 
 ---
 
