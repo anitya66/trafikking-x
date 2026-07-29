@@ -1,9 +1,10 @@
 import axios from "axios";
 import { clearAuth } from "@/features/auth/utils/authStorage";
 import { getAccessToken } from "@/shared/utils/auth";
+import { API_URL } from "@/config/env";
 
 const api = axios.create({
-  baseURL: "http://localhost:8080/api/v1",
+  baseURL: API_URL,
 
   headers: {
     "Content-Type": "application/json",
@@ -26,28 +27,23 @@ api.interceptors.request.use(
 );
 
 api.interceptors.response.use(
-
   (response) => response,
 
   (error) => {
-
     const status = error.response?.status;
 
     if (status === 401 || status === 403) {
-
       console.warn("Session expired.");
 
       clearAuth();
 
-if (window.location.pathname !== "/login") {
-  window.location.replace("/login");
-}
-
+      if (window.location.pathname !== "/login") {
+        window.location.replace("/login");
+      }
     }
 
     return Promise.reject(error);
-
   }
-
 );
+
 export default api;

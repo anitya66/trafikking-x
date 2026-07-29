@@ -1,4 +1,4 @@
-import api from "./api";
+import api from "@/config/axios";
 
 export async function getDashboardSummary() {
   const response = await api.get("/dashboard/summary");
