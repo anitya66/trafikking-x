@@ -56,7 +56,7 @@ public RegisterResponse register(RegisterRequest request) {
                 .email(request.getEmail())
                 .phoneNumber(request.getPhoneNumber())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(request.getRole())
+                .role(Role.CITIZEN)
                 .build();
 
         User savedUser = userRepository.save(user);
